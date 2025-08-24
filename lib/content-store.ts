@@ -4,7 +4,7 @@ import * as bannersService from "@/services/banners"
 import * as webstoriesService from "@/services/webstories"
 import * as categoriesService from "@/services/categories"
 import * as tagsService from "@/services/tags"
-import { DashboardContentOverview, DashboardMonthlySummary, getDashboardContentOverview, getDashboardMonthlySummary } from "@/services/dashboard"
+import { DashboardContentOverview, DashboardMonthlySummary, DashboardTotalCounts, getDashboardContentOverview, getDashboardMonthlySummary, getDashboardTotalCounts } from "@/services/dashboard"
 
 interface ContentState {
   // Posts state
@@ -54,6 +54,11 @@ interface ContentState {
   contentOverview: DashboardContentOverview | null
   fetchContentOverview: () => Promise<void>
   contentOverviewError: string | null
+
+  totalCountsLoading: boolean
+  totalCounts: DashboardTotalCounts | null
+  fetchTotalCounts: () => Promise<void>
+  totalCountsError: string | null
 
   // Posts actions
   fetchPosts: (params?: any) => Promise<void>
@@ -158,6 +163,23 @@ export const useContentStore = create<ContentState>((set, get) => ({
       set({
         contentOverviewLoading: false,
         contentOverviewError: error?.response?.data?.message || "Failed to fetch dashboard content Overview.",
+      })
+    }
+  },
+
+  totalCountsLoading: false,
+  totalCounts: null,
+  totalCountsError: null,
+
+  fetchTotalCounts: async () => {
+    set({ totalCountsLoading: true, totalCountsError: null })
+    try {
+      const data = await getDashboardTotalCounts()
+      set({ totalCounts: data, totalCountsLoading: false })
+    } catch (error: any) {
+      set({
+        totalCountsLoading: false,
+        totalCountsError: error?.response?.data?.message || "Failed to fetch dashboard content Overview.",
       })
     }
   },

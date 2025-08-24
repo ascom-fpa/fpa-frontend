@@ -11,11 +11,6 @@ import { FileText, ImageIcon, Video, FolderTree, Users, BarChart3, TrendingUp, E
 export default function AdminDashboard() {
   const { user } = useAuthStore()
   const {
-    posts,
-    banners,
-    webstories,
-    categories,
-    tags,
     summary,
     fetchSummary,
     fetchContentOverview,
@@ -43,8 +38,8 @@ export default function AdminDashboard() {
     <div className="space-y-6 mt-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Welcome back, {user?.name || "Admin"}</h1>
-          <p className="text-muted-foreground mt-1">Here's what's happening with your news portal today.</p>
+          <h1 className="text-3xl font-bold text-foreground">Bem-vindo(a), {user?.name || "Admin"}</h1>
+          <p className="text-muted-foreground mt-1">Abaixo temos algumas métricas do mês atual.</p>
         </div>
         <Badge variant="secondary" className="bg-primary/10 text-primary">
           {user?.role === "super_admin" ? "Super Admin" : "Admin"}
@@ -101,26 +96,26 @@ export default function AdminDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5" />
-              Quick Actions
+              Ações rápidas
             </CardTitle>
-            <CardDescription>Common administrative tasks</CardDescription>
+            <CardDescription>Atividades comuns</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start bg-transparent" variant="outline">
+            <Button className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
               <FileText className="mr-2 h-4 w-4" />
-              Create New Post
+              Escrever nova matéria
             </Button>
-            <Button className="w-full justify-start bg-transparent" variant="outline">
+            <Button className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
               <ImageIcon className="mr-2 h-4 w-4" />
-              Manage Banners
+              Gerenciar banners
             </Button>
-            <Button className="w-full justify-start bg-transparent" variant="outline">
+            <Button className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
               <Video className="mr-2 h-4 w-4" />
-              Add Web Story
+              Adicionar Web Story
             </Button>
-            <Button className="w-full justify-start bg-transparent" variant="outline">
+            <Button className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
               <Users className="mr-2 h-4 w-4" />
-              User Management
+              Gerenciamento de usuários
             </Button>
           </CardContent>
         </Card>
@@ -156,7 +151,7 @@ export default function AdminDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Eye className="h-5 w-5" />
-            Content Overview
+            Visão geral
           </CardTitle>
           <CardDescription>Summary of your content management system</CardDescription>
         </CardHeader>
@@ -164,17 +159,17 @@ export default function AdminDashboard() {
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Published Posts</span>
+                <span className="text-sm text-muted-foreground">Matérias publicadas</span>
                 <span className="text-sm font-medium">{contentOverview?.totalPublishedPosts || 0}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Draft Posts</span>
+                <span className="text-sm text-muted-foreground">Matérias em rascunho</span>
                 <span className="text-sm font-medium">{contentOverview?.totalDraftPosts || 0}</span>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Active Banners</span>
+                <span className="text-sm text-muted-foreground">Banners ativos</span>
                 <span className="text-sm font-medium">{contentOverview?.activeBanners || 0}</span>
               </div>
               <div className="flex items-center justify-between">
@@ -188,7 +183,7 @@ export default function AdminDashboard() {
                 <span className="text-sm font-medium">{contentOverview?.webStories || 0}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Categories</span>
+                <span className="text-sm text-muted-foreground">Categorias</span>
                 <span className="text-sm font-medium">{contentOverview?.totalCategories || 0}</span>
               </div>
             </div>

@@ -2,53 +2,45 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
 import { useAuthStore } from "@/lib/auth-store"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  FileText,
-  ImageIcon,
-  Video,
-  Tag,
-  FolderOpen,
-  BarChart3,
-  Settings,
-  LogOut,
-  Menu,
-  Bell,
-  Search,
-  Plus,
-} from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { FileText, ImageIcon, Video, Tag, FolderOpen, BarChart3, Settings, LogOut, Menu, Search, Plus, UserCircle2, FocusIcon } from "lucide-react"
+import { useContentStore } from "@/lib/content-store"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
 }
 
-const sidebarItems = [
-  { icon: BarChart3, label: "Dashboard", href: "/admin", active: true },
-  { icon: FileText, label: "Posts", href: "/admin/posts", count: 24 },
-  { icon: ImageIcon, label: "Banners", href: "/admin/banners", count: 8 },
-  { icon: Video, label: "Web Stories", href: "/admin/webstories", count: 12 },
-  { icon: FolderOpen, label: "Categories", href: "/admin/categories", count: 6 },
-  { icon: Tag, label: "Tags", href: "/admin/tags", count: 45 },
-  { icon: Settings, label: "Settings", href: "/admin/settings" },
-]
-
 export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const router = useRouter()
+  const pathname = usePathname()
+
   const { user, logout } = useAuthStore()
+  const { totalCounts, fetchTotalCounts } = useContentStore()
+
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const sidebarItems = [
+    { icon: BarChart3, label: "Dashboard", href: "/admin" },
+    { icon: FileText, label: "Posts", href: "/admin/posts", count: totalCounts?.totalPosts },
+    { icon: ImageIcon, label: "Banners", href: "/admin/banners", count: totalCounts?.totalBanners },
+    { icon: Video, label: "Web Stories", href: "/admin/webstories", count: totalCounts?.totalWebStories },
+    { icon: FolderOpen, label: "Categorias", href: "/admin/categories", count: totalCounts?.totalCategories },
+    { icon: Tag, label: "Tags", href: "/admin/tags", count: totalCounts?.totalTags },
+    { icon: FocusIcon, label: "Fato em foco", href: "/admin/relevants", count: totalCounts?.totalRelevants },
+    { icon: UserCircle2, label: "Usuários", href: "/admin/users", count: totalCounts?.totalUsers },
+    { icon: Settings, label: "Configurações", href: "/admin/settings" },
+  ]
+
+
+  useEffect(() => {
+    fetchTotalCounts()
+  }, [])
 
   const handleLogout = async () => {
     await logout()
@@ -59,9 +51,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="min-h-screen bg-background">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-sidebar-border transform transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0`}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-sidebar-border transform transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0`}
       >
         <div className="flex h-full flex-col">
           {/* Logo */}
@@ -69,7 +60,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <FileText className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="text-lg font-semibold text-sidebar-foreground">NewsPortal Admin</span>
+            <span className="text-lg font-semibold text-sidebar-foreground">Portal FPA | Admin</span>
           </div>
 
           {/* Navigation */}
@@ -78,15 +69,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <a
                 key={item.label}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                  item.active
-                    ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                }`}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${item.href == pathname
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                  }`}
               >
                 <item.icon className="h-4 w-4" />
                 <span className="flex-1">{item.label}</span>
-                {item.count && (
+                {typeof item.count != 'undefined' && (
                   <Badge variant="secondary" className="ml-auto">
                     {item.count}
                   </Badge>
@@ -99,28 +89,28 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="border-t border-sidebar-border p-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="w-full justify-start gap-2 h-auto p-2">
+                <Button variant="ghost" className="cursor-pointer group w-full justify-start gap-2 h-auto p-2">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/admin-avatar.png" />
                     <AvatarFallback>{user?.name?.charAt(0) || "A"}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col items-start text-sm">
                     <span className="font-medium">{user?.name || "Admin User"}</span>
-                    <span className="text-muted-foreground">{user?.email || "admin@news.com"}</span>
+                    <span className="text-muted-foreground group-hover:text-gray-400">{user?.email || "admin@news.com"}</span>
                   </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push("/admin/settings")}>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => router.push("/admin/settings")}>
                   <Settings className="mr-2 h-4 w-4" />
-                  Settings
+                  Configurações
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive" onClick={handleLogout}>
+                <DropdownMenuItem className="cursor-pointer text-destructive" onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
-                  Logout
+                  Sair
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -148,9 +138,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button size="sm" className="gap-2" onClick={() => router.push("/admin/posts/new")}>
+            <Button size="sm" className="gap-2 cursor-pointer" onClick={() => router.push("/admin/posts/new")}>
               <Plus className="h-4 w-4" />
-              New Post
+              Nova matéria
             </Button>
             {/* <Button variant="ghost" size="icon">
               <Bell className="h-4 w-4" />

@@ -75,6 +75,8 @@ export const useAuthStore = create<AuthState>()(
           // Salva o token nos cookies
           document.cookie = `auth_token=${access_token}; path=/; max-age=3600; secure; samesite=strict`;
 
+          localStorage.setItem('auth_token', access_token)
+
           // Decodifica o token para recuperar o payload
           const payload = jwtDecode.jwtDecode<any>(access_token);
 
@@ -110,12 +112,10 @@ export const useAuthStore = create<AuthState>()(
           .split("; ")
           .find(row => row.startsWith("auth_token="));
         const token = cookie?.split("=")[1];
-        console.log(token)
         if (!token) return set({ isLoggedIn: false, user: null });
 
         try {
           const payload = jwtDecode.jwtDecode<any>(token);
-          console.log(payload)
           if (Date.now() >= payload.exp * 1000 || payload.role === "READER") {
             // Token expirado ou role inválida
             set({ isLoggedIn: false, user: null });

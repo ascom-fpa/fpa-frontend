@@ -16,7 +16,16 @@ export interface DashboardContentOverview {
     totalCategories: number
 }
 
-// Get dashboard summary for the current month
+export interface DashboardTotalCounts {
+    totalPosts: number
+    totalBanners: number
+    totalWebStories: number
+    totalCategories: number
+    totalTags: number
+    totalUsers: number
+    totalRelevants: number
+}
+
 export const getDashboardMonthlySummary = async (): Promise<DashboardMonthlySummary> => {
     const response = await api.get("/dashboard/monthly-summary")
     return response.data.data
@@ -24,5 +33,10 @@ export const getDashboardMonthlySummary = async (): Promise<DashboardMonthlySumm
 
 export const getDashboardContentOverview = async (): Promise<DashboardContentOverview> => {
     const response = await api.get("/dashboard/content-overview")
+    return response.data.data
+}
+
+export const getDashboardTotalCounts = async (): Promise<DashboardTotalCounts> => {
+    const response = await api.get("/dashboard/totals")
     return response.data.data
 }
