@@ -3,8 +3,9 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/lib/auth-store"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -28,10 +29,6 @@ import {
   Bell,
   Search,
   Plus,
-  TrendingUp,
-  Users,
-  Eye,
-  MessageSquare,
 } from "lucide-react"
 
 interface DashboardLayoutProps {
@@ -39,52 +36,24 @@ interface DashboardLayoutProps {
 }
 
 const sidebarItems = [
-  { icon: BarChart3, label: "Dashboard", href: "/dashboard", active: true },
-  { icon: FileText, label: "Posts", href: "/dashboard/posts", count: 24 },
-  { icon: ImageIcon, label: "Banners", href: "/dashboard/banners", count: 8 },
-  { icon: Video, label: "Web Stories", href: "/dashboard/webstories", count: 12 },
-  { icon: FolderOpen, label: "Categories", href: "/dashboard/categories", count: 6 },
-  { icon: Tag, label: "Tags", href: "/dashboard/tags", count: 45 },
-  { icon: Settings, label: "Settings", href: "/dashboard/settings" },
-]
-
-const statsCards = [
-  {
-    title: "Total Posts",
-    value: "2,847",
-    change: "+12%",
-    trend: "up",
-    icon: FileText,
-    description: "Published articles",
-  },
-  {
-    title: "Page Views",
-    value: "1.2M",
-    change: "+8%",
-    trend: "up",
-    icon: Eye,
-    description: "This month",
-  },
-  {
-    title: "Active Users",
-    value: "45.2K",
-    change: "+23%",
-    trend: "up",
-    icon: Users,
-    description: "Monthly active",
-  },
-  {
-    title: "Comments",
-    value: "892",
-    change: "-3%",
-    trend: "down",
-    icon: MessageSquare,
-    description: "This week",
-  },
+  { icon: BarChart3, label: "Dashboard", href: "/admin", active: true },
+  { icon: FileText, label: "Posts", href: "/admin/posts", count: 24 },
+  { icon: ImageIcon, label: "Banners", href: "/admin/banners", count: 8 },
+  { icon: Video, label: "Web Stories", href: "/admin/webstories", count: 12 },
+  { icon: FolderOpen, label: "Categories", href: "/admin/categories", count: 6 },
+  { icon: Tag, label: "Tags", href: "/admin/tags", count: 45 },
+  { icon: Settings, label: "Settings", href: "/admin/settings" },
 ]
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const router = useRouter()
+  const { user, logout } = useAuthStore()
+
+  const handleLogout = async () => {
+    await logout()
+    router.push("/")
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -100,7 +69,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <FileText className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="text-lg font-semibold text-sidebar-foreground">NewsPortal</span>
+            <span className="text-lg font-semibold text-sidebar-foreground">NewsPortal Admin</span>
           </div>
 
           {/* Navigation */}
@@ -133,23 +102,23 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 <Button variant="ghost" className="w-full justify-start gap-2 h-auto p-2">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/admin-avatar.png" />
-                    <AvatarFallback>AD</AvatarFallback>
+                    <AvatarFallback>{user?.name?.charAt(0) || "A"}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col items-start text-sm">
-                    <span className="font-medium">Admin User</span>
-                    <span className="text-muted-foreground">admin@news.com</span>
+                    <span className="font-medium">{user?.name || "Admin User"}</span>
+                    <span className="text-muted-foreground">{user?.email || "admin@news.com"}</span>
                   </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/admin/settings")}>
                   <Settings className="mr-2 h-4 w-4" />
                   Settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive">
+                <DropdownMenuItem className="text-destructive" onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </DropdownMenuItem>
@@ -179,7 +148,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button size="sm" className="gap-2">
+            <Button size="sm" className="gap-2" onClick={() => router.push("/admin/posts/new")}>
               <Plus className="h-4 w-4" />
               New Post
             </Button>
@@ -190,7 +159,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="p-6">{children}</main>
+        <main className="p-6">
+          <DashboardOverview />
+          {children}
+        </main>
       </div>
 
       {/* Mobile Sidebar Overlay */}
@@ -214,34 +186,61 @@ export function DashboardOverview() {
 
       {/* Stats Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {statsCards.map((stat) => (
-          <Card key={stat.title} className="relative overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
+        {[
+          {
+            title: "Total Posts",
+            value: "2,847",
+            change: "+12%",
+            trend: "up",
+            icon: FileText,
+            description: "Published articles",
+          },
+          {
+            title: "Page Views",
+            value: "1.2M",
+            change: "+8%",
+            trend: "up",
+            icon: BarChart3,
+            description: "This month",
+          },
+          {
+            title: "Active Users",
+            value: "45.2K",
+            change: "+23%",
+            trend: "up",
+            icon: BarChart3,
+            description: "Monthly active",
+          },
+          {
+            title: "Comments",
+            value: "892",
+            change: "-3%",
+            trend: "down",
+            icon: BarChart3,
+            description: "This week",
+          },
+        ].map((stat) => (
+          <div key={stat.title} className="bg-card rounded-lg border p-6">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium text-muted-foreground">{stat.title}</div>
               <stat.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-              <div className="flex items-center gap-1 text-xs">
-                <TrendingUp className={`h-3 w-3 ${stat.trend === "up" ? "text-primary" : "text-destructive"}`} />
-                <span className={`font-medium ${stat.trend === "up" ? "text-primary" : "text-destructive"}`}>
-                  {stat.change}
-                </span>
-                <span className="text-muted-foreground">{stat.description}</span>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+            <div className="text-2xl font-bold text-foreground mt-2">{stat.value}</div>
+            <div className="flex items-center gap-1 text-xs mt-1">
+              <span className={`font-medium ${stat.trend === "up" ? "text-primary" : "text-destructive"}`}>
+                {stat.change}
+              </span>
+              <span className="text-muted-foreground">{stat.description}</span>
+            </div>
+          </div>
         ))}
       </div>
 
       {/* Recent Activity */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Posts</CardTitle>
-            <CardDescription>Latest published articles</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="bg-card rounded-lg border p-6">
+          <h3 className="text-lg font-semibold mb-4">Recent Posts</h3>
+          <div className="space-y-4">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="flex items-center gap-4">
                 <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center">
@@ -254,20 +253,17 @@ export function DashboardOverview() {
                 <Badge variant="secondary">Published</Badge>
               </div>
             ))}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Popular Categories</CardTitle>
-            <CardDescription>Most viewed content categories</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="bg-card rounded-lg border p-6">
+          <h3 className="text-lg font-semibold mb-4">Popular Categories</h3>
+          <div className="space-y-4">
             {[
-              { name: "Technology", count: "1.2K views", color: "bg-chart-1" },
-              { name: "Sports", count: "890 views", color: "bg-chart-2" },
-              { name: "Politics", count: "756 views", color: "bg-chart-3" },
-              { name: "Entertainment", count: "623 views", color: "bg-chart-4" },
+              { name: "Technology", count: "1.2K views", color: "bg-primary" },
+              { name: "Sports", count: "890 views", color: "bg-secondary" },
+              { name: "Politics", count: "756 views", color: "bg-accent" },
+              { name: "Entertainment", count: "623 views", color: "bg-muted" },
             ].map((category) => (
               <div key={category.name} className="flex items-center gap-4">
                 <div className={`h-3 w-3 rounded-full ${category.color}`} />
@@ -277,8 +273,8 @@ export function DashboardOverview() {
                 </div>
               </div>
             ))}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   )

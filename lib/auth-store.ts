@@ -58,16 +58,20 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true, error: null })
         try {
           const response = await authService.login({ email, password })
+          const user = response.user
+          if (user.role !== "admin" && user.role !== "super_admin") {
+            throw new Error("Access denied. Admin privileges required.")
+          }
           set({
             isLoggedIn: true,
-            user: response.user,
+            user: user,
             isLoading: false,
             error: null,
           })
         } catch (error: any) {
           set({
             isLoading: false,
-            error: error.response?.data?.message || "Login failed. Please try again.",
+            error: error.response?.data?.message || error.message || "Login failed. Please try again.",
           })
           throw error
         }
