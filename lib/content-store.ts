@@ -346,10 +346,10 @@ export const useContentStore = create<ContentState>((set, get) => ({
     }
   },
 
-  reorderBanners: async (bannerIds: string[]) => {
+  reorderBanners: async (bannerId: string, newIndex: number) => {
     set({ bannersLoading: true, bannersError: null })
     try {
-      await bannersService.reorderBanners(bannerIds)
+      await bannersService.reorderBanners(bannerId, newIndex)
       // Reorder banners in state to match the new order
       const { banners } = get()
       const reorderedBanners = bannerIds.map((id) => banners.find((banner) => banner.id === id)!).filter(Boolean)

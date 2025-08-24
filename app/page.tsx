@@ -2,27 +2,23 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ChevronLeft, ChevronRight, Menu, Search, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
+import { useContentStore } from "@/lib/content-store"
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
 
-  const heroSlides = [
-    {
-      title: "Novo marco dos portos começa a ser debatido na Câmara",
-      image: "/brazilian-congress-chamber-debate-session.png",
-    },
-    {
-      title: "Modernização da infraestrutura portuária em discussão",
-      image: "/modern-port-infrastructure-aerial-view.png",
-    },
-  ]
+  const { fetchBanners, banners } = useContentStore()
+
+  useEffect(() => {
+    fetchBanners()
+  }, []);
 
   const newsArticles = [
     {
@@ -103,11 +99,11 @@ export default function Home() {
   ]
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
+    setCurrentSlide((prev) => (prev + 1) % banners.length)
   }
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)
+    setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)
   }
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
@@ -173,27 +169,39 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative h-[600px] overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-all duration-500"
-          style={{ backgroundImage: `url('${heroSlides[currentSlide].image}')` }}
-        >
-          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        {/* Todas as imagens empilhadas com opacidade controlada */}
+        {banners.map((banner, index) => (
+          <img
+            key={banner.id}
+            src={banner.imageUrl}
+            alt={banner.text}
+            className={`
+        absolute inset-0 w-full h-full object-cover transition-opacity duration-700
+        ${index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"}
+      `}
+          />
+        ))}
+
+        {/* Overlay escuro */}
+        <div className="absolute inset-0 bg-black opacity-50 z-20" />
+
+        {/* Texto acima das imagens */}
+        <div className="relative z-30 flex items-center justify-center h-full text-white text-center px-4">
+          <h1 className="text-4xl md:text-6xl font-bold max-w-4xl leading-tight">
+            {banners[currentSlide]?.text}
+          </h1>
         </div>
 
-        <div className="relative z-10 flex items-center justify-center h-full text-white text-center px-4">
-          <h1 className="text-4xl md:text-6xl font-bold max-w-4xl leading-tight">{heroSlides[currentSlide].title}</h1>
-        </div>
-
-        {/* Navigation arrows */}
+        {/* Navegação */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all"
+          className="cursor-pointer hover:scale-105 absolute left-4 top-1/2 transform -translate-y-1/2 z-40 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all"
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all"
+          className="cursor-pointer hover:scale-105 absolute right-4 top-1/2 transform -translate-y-1/2 z-40 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all"
         >
           <ChevronRight className="h-6 w-6" />
         </button>
