@@ -17,7 +17,9 @@ export default function AdminDashboard() {
     categories,
     tags,
     summary,
-    fetchSummary
+    fetchSummary,
+    fetchContentOverview,
+    contentOverview,
   } = useContentStore()
 
   useEffect(() => {
@@ -26,6 +28,7 @@ export default function AdminDashboard() {
     // fetchWebStories()
     // fetchCategories()
     // fetchTags()
+    fetchContentOverview()
     fetchSummary()
   }, [])
 
@@ -162,31 +165,31 @@ export default function AdminDashboard() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Published Posts</span>
-                <span className="text-sm font-medium">{posts?.filter((p) => p.status === "published").length}</span>
+                <span className="text-sm font-medium">{contentOverview?.totalPublishedPosts || 0}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Draft Posts</span>
-                <span className="text-sm font-medium">{posts?.filter((p) => p.status === "draft").length}</span>
+                <span className="text-sm font-medium">{contentOverview?.totalDraftPosts || 0}</span>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Active Banners</span>
-                <span className="text-sm font-medium">{banners.length}</span>
+                <span className="text-sm font-medium">{contentOverview?.activeBanners || 0}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Total Tags</span>
-                <span className="text-sm font-medium">{tags?.length}</span>
+                <span className="text-sm font-medium">{contentOverview?.totalTags || 0}</span>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Web Stories</span>
-                <span className="text-sm font-medium">{webstories.length}</span>
+                <span className="text-sm font-medium">{contentOverview?.webStories || 0}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Categories</span>
-                <span className="text-sm font-medium">{categories.length}</span>
+                <span className="text-sm font-medium">{contentOverview?.totalCategories || 0}</span>
               </div>
             </div>
           </div>
