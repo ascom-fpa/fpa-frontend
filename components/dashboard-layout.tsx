@@ -152,15 +152,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <Plus className="h-4 w-4" />
               New Post
             </Button>
-            <Button variant="ghost" size="icon">
+            {/* <Button variant="ghost" size="icon">
               <Bell className="h-4 w-4" />
-            </Button>
+            </Button> */}
           </div>
         </header>
 
         {/* Page Content */}
         <main className="p-6">
-          <DashboardOverview />
           {children}
         </main>
       </div>
@@ -169,113 +168,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
-    </div>
-  )
-}
-
-export function DashboardOverview() {
-  return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's what's happening with your news portal.</p>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {[
-          {
-            title: "Total Posts",
-            value: "2,847",
-            change: "+12%",
-            trend: "up",
-            icon: FileText,
-            description: "Published articles",
-          },
-          {
-            title: "Page Views",
-            value: "1.2M",
-            change: "+8%",
-            trend: "up",
-            icon: BarChart3,
-            description: "This month",
-          },
-          {
-            title: "Active Users",
-            value: "45.2K",
-            change: "+23%",
-            trend: "up",
-            icon: BarChart3,
-            description: "Monthly active",
-          },
-          {
-            title: "Comments",
-            value: "892",
-            change: "-3%",
-            trend: "down",
-            icon: BarChart3,
-            description: "This week",
-          },
-        ].map((stat) => (
-          <div key={stat.title} className="bg-card rounded-lg border p-6">
-            <div className="flex items-center justify-between">
-              <div className="text-sm font-medium text-muted-foreground">{stat.title}</div>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
-            </div>
-            <div className="text-2xl font-bold text-foreground mt-2">{stat.value}</div>
-            <div className="flex items-center gap-1 text-xs mt-1">
-              <span className={`font-medium ${stat.trend === "up" ? "text-primary" : "text-destructive"}`}>
-                {stat.change}
-              </span>
-              <span className="text-muted-foreground">{stat.description}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Recent Activity */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="bg-card rounded-lg border p-6">
-          <h3 className="text-lg font-semibold mb-4">Recent Posts</h3>
-          <div className="space-y-4">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center">
-                  <FileText className="h-5 w-5 text-muted-foreground" />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium">Breaking News: Technology Advances</p>
-                  <p className="text-xs text-muted-foreground">Published 2 hours ago</p>
-                </div>
-                <Badge variant="secondary">Published</Badge>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-card rounded-lg border p-6">
-          <h3 className="text-lg font-semibold mb-4">Popular Categories</h3>
-          <div className="space-y-4">
-            {[
-              { name: "Technology", count: "1.2K views", color: "bg-primary" },
-              { name: "Sports", count: "890 views", color: "bg-secondary" },
-              { name: "Politics", count: "756 views", color: "bg-accent" },
-              { name: "Entertainment", count: "623 views", color: "bg-muted" },
-            ].map((category) => (
-              <div key={category.name} className="flex items-center gap-4">
-                <div className={`h-3 w-3 rounded-full ${category.color}`} />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{category.name}</p>
-                  <p className="text-xs text-muted-foreground">{category.count}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

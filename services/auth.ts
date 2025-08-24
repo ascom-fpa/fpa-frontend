@@ -1,3 +1,4 @@
+import axios from "axios"
 import api from "./axios"
 
 export interface LoginCredentials {
@@ -6,13 +7,17 @@ export interface LoginCredentials {
 }
 
 export interface AuthResponse {
-  access_token: string
-  refresh_token: string
-  user: {
-    id: string
-    email: string
-    name: string
-    role: string
+  error: boolean
+  message: string
+  data: {
+    access_token: string
+    mustChangePassword: boolean
+    user: {
+      id: string
+      email: string
+      name: string
+      role: string
+    }
   }
 }
 
@@ -41,6 +46,8 @@ export const logout = async (): Promise<void> => {
     // Clear tokens regardless of API response
     localStorage.removeItem("auth_token")
     localStorage.removeItem("refresh_token")
+    delete axios.defaults.headers.common["Authorization"]
+    document.cookie = "auth_token=; path=/; max-age=0; secure; samesite=strict"
   }
 }
 

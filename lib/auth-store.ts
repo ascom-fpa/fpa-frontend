@@ -1,6 +1,8 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import * as authService from "@/services/auth"
+import axios from 'axios'
+import * as jwtDecode from "jwt-decode"
 
 interface User {
   id: string
@@ -26,7 +28,7 @@ interface AuthState {
   login: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
   getCurrentUser: () => Promise<void>
-  verifySession: () => Promise<void>
+  verifySession: () => Promise<unknown>
 
   // Forgot password actions
   showForgotPasswordForm: () => void
@@ -39,6 +41,16 @@ interface AuthState {
   // Utility actions
   clearError: () => void
   setLoading: (loading: boolean) => void
+}
+
+function isTokenValid(token: string | null) {
+  if (!token) return false
+  try {
+    const decoded = jwtDecode.jwtDecode<{ exp: number }>(token)
+    return decoded.exp > Date.now() / 1000
+  } catch {
+    return false
+  }
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -55,25 +67,74 @@ export const useAuthStore = create<AuthState>()(
       resetEmail: "",
 
       login: async (email: string, password: string) => {
-        set({ isLoading: true, error: null })
+        set({ isLoading: true, error: null });
         try {
-          const response = await authService.login({ email, password })
-          const user = response.user
-          if (user.role !== "admin" && user.role !== "super_admin") {
-            throw new Error("Access denied. Admin privileges required.")
+          const response = await authService.login({ email, password });
+          const { access_token } = response.data;
+
+          // Salva o token nos cookies
+          document.cookie = `auth_token=${access_token}; path=/; max-age=3600; secure; samesite=strict`;
+
+          // Decodifica o token para recuperar o payload
+          const payload = jwtDecode.jwtDecode<any>(access_token);
+
+          if (!payload || payload.role === "READER") {
+            throw new Error("Access denied");
           }
+
+          // Atualiza o estado
           set({
             isLoggedIn: true,
-            user: user,
+            user: {
+              id: payload.sub,
+              email: payload.email,
+              role: payload.role,
+              name: payload.name
+            },
             isLoading: false,
             error: null,
-          })
+          });
+
+          window.location.href = "/admin";
         } catch (error: any) {
           set({
             isLoading: false,
-            error: error.response?.data?.message || error.message || "Login failed. Please try again.",
-          })
-          throw error
+            error: error.response?.data?.message || error.message || "Login failed",
+          });
+          throw error;
+        }
+      },
+
+      verifySession: async () => {
+        const cookie = document.cookie
+          .split("; ")
+          .find(row => row.startsWith("auth_token="));
+        const token = cookie?.split("=")[1];
+        console.log(token)
+        if (!token) return set({ isLoggedIn: false, user: null });
+
+        try {
+          const payload = jwtDecode.jwtDecode<any>(token);
+          console.log(payload)
+          if (Date.now() >= payload.exp * 1000 || payload.role === "READER") {
+            // Token expirado ou role inválida
+            set({ isLoggedIn: false, user: null });
+            window.location.href = "/";
+            return;
+          }
+
+          set({
+            isLoggedIn: true,
+            user: {
+              id: payload.sub,
+              email: payload.email,
+              role: payload.role,
+              name: payload.name
+            },
+          });
+        } catch (e) {
+          set({ isLoggedIn: false, user: null });
+          window.location.href = "/";
         }
       },
 
@@ -107,23 +168,6 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: error.response?.data?.message || "Failed to get user info",
           })
-        }
-      },
-
-      verifySession: async () => {
-        set({ isLoading: true })
-        try {
-          const isValid = await authService.verifySession()
-          if (isValid) {
-            await get().getCurrentUser()
-            set({ isLoggedIn: true })
-          } else {
-            set({ isLoggedIn: false, user: null })
-          }
-        } catch (error) {
-          set({ isLoggedIn: false, user: null })
-        } finally {
-          set({ isLoading: false })
         }
       },
 

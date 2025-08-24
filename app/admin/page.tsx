@@ -2,7 +2,7 @@
 
 import { useAuthStore } from "@/lib/auth-store"
 import { useContentStore } from "@/lib/content-store"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -13,54 +13,21 @@ export default function AdminDashboard() {
   const {
     posts,
     banners,
-    webStories,
+    webstories,
     categories,
     tags,
-    fetchPosts,
-    fetchBanners,
-    fetchWebStories,
-    fetchCategories,
-    fetchTags,
+    summary,
+    fetchSummary
   } = useContentStore()
 
   useEffect(() => {
-    fetchPosts()
-    fetchBanners()
-    fetchWebStories()
-    fetchCategories()
-    fetchTags()
-  }, [fetchPosts, fetchBanners, fetchWebStories, fetchCategories, fetchTags])
-
-  const stats = [
-    {
-      title: "Total Posts",
-      value: posts.length,
-      icon: FileText,
-      description: "Published articles",
-      trend: "+12%",
-    },
-    {
-      title: "Active Banners",
-      value: banners.filter((b) => b.status === "active").length,
-      icon: ImageIcon,
-      description: "Currently displayed",
-      trend: "+3%",
-    },
-    {
-      title: "Web Stories",
-      value: webStories.length,
-      icon: Video,
-      description: "Interactive stories",
-      trend: "+8%",
-    },
-    {
-      title: "Categories",
-      value: categories.length,
-      icon: FolderTree,
-      description: "Content categories",
-      trend: "+2%",
-    },
-  ]
+    // fetchPosts()
+    // fetchBanners()
+    // fetchWebStories()
+    // fetchCategories()
+    // fetchTags()
+    fetchSummary()
+  }, [])
 
   const recentActivity = [
     { action: "New post published", item: "Breaking News: Tech Update", time: "2 hours ago" },
@@ -70,7 +37,7 @@ export default function AdminDashboard() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mt-4">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Welcome back, {user?.name || "Admin"}</h1>
@@ -83,20 +50,46 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-              <p className="text-xs text-muted-foreground">
-                <span className="text-primary">{stat.trend}</span> {stat.description}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total de Posts</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground">{summary?.totalPostsThisMonth}</div>
+            <p className="text-xs text-muted-foreground">Artigos publicados</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Banners ativos</CardTitle>
+            <ImageIcon className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground">{summary?.activeBannersThisMonth}</div>
+            <p className="text-xs text-muted-foreground">Atualmente exibidos</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Web Stories</CardTitle>
+            <Video className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground">{summary?.webStoriesThisMonth}</div>
+            <p className="text-xs text-muted-foreground">Histórias interativas</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Categorias</CardTitle>
+            <FolderTree className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground">{summary?.categoriesThisMonth}</div>
+            <p className="text-xs text-muted-foreground">Categorias de conteúdo</p>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -169,27 +162,27 @@ export default function AdminDashboard() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Published Posts</span>
-                <span className="text-sm font-medium">{posts.filter((p) => p.status === "published").length}</span>
+                <span className="text-sm font-medium">{posts?.filter((p) => p.status === "published").length}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Draft Posts</span>
-                <span className="text-sm font-medium">{posts.filter((p) => p.status === "draft").length}</span>
+                <span className="text-sm font-medium">{posts?.filter((p) => p.status === "draft").length}</span>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Active Banners</span>
-                <span className="text-sm font-medium">{banners.filter((b) => b.status === "active").length}</span>
+                <span className="text-sm font-medium">{banners.length}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Total Tags</span>
-                <span className="text-sm font-medium">{tags.length}</span>
+                <span className="text-sm font-medium">{tags?.length}</span>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Web Stories</span>
-                <span className="text-sm font-medium">{webStories.length}</span>
+                <span className="text-sm font-medium">{webstories.length}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Categories</span>

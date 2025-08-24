@@ -2,14 +2,17 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useAuthStore } from "@/lib/auth-store"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useRouter } from "next/navigation"
 
 export function AdminLogin() {
+
+  const router = useRouter()
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -34,14 +37,21 @@ export function AdminLogin() {
     resetPasswordWithCode,
   } = useAuthStore()
 
+  useEffect(() => {
+    console.log(isLoggedIn)
+    if (isLoggedIn) {
+      router.push("/admin")
+    }
+
+  }, [isLoggedIn]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate authentication delay
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    login()
+    login(email, password)
     setIsLoading(false)
   }
 
@@ -71,36 +81,6 @@ export function AdminLogin() {
     setIsVerifying(false)
   }
 
-  if (isLoggedIn) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
-        <div className="w-full max-w-md animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
-          <Card className="shadow-2xl border-0 bg-white">
-            <CardHeader className="text-center pb-8">
-              <div
-                className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                style={{ backgroundColor: "#419672" }}
-              >
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <CardTitle className="text-2xl font-bold text-black">Welcome to the Admin Dashboard</CardTitle>
-              <CardDescription className="text-gray-600 mt-2">
-                You have successfully logged in to the news portal admin panel.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
-      </div>
-    )
-  }
-
   if (showCodeVerification) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
@@ -128,9 +108,9 @@ export function AdminLogin() {
             <CardContent>
               <form onSubmit={handleCodeVerification} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="email-display" className="text-black font-medium">
+                  <label htmlFor="email-display" className="text-black font-medium">
                     Email Address
-                  </Label>
+                  </label>
                   <Input
                     id="email-display"
                     type="email"
@@ -140,9 +120,9 @@ export function AdminLogin() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="verification-code" className="text-black font-medium">
+                  <label htmlFor="verification-code" className="text-black font-medium">
                     Verification Code
-                  </Label>
+                  </label>
                   <Input
                     id="verification-code"
                     type="text"
@@ -156,9 +136,9 @@ export function AdminLogin() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="new-password" className="text-black font-medium">
+                  <label htmlFor="new-password" className="text-black font-medium">
                     New Password
-                  </Label>
+                  </label>
                   <Input
                     id="new-password"
                     type="password"
@@ -172,9 +152,9 @@ export function AdminLogin() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="repeat-password" className="text-black font-medium">
+                  <label htmlFor="repeat-password" className="text-black font-medium">
                     Repeat New Password
-                  </Label>
+                  </label>
                   <Input
                     id="repeat-password"
                     type="password"
@@ -258,9 +238,9 @@ export function AdminLogin() {
             <CardContent>
               <form onSubmit={handleForgotPassword} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="reset-email" className="text-black font-medium">
+                  <label htmlFor="reset-email" className="text-black font-medium">
                     Email Address
-                  </Label>
+                  </label>
                   <Input
                     id="reset-email"
                     type="email"
@@ -340,9 +320,9 @@ export function AdminLogin() {
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-black font-medium">
+                <label htmlFor="email" className="text-black font-medium">
                   Email
-                </Label>
+                </label>
                 <Input
                   id="email"
                   type="email"
@@ -355,9 +335,9 @@ export function AdminLogin() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-black font-medium">
+                <label htmlFor="password" className="text-black font-medium">
                   Password
-                </Label>
+                </label>
                 <Input
                   id="password"
                   type="password"

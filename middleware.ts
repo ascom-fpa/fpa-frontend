@@ -1,27 +1,32 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import { jwtVerify } from 'jose'
+import { NextResponse, NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+export async function middleware(request: NextRequest) {
+  const token = request.cookies.get('auth_token')?.value
 
-  // Check if the request is for admin routes
-  if (pathname.startsWith("/admin")) {
-    // Get the auth token from cookies or headers
-    const authToken =
-      request.cookies.get("auth_token")?.value || request.headers.get("authorization")?.replace("Bearer ", "")
+  if (!token) {
+    const url = new URL('/login', request.url)
+    url.searchParams.set('redirect', request.nextUrl.pathname)
+    return NextResponse.redirect(url)
+  }
+  console.log('here 12', token)
 
-    // If no token, redirect to login
-    if (!authToken) {
-      const loginUrl = new URL("/", request.url)
-      loginUrl.searchParams.set("redirect", pathname)
-      return NextResponse.redirect(loginUrl)
+  try {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+    const { payload } = await jwtVerify(token, secret)
+    console.log(payload)
+    // Opcional: valida role
+    if (!payload.role || payload.role === 'READER') {
+      return NextResponse.redirect(new URL('/unauthorized', request.url))
     }
 
-    // TODO: Add JWT verification and role checking here
-    // For now, we'll let the client-side auth store handle detailed verification
+    return NextResponse.next()
+  } catch (err) {
+    console.error('Invalid JWT', err)
+    const url = new URL('/login', request.url)
+    url.searchParams.set('redirect', request.nextUrl.pathname)
+    return NextResponse.redirect(url)
   }
-
-  return NextResponse.next()
 }
 
 export const config = {

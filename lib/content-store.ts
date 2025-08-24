@@ -4,6 +4,7 @@ import * as bannersService from "@/services/banners"
 import * as webstoriesService from "@/services/webstories"
 import * as categoriesService from "@/services/categories"
 import * as tagsService from "@/services/tags"
+import { DashboardMonthlySummary, getDashboardMonthlySummary } from "@/services/dashboard"
 
 interface ContentState {
   // Posts state
@@ -43,6 +44,11 @@ interface ContentState {
   popularTags: tagsService.Tag[]
   tagsLoading: boolean
   tagsError: string | null
+
+  summaryLoading: boolean
+  summary: DashboardMonthlySummary | null
+  fetchSummary: () => Promise<void>
+  summaryError: string | null
 
   // Posts actions
   fetchPosts: (params?: any) => Promise<void>
@@ -116,6 +122,23 @@ export const useContentStore = create<ContentState>((set, get) => ({
   popularTags: [],
   tagsLoading: false,
   tagsError: null,
+
+  summaryLoading: false,
+  summary: null,
+  summaryError: null,
+
+  fetchSummary: async () => {
+    set({ summaryLoading: true, summaryError: null })
+    try {
+      const data = await getDashboardMonthlySummary()
+      set({ summary: data, summaryLoading: false })
+    } catch (error: any) {
+      set({
+        summaryLoading: false,
+        summaryError: error?.response?.data?.message || "Failed to fetch dashboard summary.",
+      })
+    }
+  },
 
   // Posts actions
   fetchPosts: async (params) => {

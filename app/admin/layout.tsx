@@ -16,23 +16,8 @@ export default function AdminLayout({
   const { isLoggedIn, user, isLoading, verifySession } = useAuthStore()
 
   useEffect(() => {
-    // Verify session on admin access
     verifySession()
-  }, [verifySession])
-
-  useEffect(() => {
-    if (!isLoading) {
-      if (!isLoggedIn) {
-        router.push("/")
-        return
-      }
-
-      if (user && user.role !== "admin" && user.role !== "super_admin") {
-        router.push("/")
-        return
-      }
-    }
-  }, [isLoggedIn, user, isLoading, router])
+  }, [router])
 
   // Show loading while checking auth
   if (isLoading) {
@@ -44,7 +29,7 @@ export default function AdminLayout({
   }
 
   // Don't render admin content if not authorized
-  if (!isLoggedIn || !user || (user.role !== "admin" && user.role !== "super_admin")) {
+  if (!isLoggedIn || !user || (!user.role || user?.role === "READER")) {
     return null
   }
 

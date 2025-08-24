@@ -158,14 +158,14 @@ export default function Home() {
                 <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
                 <span className="font-medium">AO VIVO</span>
               </div>
-              <Link href="/admin">
+              {/* <Link href="/admin">
                 <Button
                   variant="outline"
                   className="text-white border-white hover:bg-white hover:text-[#419672] bg-transparent"
                 >
                   LOGIN
                 </Button>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
