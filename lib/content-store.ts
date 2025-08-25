@@ -70,10 +70,10 @@ interface ContentState {
 
   // Banners actions
   fetchBanners: () => Promise<void>
-  createBanner: (data: bannersService.CreateBannerData) => Promise<void>
+  createBanner: (data: FormData) => Promise<void>
   updateBanner: (data: bannersService.UpdateBannerData) => Promise<void>
   deleteBanner: (id: string) => Promise<void>
-  reorderBanners: (bannerIds: string[]) => Promise<void>
+  reorderBanners: (id: string, newIndex: number) => Promise<void>
   uploadBannerImage: (file: File) => Promise<string>
 
   // Web Stories actions
@@ -86,6 +86,7 @@ interface ContentState {
     onProgress?: (progress: number) => void,
   ) => Promise<{ url: string; duration: number }>
   uploadWebStoryCover: (file: File) => Promise<string>
+  reorderWebstories: (id: string, newIndex: number) => Promise<void>
 
   // Categories actions
   fetchCategories: (params?: any) => Promise<void>
@@ -346,14 +347,14 @@ export const useContentStore = create<ContentState>((set, get) => ({
     }
   },
 
-  reorderBanners: async (bannerId: string, newIndex: number) => {
+  reorderBanners: async (id: string, newIndex: number) => {
     set({ bannersLoading: true, bannersError: null })
     try {
-      await bannersService.reorderBanners(bannerId, newIndex)
+      await bannersService.reorderBanners(id, newIndex)
       // Reorder banners in state to match the new order
       const { banners } = get()
-      const reorderedBanners = bannerIds.map((id) => banners.find((banner) => banner.id === id)!).filter(Boolean)
-      set({ banners: reorderedBanners, bannersLoading: false })
+      // const reorderedBanners = bannerIds.map((id) => banners.find((banner) => banner.id === id)!).filter(Boolean)
+      // set({ banners: reorderedBanners, bannersLoading: false })
     } catch (error: any) {
       set({
         bannersLoading: false,
@@ -378,13 +379,9 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ webstoriesLoading: true, webstoriesError: null })
     try {
       const response = await webstoriesService.getWebStories(params)
+      console.log('line 382:', response)
       set({
-        webstories: response.stories,
-        webstoriesPagination: {
-          total: response.total,
-          page: response.page,
-          limit: response.limit,
-        },
+        webstories: response,
         webstoriesLoading: false,
       })
     } catch (error: any) {
@@ -397,8 +394,15 @@ export const useContentStore = create<ContentState>((set, get) => ({
 
   createWebStory: async (data) => {
     set({ webstoriesLoading: true, webstoriesError: null })
+
+    const formData = new FormData()
+    formData.append("title", data.title)
+    if (data.description) formData.append("description", data.description)
+    formData.append("videoFile", data.videoFile!)
+    if (data.coverFile) formData.append("coverFile", data.coverFile)
+
     try {
-      const newWebStory = await webstoriesService.createWebStory(data)
+      const newWebStory = await webstoriesService.createWebStory(formData)
       set((state) => ({
         webstories: [newWebStory, ...state.webstories],
         webstoriesLoading: false,
@@ -463,6 +467,11 @@ export const useContentStore = create<ContentState>((set, get) => ({
       set({ webstoriesError: error.response?.data?.message || "Failed to upload cover image" })
       throw error
     }
+  },
+  reorderWebstories: async (id: string, newIndex: number) => {
+    await webstoriesService.reorderWebstories(id, newIndex)
+    const data = await webstoriesService.getWebStories()
+    set({ webstories: data })
   },
 
   // Categories actions

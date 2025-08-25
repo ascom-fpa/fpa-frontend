@@ -14,10 +14,11 @@ export default function Home() {
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
 
-  const { fetchBanners, banners } = useContentStore()
+  const { fetchBanners, banners, webstories, fetchWebStories } = useContentStore()
 
   useEffect(() => {
     fetchBanners()
+    fetchWebStories()
   }, []);
 
   const newsArticles = [
@@ -74,27 +75,6 @@ export default function Home() {
       title: "Licenciamento ambiental é aprovado na Câmara dos Deputados",
       category: "POLÍTICA AGRÍCOLA",
       description: "Nova lei moderniza regras, reduz burocracia e destrava obras paradas em todo o país.",
-    },
-  ]
-
-  const webstories = [
-    {
-      id: 1,
-      title: "Aqui vai ficar o título da matéria, beleza?",
-      time: "5min atrás",
-      image: "/agricultural-worker-in-field.png",
-    },
-    {
-      id: 2,
-      title: "Aqui vai ficar o título da matéria, beleza?",
-      time: "10min atrás",
-      image: "/female-agricultural-scientist.png",
-    },
-    {
-      id: 3,
-      title: "Aqui vai ficar o título da matéria, beleza?",
-      time: "30min atrás",
-      image: "/agricultural-technology-expert.png",
     },
   ]
 
@@ -332,17 +312,18 @@ export default function Home() {
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Webstories</h3>
                 <div className="flex gap-2 mb-4">
-                  {webstories.map((story) => (
+                  {webstories.items?.map((story) => (
                     <div key={story.id} className="relative">
-                      <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#419672]">
-                        <img
-                          src={story.image || "/placeholder.svg"}
+                      <div className="w-[120px] h-[200px] rounded-md overflow-hidden border-2 border-[#419672]">
+                        {/* <img
+                          src={story.coverImageUrl || "/placeholder.svg"}
                           alt={story.title}
                           className="w-full h-full object-cover"
-                        />
+                        /> */}
+                        <video className="h-full" controls src={story.coverImageUrl}></video>
                       </div>
                       <div className="absolute -top-1 -right-1 bg-gray-600 text-white text-xs px-1 rounded">
-                        {story.time}
+                        {new Date(story.createdAt).toLocaleDateString('pt-BR')}
                       </div>
                     </div>
                   ))}

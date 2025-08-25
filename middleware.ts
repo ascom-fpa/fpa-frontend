@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value
-
+  console.log('here 6', token)
   if (!token) {
     const url = new URL('/login', request.url)
     url.searchParams.set('redirect', request.nextUrl.pathname)

@@ -28,7 +28,6 @@ export const metadata = {
     description: 'Acompanhe as principais notícias do Brasil e do mundo com profundidade e agilidade no FPA Notícias.',
     images: ['https://www.fpanoticias.com.br/og-image.jpg'],
   },
-  themeColor: '#154B2B',
 }
 
 export default function RootLayout({

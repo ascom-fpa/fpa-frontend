@@ -5,31 +5,23 @@ export interface WebStory {
   title: string
   description?: string
   video_url: string
-  cover_image_url: string
+  coverImageUrl: string
   duration: number
-  is_active: boolean
-  view_count: number
-  created_at: string
-  updated_at: string
+  isActive: boolean
+  viewCount: number
+  createdAt: string
+  updatedAt: string
 }
 
 export interface CreateWebStoryData {
   title: string
   description?: string
-  video_url: string
-  cover_image_url: string
-  is_active: boolean
+  videoFile: File | null
+  coverFile?: File | null
 }
 
 export interface UpdateWebStoryData extends Partial<CreateWebStoryData> {
   id: string
-}
-
-export interface WebStoriesResponse {
-  stories: WebStory[]
-  total: number
-  page: number
-  limit: number
 }
 
 // Get all web stories with pagination
@@ -37,9 +29,9 @@ export const getWebStories = async (params?: {
   page?: number
   limit?: number
   is_active?: boolean
-}): Promise<WebStoriesResponse> => {
+}): Promise<WebStory[]> => {
   const response = await api.get("/webstories", { params })
-  return response.data
+  return response.data.data
 }
 
 // Get active web stories for public display
@@ -55,8 +47,8 @@ export const getWebStory = async (id: string): Promise<WebStory> => {
 }
 
 // Create new web story
-export const createWebStory = async (data: CreateWebStoryData): Promise<WebStory> => {
-  const response = await api.post("/webstories", data)
+export const createWebStory = async (data: FormData): Promise<WebStory> => {
+  const response = await api.postForm("/webstories", data)
   return response.data
 }
 
@@ -123,4 +115,8 @@ export const incrementWebStoryViews = async (id: string): Promise<void> => {
 // Bulk delete web stories
 export const bulkDeleteWebStories = async (ids: string[]): Promise<void> => {
   await api.delete("/webstories/bulk", { data: { ids } })
+}
+
+export const reorderWebstories = async (id: string, newIndex: number): Promise<void> => {
+  await api.patch(`/webstories/${id}/reorder/${newIndex}`,)
 }
