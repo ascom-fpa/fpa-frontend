@@ -18,21 +18,16 @@ export interface CreateCategoryData {
   name: string
   slug: string
   description?: string
-  parent_id?: string
+  // parentId?: string
   color?: string
-  is_active: boolean
+  isVisible?: boolean
+  iconFile?: File
 }
 
 export interface UpdateCategoryData extends Partial<CreateCategoryData> {
   id: string
 }
 
-export interface CategoriesResponse {
-  categories: Category[]
-  total: number
-  page: number
-  limit: number
-}
 
 // Get all categories with pagination and filters
 export const getCategories = async (params?: {
@@ -41,9 +36,9 @@ export const getCategories = async (params?: {
   parent_id?: string
   is_active?: boolean
   include_children?: boolean
-}): Promise<CategoriesResponse> => {
+}): Promise<Category[]> => {
   const response = await api.get("/categories", { params })
-  return response.data
+  return response.data.data
 }
 
 // Get categories in hierarchical tree structure
@@ -113,4 +108,8 @@ export const bulkDeleteCategories = async (ids: string[]): Promise<void> => {
 
 export const bulkUpdateCategories = async (ids: string[], updates: Partial<Category>): Promise<void> => {
   await api.patch("/categories/bulk", { ids, updates })
+}
+
+export const reorderCategories = async (id: string, newIndex: number): Promise<void> => {
+  await api.patch(`/categories/${id}/reorder/${newIndex}`,)
 }

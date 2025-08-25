@@ -94,6 +94,7 @@ interface ContentState {
   createCategory: (data: categoriesService.CreateCategoryData) => Promise<void>
   updateCategory: (data: categoriesService.UpdateCategoryData) => Promise<void>
   deleteCategory: (id: string) => Promise<void>
+  reorderCategories: (id: string, newIndex: number) => Promise<void>
 
   // Tags actions
   fetchTags: (params?: any) => Promise<void>
@@ -479,7 +480,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ categoriesLoading: true, categoriesError: null })
     try {
       const response = await categoriesService.getCategories(params)
-      set({ categories: response.categories, categoriesLoading: false })
+      set({ categories: response, categoriesLoading: false })
     } catch (error: any) {
       set({
         categoriesLoading: false,
@@ -550,6 +551,11 @@ export const useContentStore = create<ContentState>((set, get) => ({
       })
       throw error
     }
+  },
+  reorderCategories: async (id: string, newIndex: number) => {
+    await categoriesService.reorderCategories(id, newIndex)
+    const data = await categoriesService.getCategories()
+    set({ categories: data })
   },
 
   // Tags actions
