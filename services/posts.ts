@@ -1,3 +1,4 @@
+import { PostStatusEnum } from "@/enums/post"
 import api from "./axios"
 
 export interface Post {
@@ -17,15 +18,14 @@ export interface Post {
 }
 
 export interface CreatePostData {
-  title: string
-  content: string
-  excerpt: string
-  slug: string
-  status: "draft" | "published"
-  featured_image?: string
-  category_id: string
-  tags: string[]
-  published_at?: string
+  postTitle: string
+  postContent: object
+  postStatus: PostStatusEnum
+  postCategoryId: string
+  relatedTags?: string[]
+  thumbnailFile?: File | null
+  slug?: string
+  summary: string
 }
 
 export interface UpdatePostData extends Partial<CreatePostData> {
@@ -46,9 +46,9 @@ export const getPosts = async (params?: {
   status?: string
   category_id?: string
   search?: string
-}): Promise<PostsResponse> => {
+}): Promise<Post[]> => {
   const response = await api.get("/posts", { params })
-  return response.data
+  return response.data.data
 }
 
 // Get single post by ID
