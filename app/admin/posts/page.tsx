@@ -11,6 +11,7 @@ import { LabelInputFile } from "@/components/ui/label-input-file"
 import { PostStatusEnum } from "@/enums/post"
 import { CreatePostData } from "@/services/posts"
 import { MultiSelect } from "@/components/ui/multi-select"
+import { TipTapEditor } from "./tiptap-editor"
 
 const formInitialState: CreatePostData = {
     postTitle: "",
@@ -102,7 +103,7 @@ export default function PostsAdminPage() {
                     />
 
                     {/* Editor de conteúdo pode ser implementado com Tiptap ou outro */}
-                    <textarea
+                    {/* <textarea
                         placeholder="Conteúdo (JSON string por enquanto)"
                         className="border rounded-md px-3 py-2 text-sm text-gray-700"
                         rows={6}
@@ -115,7 +116,9 @@ export default function PostsAdminPage() {
                                 // você pode exibir um erro se quiser
                             }
                         }}
-                    />
+                    /> */}
+
+                    <TipTapEditor />
 
                     <LabelInputFile
                         id="thumbnail-upload"

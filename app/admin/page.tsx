@@ -7,15 +7,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { FileText, ImageIcon, Video, FolderTree, Users, BarChart3, TrendingUp, Eye } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function AdminDashboard() {
   const { user } = useAuthStore()
-  const {
-    summary,
-    fetchSummary,
-    fetchContentOverview,
-    contentOverview,
-  } = useContentStore()
+  const { summary, fetchSummary, fetchContentOverview, contentOverview, } = useContentStore()
+
+  const router = useRouter()
 
   useEffect(() => {
     // fetchPosts()
@@ -101,19 +99,19 @@ export default function AdminDashboard() {
             <CardDescription>Atividades comuns</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
+            <Button onClick={() => router.push("/admin/posts")} className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
               <FileText className="mr-2 h-4 w-4" />
               Escrever nova matéria
             </Button>
-            <Button className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
+            <Button onClick={() => router.push("/admin/banners")} className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
               <ImageIcon className="mr-2 h-4 w-4" />
               Gerenciar banners
             </Button>
-            <Button className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
+            <Button onClick={() => router.push("/admin/webstories")} className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
               <Video className="mr-2 h-4 w-4" />
               Adicionar Web Story
             </Button>
-            <Button className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
+            <Button onClick={() => router.push("/admin/users")} className="cursor-pointer w-full justify-start bg-transparent" variant="outline">
               <Users className="mr-2 h-4 w-4" />
               Gerenciamento de usuários
             </Button>
