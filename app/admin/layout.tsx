@@ -7,6 +7,10 @@ import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/lib/auth-store"
 import { DashboardLayout } from "@/components/dashboard-layout"
 
+import { ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
+import Loading from "../loading"
+
 export default function AdminLayout({
   children,
 }: {
@@ -33,5 +37,9 @@ export default function AdminLayout({
     return null
   }
 
-  return <DashboardLayout>{children}</DashboardLayout>
+  return <DashboardLayout>
+    {children}
+    <ToastContainer position="top-right" autoClose={false} />
+    <Loading />
+  </DashboardLayout>
 }

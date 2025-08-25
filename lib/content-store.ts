@@ -4,9 +4,12 @@ import * as bannersService from "@/services/banners"
 import * as webstoriesService from "@/services/webstories"
 import * as categoriesService from "@/services/categories"
 import * as tagsService from "@/services/tags"
+import * as relevantsService from "@/services/relevants"
 import { DashboardContentOverview, DashboardMonthlySummary, DashboardTotalCounts, getDashboardContentOverview, getDashboardMonthlySummary, getDashboardTotalCounts } from "@/services/dashboard"
 
 interface ContentState {
+  loading: boolean
+
   // Posts state
   posts: postsService.Post[]
   currentPost: postsService.Post | null
@@ -28,6 +31,18 @@ interface ContentState {
   webstoriesLoading: boolean
   webstoriesError: string | null
   webstoriesPagination: {
+    total: number
+    page: number
+    limit: number
+  }
+
+  // Relevants state
+  setFileUploadProgress: (fileUploadProgress: number) => void
+  fileUploadProgress: number
+  relevants: relevantsService.Relevant[]
+  relevantsLoading: boolean
+  relevantsError: string | null
+  relevantsPagination: {
     total: number
     page: number
     limit: number
@@ -83,10 +98,22 @@ interface ContentState {
   deleteWebStory: (id: string) => Promise<void>
   uploadWebStoryVideo: (
     file: File,
-    onProgress?: (progress: number) => void,
+    onProgress?: (fileUploadProgress: number) => void,
   ) => Promise<{ url: string; duration: number }>
   uploadWebStoryCover: (file: File) => Promise<string>
   reorderWebstories: (id: string, newIndex: number) => Promise<void>
+
+  // Relevant actions
+  fetchRelevants: (params?: any) => Promise<void>
+  createRelevant: (data: relevantsService.CreateRelevantData) => Promise<void>
+  updateRelevant: (data: relevantsService.UpdateRelevantData) => Promise<void>
+  deleteRelevant: (id: string) => Promise<void>
+  uploadRelevantVideo: (
+    file: File,
+    onProgress?: (fileUploadProgress: number) => void,
+  ) => Promise<{ url: string; duration: number }>
+  uploadRelevantCover: (file: File) => Promise<string>
+  reorderRelevants: (id: string, newIndex: number) => Promise<void>
 
   // Categories actions
   fetchCategories: (params?: any) => Promise<void>
@@ -106,10 +133,14 @@ interface ContentState {
 
   // Utility actions
   clearErrors: () => void
+
+  setLoading: (isLoading: boolean) => void,
 }
 
 export const useContentStore = create<ContentState>((set, get) => ({
   // Initial state
+  loading: false,
+
   posts: [],
   currentPost: null,
   postsLoading: false,
@@ -124,6 +155,12 @@ export const useContentStore = create<ContentState>((set, get) => ({
   webstoriesLoading: false,
   webstoriesError: null,
   webstoriesPagination: { total: 0, page: 1, limit: 10 },
+
+  fileUploadProgress: 0,
+  relevants: [],
+  relevantsLoading: false,
+  relevantsError: null,
+  relevantsPagination: { total: 0, page: 1, limit: 10 },
 
   categories: [],
   categoriesTree: [],
@@ -475,6 +512,112 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ webstories: data })
   },
 
+  // Relevant actions
+  fetchRelevants: async (params) => {
+    set({ relevantsLoading: true, relevantsError: null })
+    try {
+      const response = await relevantsService.getRelevants(params)
+      console.log('line 382:', response)
+      set({
+        relevants: response,
+        relevantsLoading: false,
+      })
+    } catch (error: any) {
+      set({
+        relevantsLoading: false,
+        relevantsError: error.response?.data?.message || "Failed to fetch web stories",
+      })
+    }
+  },
+
+  setFileUploadProgress: (data) => {
+    set({ fileUploadProgress: data })
+  },
+
+  createRelevant: async (data) => {
+    set({ relevantsLoading: true, relevantsError: null, loading: true })
+
+    const formData = new FormData()
+    formData.append("title", data.title)
+    if (data.description) formData.append("description", data.description)
+    formData.append("videoFile", data.videoFile!)
+    if (data.coverFile) formData.append("coverFile", data.coverFile)
+
+    try {
+      const newRelevant = await relevantsService.createRelevant(formData)
+      set((state) => ({
+        relevants: [newRelevant, ...state.relevants],
+        relevantsLoading: false,
+      }))
+    } catch (error: any) {
+      set({
+        relevantsLoading: false,
+        relevantsError: error.response?.data?.message || "Failed to create web story",
+      })
+      throw error
+    } finally {
+      set({loading: false})
+    }
+  },
+
+  updateRelevant: async (data) => {
+    set({ relevantsLoading: true, relevantsError: null })
+    try {
+      const updatedRelevant = await relevantsService.updateRelevant(data)
+      set((state) => ({
+        relevants: state.relevants.map((story) => (story.id === data.id ? updatedRelevant : story)),
+        relevantsLoading: false,
+      }))
+    } catch (error: any) {
+      set({
+        relevantsLoading: false,
+        relevantsError: error.response?.data?.message || "Failed to update web story",
+      })
+      throw error
+    }
+  },
+
+  deleteRelevant: async (id: string) => {
+    set({ relevantsLoading: true, relevantsError: null })
+    try {
+      await relevantsService.deleteRelevant(id)
+      set((state) => ({
+        relevants: state.relevants.filter((story) => story.id !== id),
+        relevantsLoading: false,
+      }))
+    } catch (error: any) {
+      set({
+        relevantsLoading: false,
+        relevantsError: error.response?.data?.message || "Failed to delete web story",
+      })
+      throw error
+    }
+  },
+
+  uploadRelevantVideo: async (file: File, onProgress) => {
+    try {
+      return await relevantsService.uploadRelevantVideo(file, onProgress)
+    } catch (error: any) {
+      set({ relevantsError: error.response?.data?.message || "Failed to upload video" })
+      throw error
+    }
+  },
+
+  uploadRelevantCover: async (file: File) => {
+    try {
+      const response = await relevantsService.uploadRelevantCover(file)
+      return response.url
+    } catch (error: any) {
+      set({ relevantsError: error.response?.data?.message || "Failed to upload cover image" })
+      throw error
+    }
+  },
+  reorderRelevants: async (id: string, newIndex: number) => {
+    await relevantsService.reorderRelevants(id, newIndex)
+    const data = await relevantsService.getRelevants()
+    set({ relevants: data })
+  },
+
   // Categories actions
   fetchCategories: async (params) => {
     set({ categoriesLoading: true, categoriesError: null })
@@ -654,4 +797,8 @@ export const useContentStore = create<ContentState>((set, get) => ({
       categoriesError: null,
       tagsError: null,
     }),
+
+  setLoading: (loading) => {
+    set({ loading })
+  },
 }))
