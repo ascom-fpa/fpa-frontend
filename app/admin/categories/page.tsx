@@ -74,15 +74,6 @@ export default function CategoryPage() {
         fetchCategories()
     }
 
-    const confirmDelete = async () => {
-        if (categoryToDelete) {
-            await deleteCategory(categoryToDelete)
-            setCategoryToDelete(null)
-            setCategoryToDeleteData(null)
-            fetchCategories()
-        }
-    }
-
     return (
         <div className="space-y-6">
             <h1 className="text-2xl font-semibold">Gerenciamento de Categorias</h1>

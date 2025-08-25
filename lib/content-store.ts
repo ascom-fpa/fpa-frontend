@@ -563,7 +563,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ tagsLoading: true, tagsError: null })
     try {
       const response = await tagsService.getTags(params)
-      set({ tags: response.tags, tagsLoading: false })
+      set({ tags: response, tagsLoading: false })
     } catch (error: any) {
       set({
         tagsLoading: false,

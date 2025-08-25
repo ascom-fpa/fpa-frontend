@@ -17,18 +17,10 @@ export interface CreateTagData {
   slug: string
   description?: string
   color?: string
-  is_active: boolean
 }
 
 export interface UpdateTagData extends Partial<CreateTagData> {
   id: string
-}
-
-export interface TagsResponse {
-  tags: Tag[]
-  total: number
-  page: number
-  limit: number
 }
 
 // Get all tags with pagination and filters
@@ -37,15 +29,15 @@ export const getTags = async (params?: {
   limit?: number
   is_active?: boolean
   search?: string
-}): Promise<TagsResponse> => {
+}): Promise<Tag[]> => {
   const response = await api.get("/tags", { params })
-  return response.data
+  return response.data.data
 }
 
 // Get active tags for public use
 export const getActiveTags = async (): Promise<Tag[]> => {
   const response = await api.get("/tags/active")
-  return response.data
+  return response.data.data
 }
 
 // Get popular tags (most used)
