@@ -12,6 +12,22 @@ import { PostStatusEnum } from "@/enums/post"
 import { CreatePostData } from "@/services/posts"
 import { MultiSelect } from "@/components/ui/multi-select"
 import { TipTapEditor } from "./tiptap-editor"
+import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
+
+// --- Tiptap Core Extensions ---
+import { StarterKit } from "@tiptap/starter-kit"
+import { Image } from "@tiptap/extension-image"
+import { TaskItem, TaskList } from "@tiptap/extension-list"
+import { TextAlign } from "@tiptap/extension-text-align"
+import { Typography } from "@tiptap/extension-typography"
+import { Highlight } from "@tiptap/extension-highlight"
+import { Subscript } from "@tiptap/extension-subscript"
+import { Superscript } from "@tiptap/extension-superscript"
+import { Selection } from "@tiptap/extensions"
+import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension"
+import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension"
+import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
+import content from "@/components/tiptap-templates/data/content.json"
 
 const formInitialState: CreatePostData = {
     postTitle: "",
@@ -21,13 +37,60 @@ const formInitialState: CreatePostData = {
     summary: "",
     relatedTags: [],
     slug: "",
-    thumbnailFile: null
+    thumbnailFile: null,
+    files: []
 }
 
 export default function PostsAdminPage() {
     const [form, setForm] = useState<CreatePostData>(formInitialState)
-    const { posts, fetchPosts, createPost, deletePost, fetchTags, tags, fetchCategories, categories } = useContentStore()
+    const {
+        posts, fetchPosts, createPost, deletePost,
+        fetchTags, tags, fetchCategories, categories,
+        pushCurrentPostFiles, currentPostFiles, setLoading
+    } = useContentStore()
     const [orderedPosts, setOrderedPosts] = useState<any[]>([])
+
+    const editor = useEditor({
+        immediatelyRender: false,
+        shouldRerenderOnTransaction: false,
+        editorProps: {
+            attributes: {
+                autocomplete: "off",
+                autocorrect: "off",
+                autocapitalize: "off",
+                "aria-label": "Main content area, start typing to enter text.",
+                class: "simple-editor",
+            },
+        },
+        extensions: [
+            StarterKit.configure({
+                horizontalRule: false,
+                link: {
+                    openOnClick: false,
+                    enableClickSelection: true,
+                },
+            }),
+            HorizontalRule,
+            TextAlign.configure({ types: ["heading", "paragraph"] }),
+            TaskList,
+            TaskItem.configure({ nested: true }),
+            Highlight.configure({ multicolor: true }),
+            Image,
+            Typography,
+            Superscript,
+            Subscript,
+            Selection,
+            ImageUploadNode.configure({
+                accept: "image/*",
+                maxSize: MAX_FILE_SIZE,
+                limit: 3,
+                upload: (file, progress, signal) =>
+                    handleImageUpload(file, progress, signal, pushCurrentPostFiles),
+                onError: (error) => console.error("Upload failed:", error),
+            }),
+        ],
+        content,
+    })
 
     useEffect(() => {
         fetchPosts()
@@ -40,14 +103,15 @@ export default function PostsAdminPage() {
     }, [posts])
 
     const handleUpload = async () => {
-        if (!form.postTitle || !form.postCategoryId) return
-
+        setLoading(true)
+        if (!form.postTitle || !form.postCategoryId || !form.postStatus || !form.slug) return
+        form.files = currentPostFiles
+        form.postContent = editor?.getJSON() || {}
         await createPost(form)
         setForm(formInitialState)
         fetchPosts()
+        setLoading(false)
     }
-
-    console.log(tags, posts)
 
     return (
         <div className="space-y-6">
@@ -103,22 +167,7 @@ export default function PostsAdminPage() {
                     />
 
                     {/* Editor de conteúdo pode ser implementado com Tiptap ou outro */}
-                    {/* <textarea
-                        placeholder="Conteúdo (JSON string por enquanto)"
-                        className="border rounded-md px-3 py-2 text-sm text-gray-700"
-                        rows={6}
-                        value={JSON.stringify(form.postContent, null, 2)}
-                        onChange={(e) => {
-                            try {
-                                const json = JSON.parse(e.target.value)
-                                setForm({ ...form, postContent: json })
-                            } catch (err) {
-                                // você pode exibir um erro se quiser
-                            }
-                        }}
-                    /> */}
-
-                    <TipTapEditor />
+                    <TipTapEditor editor={editor} />
 
                     <LabelInputFile
                         id="thumbnail-upload"
@@ -128,8 +177,8 @@ export default function PostsAdminPage() {
                     />
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                    <Button onClick={handleUpload} disabled={!form.postTitle}>
-                        <UploadCloud className="mr-2 h-4 w-4" /> Enviar Tag
+                    <Button onClick={handleUpload} disabled={!form.postTitle || !form.postCategoryId || !form.postStatus || !form.slug}>
+                        <UploadCloud className="mr-2 h-4 w-4" /> Enviar matéria
                     </Button>
                 </CardFooter>
             </Card>

@@ -26,6 +26,7 @@ export interface CreatePostData {
   thumbnailFile?: File | null
   slug?: string
   summary: string
+  files?: File[]
 }
 
 export interface UpdatePostData extends Partial<CreatePostData> {
@@ -58,8 +59,8 @@ export const getPost = async (id: string): Promise<Post> => {
 }
 
 // Create new post
-export const createPost = async (data: CreatePostData): Promise<Post> => {
-  const response = await api.post("/posts", data)
+export const createPost = async (form: FormData): Promise<Post> => {
+  const response = await api.postForm("/posts", form)
   return response.data
 }
 

@@ -1,6 +1,7 @@
 import type { Node as TiptapNode } from "@tiptap/pm/model"
 import { NodeSelection, Selection, TextSelection } from "@tiptap/pm/state"
 import type { Editor } from "@tiptap/react"
+import { useContentStore } from "./content-store"
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
@@ -289,8 +290,11 @@ export function isNodeTypeSelected(
 export const handleImageUpload = async (
   file: File,
   onProgress?: (event: { progress: number }) => void,
-  abortSignal?: AbortSignal
+  abortSignal?: AbortSignal,
+  pushCurrentPostFiles?: (file: File) => void
 ): Promise<string> => {
+  console.log('here 294')
+
   // Validate file
   if (!file) {
     throw new Error("No file provided")
@@ -311,6 +315,9 @@ export const handleImageUpload = async (
     await new Promise((resolve) => setTimeout(resolve, 500))
     onProgress?.({ progress })
   }
+
+  console.log(file)
+  pushCurrentPostFiles && pushCurrentPostFiles(file)
 
   const previewUrl = URL.createObjectURL(file);
 

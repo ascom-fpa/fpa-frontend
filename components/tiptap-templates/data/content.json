@@ -222,14 +222,6 @@
       ]
     },
     {
-      "type": "image",
-      "attrs": {
-        "src": "/placeholder.png",
-        "alt": "placeholder-image",
-        "title": "placeholder-image"
-      }
-    },
-    {
       "type": "bulletList",
       "content": [
         {

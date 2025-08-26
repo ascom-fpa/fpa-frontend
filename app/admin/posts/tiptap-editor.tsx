@@ -1,18 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
-
-// --- Tiptap Core Extensions ---
-import { StarterKit } from "@tiptap/starter-kit"
-import { Image } from "@tiptap/extension-image"
-import { TaskItem, TaskList } from "@tiptap/extension-list"
-import { TextAlign } from "@tiptap/extension-text-align"
-import { Typography } from "@tiptap/extension-typography"
-import { Highlight } from "@tiptap/extension-highlight"
-import { Subscript } from "@tiptap/extension-subscript"
-import { Superscript } from "@tiptap/extension-superscript"
-import { Selection } from "@tiptap/extensions"
+import { Editor, EditorContent, EditorContext } from "@tiptap/react"
 
 // --- UI Primitives ---
 import { Button } from "@/components/tiptap-ui-primitive/button"
@@ -20,8 +9,6 @@ import { Spacer } from "@/components/tiptap-ui-primitive/spacer"
 import { Toolbar, ToolbarGroup, ToolbarSeparator, } from "@/components/tiptap-ui-primitive/toolbar"
 
 // --- Tiptap Node ---
-import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension"
-import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension"
 import "@/components/tiptap-node/blockquote-node/blockquote-node.scss"
 import "@/components/tiptap-node/code-block-node/code-block-node.scss"
 import "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node.scss"
@@ -52,16 +39,8 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { useWindowSize } from "@/hooks/use-window-size"
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
 
-// --- Components ---
-import { ThemeToggle } from "@/components/tiptap-templates/theme-toggle"
-
-// --- Lib ---
-import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
-
 // --- Styles ---
 import "@/components/tiptap-templates/simple-editor.scss"
-
-import content from "@/components/tiptap-templates/data/content.json"
 
 const MainToolbarContent = ({
     onHighlighterClick,
@@ -134,10 +113,6 @@ const MainToolbarContent = ({
             <Spacer />
 
             {isMobile && <ToolbarSeparator />}
-
-            <ToolbarGroup>
-                <ThemeToggle />
-            </ToolbarGroup>
         </>
     )
 }
@@ -171,7 +146,7 @@ const MobileToolbarContent = ({
     </>
 )
 
-export function TipTapEditor() {
+export function TipTapEditor(props: { editor: Editor | null }) {
     const isMobile = useIsMobile()
     const { height } = useWindowSize()
     const [mobileView, setMobileView] = React.useState<
@@ -179,66 +154,22 @@ export function TipTapEditor() {
     >("main")
     const toolbarRef = React.useRef<HTMLDivElement>(null)
 
-    const editor = useEditor({
-        immediatelyRender: false,
-        shouldRerenderOnTransaction: false,
-        editorProps: {
-            attributes: {
-                autocomplete: "off",
-                autocorrect: "off",
-                autocapitalize: "off",
-                "aria-label": "Main content area, start typing to enter text.",
-                class: "simple-editor",
-            },
-        },
-        extensions: [
-            StarterKit.configure({
-                horizontalRule: false,
-                link: {
-                    openOnClick: false,
-                    enableClickSelection: true,
-                },
-            }),
-            HorizontalRule,
-            TextAlign.configure({ types: ["heading", "paragraph"] }),
-            TaskList,
-            TaskItem.configure({ nested: true }),
-            Highlight.configure({ multicolor: true }),
-            Image,
-            Typography,
-            Superscript,
-            Subscript,
-            Selection,
-            ImageUploadNode.configure({
-                accept: "image/*",
-                maxSize: MAX_FILE_SIZE,
-                limit: 3,
-                upload: handleImageUpload,
-                onError: (error) => console.error("Upload failed:", error),
-            }),
-        ],
-        content,
-    })
-
     const rect = useCursorVisibility({
-        editor,
+        editor: props.editor,
         overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
     })
 
-    editor?.state.doc.descendants((node, pos) => {
+    props.editor?.state.doc.descendants((node, pos) => {
         if (node.type.name === 'image' && node.attrs.src.startsWith('blob:')) {
             console.log(node)
         }
     });
 
-    editor?.state.doc.descendants((node, pos) => {
+    props.editor?.state.doc.descendants((node, pos) => {
         if (node.type.name === 'image' && node.attrs.src.startsWith('blob:')) {
             console.log(node)
         }
     });
-
-    console.log('line 240', editor?.getJSON())
-    console.log('line 241', editor?.getAttributes('img'))
 
     React.useEffect(() => {
         if (!isMobile && mobileView !== "main") {
@@ -248,7 +179,7 @@ export function TipTapEditor() {
 
     return (
         <div className="simple-editor-wrapper">
-            <EditorContext.Provider value={{ editor }}>
+            <EditorContext.Provider value={{ editor: props.editor }}>
                 <Toolbar
                     ref={toolbarRef}
                     style={{
@@ -274,7 +205,7 @@ export function TipTapEditor() {
                 </Toolbar>
 
                 <EditorContent
-                    editor={editor}
+                    editor={props.editor}
                     role="presentation"
                     className="simple-editor-content"
                 />

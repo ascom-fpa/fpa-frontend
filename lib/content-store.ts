@@ -20,6 +20,7 @@ interface ContentState {
     page: number
     limit: number
   }
+  currentPostFiles: File[]
 
   // Banners state
   banners: bannersService.Banner[]
@@ -82,6 +83,7 @@ interface ContentState {
   updatePost: (data: postsService.UpdatePostData) => Promise<void>
   deletePost: (id: string) => Promise<void>
   uploadPostImage: (file: File) => Promise<string>
+  pushCurrentPostFiles: (file: File) => void
 
   // Banners actions
   fetchBanners: () => Promise<void>
@@ -146,6 +148,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
   postsLoading: false,
   postsError: null,
   postsPagination: { total: 0, page: 1, limit: 10 },
+  currentPostFiles: [],
 
   banners: [],
   bannersLoading: false,
@@ -256,7 +259,17 @@ export const useContentStore = create<ContentState>((set, get) => ({
   createPost: async (data) => {
     set({ postsLoading: true, postsError: null })
     try {
-      const newPost = await postsService.createPost(data)
+      const form = new FormData()
+      form.append("postTitle", data.postTitle)
+      form.append("postCategoryId", data.postCategoryId)
+      form.append("postStatus", data.postStatus)
+      form.append("slug", data.slug || '')
+      form.append("postContent", JSON.stringify(data.postContent))
+      data.files?.forEach((file: File) => {
+        form.append("files", file)
+      })
+
+      const newPost = await postsService.createPost(form)
       set((state) => ({
         posts: [newPost, ...state.posts],
         postsLoading: false,
@@ -313,6 +326,10 @@ export const useContentStore = create<ContentState>((set, get) => ({
       set({ postsError: error.response?.data?.message || "Failed to upload image" })
       throw error
     }
+  },
+
+  pushCurrentPostFiles: (file: File) => {
+    set(state => ({ currentPostFiles: [...state.currentPostFiles, file] }))
   },
 
   // Banners actions
@@ -551,7 +568,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
       })
       throw error
     } finally {
-      set({loading: false})
+      set({ loading: false })
     }
   },
 
