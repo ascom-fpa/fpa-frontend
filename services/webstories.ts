@@ -4,7 +4,7 @@ export interface WebStory {
   id: string
   title: string
   description?: string
-  video_url: string
+  videoUrl: string
   coverImageUrl: string
   duration: number
   isActive: boolean

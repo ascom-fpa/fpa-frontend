@@ -269,6 +269,8 @@ export const useContentStore = create<ContentState>((set, get) => ({
         form.append("files", file)
       })
 
+      console.log(form.get("postContent"))
+
       const newPost = await postsService.createPost(form)
       set((state) => ({
         posts: [newPost, ...state.posts],

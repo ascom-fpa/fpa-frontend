@@ -1,10 +1,12 @@
 "use client"
 
+import { nanoid } from "nanoid" // certifique-se de instalar: npm i nanoid
+
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { UploadCloud, Trash2 } from "lucide-react"
+import { UploadCloud, Trash2, AlertTriangle, Copy } from "lucide-react"
 import { useContentStore } from "@/lib/content-store"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { LabelInputFile } from "@/components/ui/label-input-file"
@@ -29,6 +31,7 @@ import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/ho
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 import content from "@/components/tiptap-templates/data/content.json"
 import ViewPost from "./view-post"
+import { randomUUID } from "crypto"
 
 const formInitialState: CreatePostData = {
     postTitle: "",
@@ -114,6 +117,14 @@ export default function PostsAdminPage() {
         setLoading(false)
     }
 
+    async function handleDuplicate(duplicatedPost: CreatePostData) {
+        setLoading(true)
+        console.log(duplicatedPost)
+        await createPost(duplicatedPost)
+        await fetchPosts()
+        setLoading(false)
+    }
+
     return (
         <div className="space-y-6">
             <h1 className="text-2xl font-semibold">Gerenciamento de Matérias</h1>
@@ -186,14 +197,14 @@ export default function PostsAdminPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {orderedPosts?.map((post) => (
-                    <PostCard key={post.id} post={post} onDelete={() => deletePost(post.id)} />
+                    <PostCard key={post.id} post={post} onDelete={() => deletePost(post.id)} handleDuplicate={handleDuplicate} />
                 ))}
             </div>
         </div>
     )
 }
 
-function PostCard({ post, onDelete }: { post: any; onDelete: () => void }) {
+function PostCard({ post, onDelete, handleDuplicate }: { post: any; onDelete: () => void, handleDuplicate: any }) {
     return (
         <Card className="p-0">
             <CardContent className="flex flex-col gap-4">
@@ -233,7 +244,7 @@ function PostCard({ post, onDelete }: { post: any; onDelete: () => void }) {
                         )}
 
                         {/* Aqui você pode substituir por seu componente de leitura Tiptap */}
-                        <ViewPost postContent={post.postContent } />
+                        <ViewPost postContent={post.postContent} />
 
                         <AlertDialogFooter className="mt-6 fixed right-10">
                             <AlertDialogCancel>Fechar</AlertDialogCancel>
@@ -267,6 +278,44 @@ function PostCard({ post, onDelete }: { post: any; onDelete: () => void }) {
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancelar</AlertDialogCancel>
                             <AlertDialogAction onClick={onDelete}>Confirmar</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button size="sm" variant="secondary">
+                            <Copy className="w-4 h-4 mr-1" />
+                            Duplicar
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle className="flex items-center gap-2">
+                                <AlertTriangle className="text-yellow-600 w-5 h-5" />
+                                Confirmar duplicação
+                            </AlertDialogTitle>
+                        </AlertDialogHeader>
+                        <p className="text-muted-foreground text-sm mt-2">
+                            Deseja duplicar este post com um novo título e slug aleatórios?
+                        </p>
+                        <AlertDialogFooter className="mt-4">
+                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={async () => {
+                                    const randomSuffix = nanoid(12)
+                                    const duplicatedPost = {
+                                        ...post,
+                                        id: undefined,
+                                        postTitle: `${post.postTitle} - Cópia ${randomSuffix}`,
+                                        slug: `${post.slug}-${randomSuffix}`,
+                                        postContent: post.postContent ?? {}, // ou [] ou null, dependendo do que seu schema aceita
+                                    }
+
+                                    handleDuplicate(duplicatedPost)
+                                }}
+                            >
+                                Confirmar
+                            </AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>

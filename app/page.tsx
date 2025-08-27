@@ -1,4 +1,8 @@
 "use client"
+import 'swiper/css'
+import 'swiper/css/navigation'
+import { Navigation } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 import type React from "react"
 
@@ -8,75 +12,21 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useContentStore } from "@/lib/content-store"
+import Footer from '@/components/ui/footer'
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
 
-  const { fetchBanners, banners, webstories, fetchWebStories } = useContentStore()
+  const { fetchBanners, banners, webstories, fetchWebStories, fetchPosts, posts, fetchRelevants, relevants } = useContentStore()
 
   useEffect(() => {
     fetchBanners()
     fetchWebStories()
+    fetchPosts()
+    fetchRelevants()
   }, []);
-
-  const newsArticles = [
-    {
-      category: "ECONOMIA",
-      title: "Senado debate regulamentação de atividades econômicas em terras indígenas",
-      description: "Proposta garante o direito de explorar o potencial econômico dos territórios",
-      image: "/indigenous-lands-economic-activities-discussion.png",
-    },
-    {
-      category: "ECONOMIA",
-      title: "Senado debate regulamentação de atividades econômicas em terras indígenas",
-      description: "Proposta garante o direito de explorar o potencial econômico dos territórios",
-      image: "/senate-economic-regulation-debate.png",
-    },
-    {
-      category: "INTERNACIONAL",
-      title: "Licenciamento ambiental é aprovado na Câmara dos Deputados",
-      description: "Nova lei moderniza regras, reduz burocracia e destrava obras paradas em todo o país",
-      image: "/environmental-licensing-chamber-of-deputies.png",
-    },
-  ]
-
-  const recentNews = [
-    {
-      id: 1,
-      title: "Novo marco dos portos começa a ser debatido na Câmara",
-      date: "10 DE AGOSTO",
-      category: "POLÍTICA AGRÍCOLA",
-      author: "JOÃO PEREIRA",
-      image: "/brazilian-congress-chamber-debate-session.png",
-      featured: true,
-    },
-    {
-      id: 2,
-      title: "Licenciamento ambiental é aprovado na Câmara dos Deputados",
-      category: "POLÍTICA AGRÍCOLA",
-      description: "Nova lei moderniza regras, reduz burocracia e destrava obras paradas em todo o país.",
-    },
-    {
-      id: 3,
-      title: "Licenciamento ambiental é aprovado na Câmara dos Deputados",
-      category: "INTERNACIONAL",
-      description: "Nova lei moderniza regras, reduz burocracia e destrava obras paradas em todo o país.",
-    },
-    {
-      id: 4,
-      title: "Licenciamento ambiental é aprovado na Câmara dos Deputados",
-      category: "INTERNACIONAL",
-      description: "Nova lei moderniza regras, reduz burocracia e destrava obras paradas em todo o país.",
-    },
-    {
-      id: 5,
-      title: "Licenciamento ambiental é aprovado na Câmara dos Deputados",
-      category: "POLÍTICA AGRÍCOLA",
-      description: "Nova lei moderniza regras, reduz burocracia e destrava obras paradas em todo o país.",
-    },
-  ]
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % banners.length)
@@ -191,26 +141,26 @@ export default function Home() {
       <section className="py-8 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-3 gap-6">
-            {newsArticles.map((article, index) => (
+            {posts.map((article, index) => (
               <article
                 key={index}
                 className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
               >
                 <div className="relative">
                   <img
-                    src={article.image || "/placeholder.svg"}
-                    alt={article.title}
+                    src={article.thumbnailUrl || "/placeholder.svg"}
+                    alt={article.postTitle}
                     className="w-full h-48 object-cover"
                   />
                   <div className="absolute top-4 left-4">
                     <span className="bg-[#419672] text-white px-3 py-1 rounded text-sm font-medium">
-                      {article.category}
+                      {article.postCategory.name}
                     </span>
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="font-bold text-lg mb-3 text-gray-900 leading-tight">{article.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{article.description}</p>
+                  <h3 className="font-bold text-lg mb-3 text-gray-900 leading-tight">{article.postTitle}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{article.summary.slice(0, 100)}...</p>
                 </div>
               </article>
             ))}
@@ -227,42 +177,42 @@ export default function Home() {
               <h2 className="text-3xl font-bold text-[#419672] mb-8">Mais Recentes</h2>
 
               {/* Featured Article */}
-              {recentNews[0] && (
+              {posts[0] && (
                 <article className="mb-8">
                   <div className="relative mb-4">
                     <img
-                      src={recentNews[0].image || "/placeholder.svg"}
-                      alt={recentNews[0].title}
+                      src={posts[0].thumbnailUrl || "/placeholder.svg"}
+                      alt={posts[0].postTitle}
                       className="w-full h-64 object-cover rounded-lg"
                     />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{recentNews[0].title}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{posts[0].postTitle}</h3>
                   <div className="flex items-center text-sm text-gray-600 mb-4">
-                    <span>{recentNews[0].date}</span>
+                    <span>{new Date(posts[0].createdAt).toLocaleDateString('pt-BR')}</span>
                     <span className="mx-2">|</span>
-                    <span>{recentNews[0].category}</span>
+                    <span className="border p-2 border-gray-400 rounded-xl">{posts[0].postCategory.name}</span>
                     <span className="mx-2">|</span>
-                    <span>{recentNews[0].author}</span>
+                    <span>{`${posts[0].postAuthor.firstName} ${posts[0].postAuthor.lastName}`}</span>
                   </div>
                 </article>
               )}
 
               {/* Recent Articles List */}
               <div className="space-y-6">
-                {recentNews.slice(1).map((article) => (
-                  <article key={article.id} className="flex items-start gap-4 pb-6 border-b border-gray-200">
+                {posts.slice(1).map((post) => (
+                  <article key={post.id} className="flex items-start gap-4 pb-6 border-b border-gray-200">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xs font-medium text-[#419672] uppercase tracking-wide">
-                          {article.category}
+                          {post.postCategory.name}
                         </span>
                         <Button variant="ghost" size="sm" className="p-0 h-auto text-gray-400 hover:text-gray-600">
                           <Share2 className="h-4 w-4" />
                         </Button>
                       </div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight">{article.title}</h3>
-                      {article.description && (
-                        <p className="text-sm text-gray-600 leading-relaxed">{article.description}</p>
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight">{post.postTitle}</h3>
+                      {post.description && (
+                        <p className="text-sm text-gray-600 leading-relaxed">{post.description}</p>
                       )}
                     </div>
                   </article>
@@ -312,15 +262,15 @@ export default function Home() {
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Webstories</h3>
                 <div className="flex gap-2 mb-4">
-                  {webstories.items?.map((story) => (
+                  {webstories?.map((story) => (
                     <div key={story.id} className="relative">
-                      <div className="w-[120px] h-[200px] rounded-md overflow-hidden border-2 border-[#419672]">
+                      <div className="w-[140px] h-[300px] rounded-md overflow-hidden border-2 border-[#419672]">
                         {/* <img
                           src={story.coverImageUrl || "/placeholder.svg"}
                           alt={story.title}
                           className="w-full h-full object-cover"
                         /> */}
-                        <video className="h-full" controls src={story.coverImageUrl}></video>
+                        <video className="h-full w-full object-cover" controls src={story.videoUrl}></video>
                       </div>
                       <div className="absolute -top-1 -right-1 bg-gray-600 text-white text-xs px-1 rounded">
                         {new Date(story.createdAt).toLocaleDateString('pt-BR')}
@@ -335,9 +285,9 @@ export default function Home() {
                   </Button>
                 </div>
 
-                <Button className="w-full bg-orange-400 hover:bg-orange-500 text-white font-medium">
+                {/* <Button className="w-full bg-orange-400 hover:bg-orange-500 text-white font-medium">
                   COLOCAR A REVISTA
-                </Button>
+                </Button> */}
               </div>
             </aside>
           </div>
@@ -512,6 +462,91 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <section className="py-12 px-4 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          {/* Fato em Foco */}
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold text-[#15803D]">Fato em Foco</h2>
+                <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
+              </div>
+            </div>
+            <Swiper
+              modules={[Navigation]}
+              spaceBetween={0}
+              slidesPerView={6}
+              navigation
+              breakpoints={{
+                640: { slidesPerView: 2.5 },
+                768: { slidesPerView: 3.5 },
+                1024: { slidesPerView: 4.5 },
+              }}
+              className="!pb-6"
+            >
+              {relevants.map((post) => (
+                <SwiperSlide key={post.id}>
+                  <div className="relative rounded-xl w-[180px] h-[320px] overflow-hidden bg-black">
+                    <video
+                      className="w-full h-full object-cover"
+                      poster={post.coverImageUrl}
+                      src={post.videoUrl}
+                      controls
+                    />
+
+                    <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
+                      1 min
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 px-4 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          {/* Fato em Foco */}
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold text-[#15803D]">Webstories</h2>
+                <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
+              </div>
+            </div>
+            <Swiper
+              modules={[Navigation]}
+              spaceBetween={0}
+              slidesPerView={6}
+              navigation
+              breakpoints={{
+                1024: { slidesPerView: 8 },
+              }}
+              className="!pb-6"
+            >
+              {webstories.map((story) => (
+                <SwiperSlide key={story.id}>
+                  <div className="relative rounded-xl w-[180px] h-[320px] overflow-hidden bg-black">
+                    <video
+                      className="w-full h-full object-cover"
+                      poster={story.coverImageUrl}
+                      src={story.videoUrl}
+                      controls
+                    />
+
+                    <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
+                      {new Date(story.updatedAt).toLocaleDateString('pt-BR')}
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      </section>
+      <Footer />
     </div>
   )
 }

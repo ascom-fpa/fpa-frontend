@@ -3,18 +3,23 @@ import api from "./axios"
 
 export interface Post {
   id: string
-  title: string
-  content: string
+  postTitle: string
+  postContent: string
   excerpt: string
   slug: string
   status: "draft" | "published" | "archived"
   featured_image?: string
-  author_id: string
-  category_id: string
+  postAuthorId: string
+  postCategoryId: string
   tags: string[]
   published_at?: string
-  created_at: string
-  updated_at: string
+  createdAt: string
+  updatedAt: string
+  description: string
+  summary: string
+  thumbnailUrl: string
+  postAuthor?: any
+  postCategory?: any
 }
 
 export interface CreatePostData {
