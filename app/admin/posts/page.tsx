@@ -28,6 +28,7 @@ import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/imag
 import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension"
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 import content from "@/components/tiptap-templates/data/content.json"
+import ViewPost from "./view-post"
 
 const formInitialState: CreatePostData = {
     postTitle: "",
@@ -207,6 +208,38 @@ function PostCard({ post, onDelete }: { post: any; onDelete: () => void }) {
                 {post.summary && <p className="text-sm text-muted-foreground">{post.summary}</p>}
             </CardContent>
             <CardFooter className="flex justify-between bg-[rgba(245,245,245)] py-2">
+                {/* BOTÃO VER POST */}
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button size="sm" variant="outline">
+                            Ver post
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="h-[90vh] w-[90vw] overflow-y-auto">
+                        <AlertDialogHeader>
+                            <AlertDialogTitle className="text-2xl">{post.postTitle}</AlertDialogTitle>
+                        </AlertDialogHeader>
+
+                        {post.thumbnailUrl && (
+                            <img
+                                src={post.thumbnailUrl}
+                                alt="post-thumbnail"
+                                className="w-full max-h-96 object-cover rounded my-4"
+                            />
+                        )}
+
+                        {post.summary && (
+                            <p className="text-muted-foreground mb-4">{post.summary}</p>
+                        )}
+
+                        {/* Aqui você pode substituir por seu componente de leitura Tiptap */}
+                        <ViewPost postContent={post.postContent } />
+
+                        <AlertDialogFooter className="mt-6 fixed right-10">
+                            <AlertDialogCancel>Fechar</AlertDialogCancel>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
                         <Button size="sm" variant="destructive" onClick={onDelete}>
