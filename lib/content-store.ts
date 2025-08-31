@@ -1,6 +1,7 @@
 import { create } from "zustand"
 import * as postsService from "@/services/posts"
 import * as bannersService from "@/services/banners"
+import * as videosService from "@/services/videos"
 import * as webstoriesService from "@/services/webstories"
 import * as categoriesService from "@/services/categories"
 import * as tagsService from "@/services/tags"
@@ -12,6 +13,7 @@ interface ContentState {
 
   // Posts state
   posts: postsService.Post[]
+  postsFeature: postsService.Post[]
   currentPost: postsService.Post | null
   postsLoading: boolean
   postsError: string | null
@@ -26,6 +28,11 @@ interface ContentState {
   banners: bannersService.Banner[]
   bannersLoading: boolean
   bannersError: string | null
+
+  // Videos state
+  videos: videosService.Video[]
+  videosLoading: boolean
+  videosError: string | null
 
   // Web Stories state
   webstories: webstoriesService.WebStory[]
@@ -78,6 +85,7 @@ interface ContentState {
 
   // Posts actions
   fetchPosts: (params?: any) => Promise<void>
+  fetchPostsFeatured: () => Promise<void>
   fetchPost: (id: string) => Promise<void>
   createPost: (data: postsService.CreatePostData) => Promise<void>
   updatePost: (data: postsService.UpdatePostData) => Promise<void>
@@ -92,6 +100,11 @@ interface ContentState {
   deleteBanner: (id: string) => Promise<void>
   reorderBanners: (id: string, newIndex: number) => Promise<void>
   uploadBannerImage: (file: File) => Promise<string>
+
+  // Videos actions
+  fetchVideos: () => Promise<void>
+  createVideo: (data: FormData) => Promise<void>
+  deleteVideo: (id: string) => Promise<void>
 
   // Web Stories actions
   fetchWebStories: (params?: any) => Promise<void>
@@ -144,6 +157,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
   loading: false,
 
   posts: [],
+  postsFeature: [],
   currentPost: null,
   postsLoading: false,
   postsError: null,
@@ -153,6 +167,10 @@ export const useContentStore = create<ContentState>((set, get) => ({
   banners: [],
   bannersLoading: false,
   bannersError: null,
+
+  videos: [],
+  videosLoading: false,
+  videosError: null,
 
   webstories: [],
   webstoriesLoading: false,
@@ -243,6 +261,22 @@ export const useContentStore = create<ContentState>((set, get) => ({
     }
   },
 
+  fetchPostsFeatured: async () => {
+    set({ postsLoading: true, postsError: null })
+    try {
+      const response = await postsService.getPostsFeatured()
+      set({
+        postsFeature: response,
+        postsLoading: false,
+      })
+    } catch (error: any) {
+      set({
+        postsLoading: false,
+        postsError: error.response?.data?.message || "Failed to fetch posts",
+      })
+    }
+  },
+
   fetchPost: async (id: string) => {
     set({ postsLoading: true, postsError: null })
     try {
@@ -263,13 +297,13 @@ export const useContentStore = create<ContentState>((set, get) => ({
       form.append("postTitle", data.postTitle)
       form.append("postCategoryId", data.postCategoryId)
       form.append("postStatus", data.postStatus)
+      form.append("isFeatured", data.isFeatured ? 'true' : 'false')
       form.append("slug", data.slug || '')
       form.append("postContent", JSON.stringify(data.postContent))
       data.files?.forEach((file: File) => {
         form.append("files", file)
       })
-
-      console.log(form.get("postContent"))
+      if (data.thumbnailFile) form.append("thumbnailFile", data.thumbnailFile)
 
       const newPost = await postsService.createPost(form)
       set((state) => ({
@@ -422,6 +456,55 @@ export const useContentStore = create<ContentState>((set, get) => ({
       return response.url
     } catch (error: any) {
       set({ bannersError: error.response?.data?.message || "Failed to upload banner image" })
+      throw error
+    }
+  },
+
+
+  // Videos actions
+  fetchVideos: async () => {
+    set({ videosLoading: true, videosError: null })
+    try {
+      const videos = await videosService.getVideos()
+      set({ videos, videosLoading: false })
+    } catch (error: any) {
+      set({
+        videosLoading: false,
+        videosError: error.response?.data?.message || "Failed to fetch videos",
+      })
+    }
+  },
+
+  createVideo: async (data) => {
+    set({ videosLoading: true, videosError: null })
+    try {
+      const newVideo = await videosService.createVideo(data)
+      set((state) => ({
+        videos: [...state.videos, newVideo],
+        videosLoading: false,
+      }))
+    } catch (error: any) {
+      set({
+        videosLoading: false,
+        videosError: error.response?.data?.message || "Failed to create video",
+      })
+      throw error
+    }
+  },
+
+  deleteVideo: async (id: string) => {
+    set({ videosLoading: true, videosError: null })
+    try {
+      await videosService.deleteVideo(id)
+      set((state) => ({
+        videos: state.videos.filter((video) => video.id !== id),
+        videosLoading: false,
+      }))
+    } catch (error: any) {
+      set({
+        videosLoading: false,
+        videosError: error.response?.data?.message || "Failed to delete video",
+      })
       throw error
     }
   },

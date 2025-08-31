@@ -6,27 +6,59 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import type React from "react"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ChevronLeft, ChevronRight, Menu, Search, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import Link from "next/link"
 import { useContentStore } from "@/lib/content-store"
 import Footer from '@/components/ui/footer'
+import { getRecentTweets } from '@/services/twitter'
+import { VideoSlider } from '@/components/ui/video-home'
+import ColunistasSection from '@/components/ui/colunas'
 
 export default function Home() {
+  const ref = useRef<any>(null);
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.setAttribute('src', 'https://platform.twitter.com/widgets.js');
+    script.setAttribute('async', 'true');
+    ref.current?.appendChild(script);
+  }, []);
+
   const [currentSlide, setCurrentSlide] = useState(0)
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
 
-  const { fetchBanners, banners, webstories, fetchWebStories, fetchPosts, posts, fetchRelevants, relevants } = useContentStore()
+  const {
+    fetchBanners, banners, webstories,
+    fetchWebStories, fetchPosts, posts,
+    fetchRelevants, relevants, fetchPostsFeatured,
+    postsFeature, fetchVideos, videos
+  } = useContentStore()
+
+  const newsNoFeatured = posts.filter(post => !post.isFeatured)
+  const [tweets, setTweets] = useState();
 
   useEffect(() => {
     fetchBanners()
     fetchWebStories()
     fetchPosts()
     fetchRelevants()
+    fetchPostsFeatured()
+    fetchTweets()
+    fetchVideos()
   }, []);
+
+  async function fetchTweets() {
+    try {
+      const tweets = await getRecentTweets("fpagroupecuaria")
+      console.log(tweets)
+      setTweets(tweets)
+    } catch (error) {
+      console.error("Error fetching tweets:", error)
+    }
+  }
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % banners.length)
@@ -141,7 +173,7 @@ export default function Home() {
       <section className="py-8 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-3 gap-6">
-            {posts.map((article, index) => (
+            {postsFeature.map((article, index) => (
               <article
                 key={index}
                 className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
@@ -153,14 +185,14 @@ export default function Home() {
                     className="w-full h-48 object-cover"
                   />
                   <div className="absolute top-4 left-4">
-                    <span className="bg-[#419672] text-white px-3 py-1 rounded text-sm font-medium">
+                    <span style={{ backgroundColor: article.postCategory.color }} className={`text-white px-3 py-1 rounded text-sm font-medium`}>
                       {article.postCategory.name}
                     </span>
                   </div>
                 </div>
                 <div className="p-6">
                   <h3 className="font-bold text-lg mb-3 text-gray-900 leading-tight">{article.postTitle}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{article.summary.slice(0, 100)}...</p>
+                  <p className="text-gray-600 text-sm leading-relaxed">{article.summary?.slice(0, 100)}...</p>
                 </div>
               </article>
             ))}
@@ -177,33 +209,33 @@ export default function Home() {
               <h2 className="text-3xl font-bold text-[#419672] mb-8">Mais Recentes</h2>
 
               {/* Featured Article */}
-              {posts[0] && (
+              {newsNoFeatured[0] && (
                 <article className="mb-8">
                   <div className="relative mb-4">
                     <img
-                      src={posts[0].thumbnailUrl || "/placeholder.svg"}
-                      alt={posts[0].postTitle}
+                      src={newsNoFeatured[0].thumbnailUrl || "/placeholder.svg"}
+                      alt={newsNoFeatured[0].postTitle}
                       className="w-full h-64 object-cover rounded-lg"
                     />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{posts[0].postTitle}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{newsNoFeatured[0].postTitle}</h3>
                   <div className="flex items-center text-sm text-gray-600 mb-4">
-                    <span>{new Date(posts[0].createdAt).toLocaleDateString('pt-BR')}</span>
+                    <span>{new Date(newsNoFeatured[0].createdAt).toLocaleDateString('pt-BR')}</span>
                     <span className="mx-2">|</span>
-                    <span className="border p-2 border-gray-400 rounded-xl">{posts[0].postCategory.name}</span>
+                    <span className="border p-2 border-gray-400 rounded-xl">{newsNoFeatured[0].postCategory.name}</span>
                     <span className="mx-2">|</span>
-                    <span>{`${posts[0].postAuthor.firstName} ${posts[0].postAuthor.lastName}`}</span>
+                    <span>{`${newsNoFeatured[0].postAuthor.firstName} ${newsNoFeatured[0].postAuthor.lastName}`}</span>
                   </div>
                 </article>
               )}
 
               {/* Recent Articles List */}
               <div className="space-y-6">
-                {posts.slice(1).map((post) => (
+                {newsNoFeatured.slice(1).map((post) => (
                   <article key={post.id} className="flex items-start gap-4 pb-6 border-b border-gray-200">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xs font-medium text-[#419672] uppercase tracking-wide">
+                        <span className={`text-xs font-medium text-[${post.postCategory.color}] uppercase tracking-wide`}>
                           {post.postCategory.name}
                         </span>
                         <Button variant="ghost" size="sm" className="p-0 h-auto text-gray-400 hover:text-gray-600">
@@ -256,38 +288,6 @@ export default function Home() {
                     📧 Inscrever
                   </Button>
                 </form>
-              </div>
-
-              {/* Webstories */}
-              <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Webstories</h3>
-                <div className="flex gap-2 mb-4">
-                  {webstories?.map((story) => (
-                    <div key={story.id} className="relative">
-                      <div className="w-[140px] h-[300px] rounded-md overflow-hidden border-2 border-[#419672]">
-                        {/* <img
-                          src={story.coverImageUrl || "/placeholder.svg"}
-                          alt={story.title}
-                          className="w-full h-full object-cover"
-                        /> */}
-                        <video className="h-full w-full object-cover" controls src={story.videoUrl}></video>
-                      </div>
-                      <div className="absolute -top-1 -right-1 bg-gray-600 text-white text-xs px-1 rounded">
-                        {new Date(story.createdAt).toLocaleDateString('pt-BR')}
-                      </div>
-                    </div>
-                  ))}
-                  <Button
-                    variant="ghost"
-                    className="w-16 h-16 rounded-full border-2 border-dashed border-gray-300 text-gray-400 hover:border-[#419672] hover:text-[#419672]"
-                  >
-                    <ChevronRight className="h-6 w-6" />
-                  </Button>
-                </div>
-
-                {/* <Button className="w-full bg-orange-400 hover:bg-orange-500 text-white font-medium">
-                  COLOCAR A REVISTA
-                </Button> */}
               </div>
             </aside>
           </div>
@@ -473,78 +473,55 @@ export default function Home() {
                 <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
               </div>
             </div>
-            <Swiper
-              modules={[Navigation]}
-              spaceBetween={0}
-              slidesPerView={6}
-              navigation
-              breakpoints={{
-                640: { slidesPerView: 2.5 },
-                768: { slidesPerView: 3.5 },
-                1024: { slidesPerView: 4.5 },
-              }}
-              className="!pb-6"
-            >
-              {relevants.map((post) => (
-                <SwiperSlide key={post.id}>
-                  <div className="relative rounded-xl w-[180px] h-[320px] overflow-hidden bg-black">
-                    <video
-                      className="w-full h-full object-cover"
-                      poster={post.coverImageUrl}
-                      src={post.videoUrl}
-                      controls
-                    />
-
-                    <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
-                      1 min
-                    </div>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            <VideoSlider perView={5} videos={relevants} width={200} height={300} />
           </div>
         </div>
       </section>
 
-      <section className="py-12 px-4 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          {/* Fato em Foco */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-2xl font-bold text-[#15803D]">Webstories</h2>
-                <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
+      <section className="px-4 bg-gray-50">
+        <div className="grid">
+          <div className="grid-cols-9">
+            <div className="max-w-7xl mx-auto py-12 ">
+              {/* Videos */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-2xl font-bold text-[#15803D]">Vídeos</h2>
+                    <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
+                  </div>
+                </div>
+                <VideoSlider videos={videos} />
               </div>
             </div>
-            <Swiper
-              modules={[Navigation]}
-              spaceBetween={0}
-              slidesPerView={6}
-              navigation
-              breakpoints={{
-                1024: { slidesPerView: 8 },
-              }}
-              className="!pb-6"
-            >
-              {webstories.map((story) => (
-                <SwiperSlide key={story.id}>
-                  <div className="relative rounded-xl w-[180px] h-[320px] overflow-hidden bg-black">
-                    <video
-                      className="w-full h-full object-cover"
-                      poster={story.coverImageUrl}
-                      src={story.videoUrl}
-                      controls
-                    />
-
-                    <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
-                      {new Date(story.updatedAt).toLocaleDateString('pt-BR')}
-                    </div>
+            <div className="max-w-7xl mx-auto py-12 ">
+              {/* Webstories */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-2xl font-bold text-[#15803D]">Webstories</h2>
+                    <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                   </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+                </div>
+                <VideoSlider perView={4} videos={webstories} width={200} height={300} />
+              </div>
+            </div>
+            < ColunistasSection />
+          </div>
+          <div className="grid-cols-3">
+            <div ref={ref}>
+              <a
+                className="twitter-timeline"
+                data-height="600"
+                data-theme="light"
+                data-chrome="nofooter noheader"
+                href="https://twitter.com/FPAgropecuaria?ref_src=twsrc%5Etfw"
+              >
+                Tweets by FPAgropecuaria
+              </a>
+            </div>
           </div>
         </div>
+
       </section>
       <Footer />
     </div>

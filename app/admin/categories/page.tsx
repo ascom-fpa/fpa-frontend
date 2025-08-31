@@ -25,6 +25,7 @@ const formInitialState: CreateCategoryData = {
     name: "",
     description: "",
     slug: "",
+    color: "#000000",
 }
 
 export default function CategoryPage() {
@@ -95,6 +96,16 @@ export default function CategoryPage() {
                         value={form.slug}
                         onChange={(e) => setForm({ ...form, slug: e.target.value })}
                     />
+                    <div className="flex ms-3 items-center gap-2">
+                        <label className="text-gray-600 text-sm">Cor da tag</label>
+                        <Input
+                            className="w-[60px] cursor-pointer"
+                            type="color"
+                            value={form.color}
+                            onChange={(e) => setForm({ ...form, color: e.target.value })}
+                        />
+                    </div>
+
                     {/* <LabelInputFile
                         id="icon-upload"
                         label="Selecionar ícone"
@@ -140,6 +151,10 @@ function SortableCard({ category, onDelete }: { category: any, onDelete: () => v
                     <p className="font-semibold text-sm">{category.name}</p>
                     <p className="font-semibold text-sm">{category.slug}</p>
                     <p className="text-xs text-muted-foreground">{category.description}</p>
+                    <div className="flex gap-2">
+                        <p className="text-xs">Cor: #{category.color || '000000'}</p>
+                        <div className="rounded-full w-4 h-4" style={{backgroundColor: category?.color}}></div>
+                    </div>
                     {category.iconUrl && (
                         <img src={category.iconUrl} alt="ícone" className="w-20 h-20 object-contain" />
                     )}

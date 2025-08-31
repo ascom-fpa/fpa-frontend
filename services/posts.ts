@@ -20,6 +20,7 @@ export interface Post {
   thumbnailUrl: string
   postAuthor?: any
   postCategory?: any
+  isFeatured?: boolean
 }
 
 export interface CreatePostData {
@@ -28,10 +29,11 @@ export interface CreatePostData {
   postStatus: PostStatusEnum
   postCategoryId: string
   relatedTags?: string[]
-  thumbnailFile?: File | null
+  thumbnailFile: File | null
   slug?: string
   summary: string
   files?: File[]
+  isFeatured?: boolean
 }
 
 export interface UpdatePostData extends Partial<CreatePostData> {
@@ -102,4 +104,9 @@ export const bulkUpdatePosts = async (ids: string[], updates: Partial<Post>): Pr
 
 export const bulkDeletePosts = async (ids: string[]): Promise<void> => {
   await api.delete("/posts/bulk", { data: { ids } })
+}
+
+export const getPostsFeatured = async (): Promise<Post[]> => {
+  const response = await api.get("/posts/featured")
+  return response.data.data
 }

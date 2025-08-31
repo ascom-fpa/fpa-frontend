@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { FileText, ImageIcon, Video, Tag, FolderOpen, BarChart3, Settings, LogOut, Menu, Search, Plus, UserCircle2, FocusIcon, ChevronsLeft, ChevronsRight } from "lucide-react"
+import { FileText, ImageIcon, Video, Tag, FolderOpen, BarChart3, Settings, LogOut, Menu, Search, Plus, UserCircle2, FocusIcon, ChevronsLeft, ChevronsRight, VideoIcon } from "lucide-react"
 import { useContentStore } from "@/lib/content-store"
 
 interface DashboardLayoutProps {
@@ -29,6 +29,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: BarChart3, label: "Dashboard", href: "/admin" },
     { icon: FileText, label: "Posts", href: "/admin/posts", count: totalCounts?.totalPosts },
     { icon: ImageIcon, label: "Banners", href: "/admin/banners", count: totalCounts?.totalBanners },
+    { icon: VideoIcon, label: "Videos", href: "/admin/videos", count: 0 },
     { icon: Video, label: "Web Stories", href: "/admin/webstories", count: totalCounts?.totalWebStories },
     { icon: FolderOpen, label: "Categorias", href: "/admin/categories", count: totalCounts?.totalCategories },
     { icon: Tag, label: "Tags", href: "/admin/tags", count: totalCounts?.totalTags },

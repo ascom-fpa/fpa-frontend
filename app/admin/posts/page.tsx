@@ -42,7 +42,8 @@ const formInitialState: CreatePostData = {
     relatedTags: [],
     slug: "",
     thumbnailFile: null,
-    files: []
+    files: [],
+    isFeatured: false,
 }
 
 export default function PostsAdminPage() {
@@ -108,8 +109,9 @@ export default function PostsAdminPage() {
 
     const handleUpload = async () => {
         setLoading(true)
-        if (!form.postTitle || !form.postCategoryId || !form.postStatus || !form.slug) return
+        if (!form.postTitle || !form.postCategoryId || !form.postStatus || !form.slug || !form.thumbnailFile) return
         form.files = currentPostFiles
+        
         form.postContent = editor?.getJSON() || {}
         await createPost(form)
         setForm(formInitialState)
@@ -148,6 +150,18 @@ export default function PostsAdminPage() {
                         value={form.slug}
                         onChange={(e) => setForm({ ...form, slug: e.target.value })}
                     />
+
+                    <div className="flex gap-2 items-center">
+                        <label className="flex items-center space-x-2">Matéria em destaque?</label>
+                        <Input
+                            className="cursor-pointer"
+                            style={{ width: '20px', height: '20px' }}
+                            type="checkbox"
+                            placeholder="Slug (URL amigável)"
+                            checked={form.isFeatured}
+                            onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
+                        />
+                    </div>
 
                     <select
                         value={form.postStatus}
