@@ -23,6 +23,7 @@ interface ContentState {
     limit: number
   }
   currentPostFiles: File[]
+  mostViewed: postsService.Post[]
 
   // Banners state
   banners: bannersService.Banner[]
@@ -92,6 +93,8 @@ interface ContentState {
   deletePost: (id: string) => Promise<void>
   uploadPostImage: (file: File) => Promise<string>
   pushCurrentPostFiles: (file: File) => void
+  incrementView: (id: string) => Promise<void>
+  fetchMostViewed: () => Promise<void>
 
   // Banners actions
   fetchBanners: () => Promise<void>
@@ -163,6 +166,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
   postsError: null,
   postsPagination: { total: 0, page: 1, limit: 10 },
   currentPostFiles: [],
+  mostViewed: [],
 
   banners: [],
   bannersLoading: false,
@@ -351,6 +355,35 @@ export const useContentStore = create<ContentState>((set, get) => ({
         postsError: error.response?.data?.message || "Failed to delete post",
       })
       throw error
+    }
+  },
+
+  incrementView: async (id: string) => {
+    set({ postsLoading: true, postsError: null })
+    try {
+      await postsService.incrementView(id)
+    } catch (error: any) {
+      set({
+        postsLoading: false,
+        postsError: error.response?.data?.message || "Failed to delete post",
+      })
+      throw error
+    }
+  },
+
+  fetchMostViewed: async () => {
+    set({ postsLoading: true, postsError: null })
+    try {
+      const response = await postsService.getMostViewed()
+      set({
+        mostViewed: response,
+        postsLoading: false,
+      })
+    } catch (error: any) {
+      set({
+        postsLoading: false,
+        postsError: error.response?.data?.message || "Failed to fetch posts",
+      })
     }
   },
 

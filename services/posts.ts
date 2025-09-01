@@ -110,3 +110,13 @@ export const getPostsFeatured = async (): Promise<Post[]> => {
   const response = await api.get("/posts/featured")
   return response.data.data
 }
+
+export const incrementView = async (id: string): Promise<Post[]> => {
+  const response = await api.post(`/posts/${id}/view`)
+  return response.data.data
+}
+
+export const getMostViewed = async (): Promise<Post[]> => {
+  const response = await api.get(`/posts/most-viewed`)
+  return response.data.data
+}

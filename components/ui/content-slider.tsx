@@ -3,22 +3,14 @@
 import 'keen-slider/keen-slider.min.css'
 import { useKeenSlider } from 'keen-slider/react'
 import { ArrowLeft, ArrowLeftCircle, ArrowRight, ArrowRightCircle } from 'lucide-react'
-import { useEffect, useRef } from 'react'
-
-interface Video {
-  id: string
-  url: string
-  updatedAt: string
-}
+import { useEffect } from 'react'
 
 interface Props {
-  videos: any[]
-  width?: number
-  height?: number
+  children: React.ReactNode[]
   perView?: number
 }
 
-export function VideoSlider({ videos, width = 330, height = 220, perView = 3 }: Props) {
+export function ContentSlider({ children, perView = 3 }: Props) {
   const [sliderRef, slider] = useKeenSlider<HTMLDivElement>({
     slides: {
       perView,
@@ -38,22 +30,15 @@ export function VideoSlider({ videos, width = 330, height = 220, perView = 3 }: 
   const goNext = () => slider.current?.next()
 
   useEffect(() => {
-    if (slider.current) {
-      slider.current.update()
-    }
-  }, [videos])
+    slider.current?.update()
+  }, [children])
 
   return (
     <div className="relative">
       <div ref={sliderRef} className="keen-slider">
-        {videos.map((video) => (
-          <div className="keen-slider__slide" key={video.id}>
-            <div style={{ width, height }} className="relative rounded-xl mx-auto overflow-hidden bg-black">
-              <video className="w-full h-full object-cover" src={video.url || video.videoUrl} controls />
-              <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
-                {new Date(video.updatedAt).toLocaleDateString('pt-BR')}
-              </div>
-            </div>
+        {children.map((child, index) => (
+          <div className="keen-slider__slide" key={index}>
+            {child}
           </div>
         ))}
       </div>

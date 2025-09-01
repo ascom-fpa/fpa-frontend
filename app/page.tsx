@@ -15,6 +15,8 @@ import Footer from '@/components/ui/footer'
 import { getRecentTweets } from '@/services/twitter'
 import { VideoSlider } from '@/components/ui/video-home'
 import ColunistasSection from '@/components/ui/colunas'
+import { ContentSlider } from '@/components/ui/content-slider'
+import Link from 'next/link'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -34,7 +36,7 @@ export default function Home() {
     fetchBanners, banners, webstories,
     fetchWebStories, fetchPosts, posts,
     fetchRelevants, relevants, fetchPostsFeatured,
-    postsFeature, fetchVideos, videos
+    postsFeature, fetchVideos, videos, fetchMostViewed, mostViewed
   } = useContentStore()
 
   const newsNoFeatured = posts.filter(post => !post.isFeatured)
@@ -48,6 +50,7 @@ export default function Home() {
     fetchPostsFeatured()
     fetchTweets()
     fetchVideos()
+    fetchMostViewed()
   }, []);
 
   async function fetchTweets() {
@@ -481,6 +484,44 @@ export default function Home() {
       <section className="px-4 bg-gray-50">
         <div className="grid">
           <div className="grid-cols-9">
+            <div className="max-w-7xl mx-auto py-12 ">
+              {/* Mais lidas */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-2xl font-bold text-[#15803D]">Mais lidas</h2>
+                    <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
+                  </div>
+                </div>
+                {mostViewed.length > 0 && (
+                  <ContentSlider perView={4}>
+                    {mostViewed.map((post) => (
+                      <Link
+                        key={post.id}
+                        href={`/noticia/${post.slug}`}
+                        className="block rounded-xl overflow-hidden bg-white shadow-md transition hover:shadow-lg"
+                      >
+                        <div className="w-full h-48 overflow-hidden">
+                          <img
+                            src={post.thumbnailUrl || '/placeholder.jpg'}
+                            alt={post.postTitle}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="p-4">
+                          <p className="text-sm text-gray-500">
+                            {new Date(post.updatedAt).toLocaleDateString('pt-BR')}
+                          </p>
+                          <h3 className="text-md font-semibold text-gray-800 mt-1 line-clamp-2">
+                            {post.postTitle}
+                          </h3>
+                        </div>
+                      </Link>
+                    ))}
+                  </ContentSlider>
+                )}
+              </div>
+            </div>
             <div className="max-w-7xl mx-auto py-12 ">
               {/* Videos */}
               <div className="space-y-4">
