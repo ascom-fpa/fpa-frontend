@@ -7,9 +7,15 @@ import * as categoriesService from "@/services/categories"
 import * as tagsService from "@/services/tags"
 import * as relevantsService from "@/services/relevants"
 import { DashboardContentOverview, DashboardMonthlySummary, DashboardTotalCounts, getDashboardContentOverview, getDashboardMonthlySummary, getDashboardTotalCounts } from "@/services/dashboard"
+import { createMagazine, getMagazine } from "@/services/magazine"
 
 interface ContentState {
   loading: boolean
+
+  // magazine
+  magazineUrl: string
+  fetchMagazineUrl: () => Promise<void>
+  createMagazine: (data: any) => Promise<void>
 
   // Posts state
   posts: postsService.Post[]
@@ -159,6 +165,8 @@ export const useContentStore = create<ContentState>((set, get) => ({
   // Initial state
   loading: false,
 
+  magazineUrl: '',
+
   posts: [],
   postsFeature: [],
   currentPost: null,
@@ -200,6 +208,31 @@ export const useContentStore = create<ContentState>((set, get) => ({
   summaryLoading: false,
   summary: null,
   summaryError: null,
+
+  fetchMagazineUrl: async () => {
+    try {
+      const data = await getMagazine()
+      set({ magazineUrl: data.pdfUrl })
+    } catch (error) {
+      console.error('Failed to fetch magazine URL:', error)
+    }
+  },
+
+  createMagazine: async (file: File) => {
+    try {
+
+      const form = new FormData()
+      form.append("file", file)
+      console.log('here 226', form)
+      const result = await createMagazine(form)
+      set({ magazineUrl: result.pdfUrl || '' })
+    } catch (error) {
+      console.error('Failed to create magazine:', error)
+      throw error
+    } finally {
+      set({ loading: false })
+    }
+  },
 
   fetchSummary: async () => {
     set({ summaryLoading: true, summaryError: null })

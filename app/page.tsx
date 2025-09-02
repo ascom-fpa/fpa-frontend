@@ -36,7 +36,8 @@ export default function Home() {
     fetchBanners, banners, webstories,
     fetchWebStories, fetchPosts, posts,
     fetchRelevants, relevants, fetchPostsFeatured,
-    postsFeature, fetchVideos, videos, fetchMostViewed, mostViewed
+    postsFeature, fetchVideos, videos, fetchMostViewed, mostViewed,
+    fetchMagazineUrl, magazineUrl
   } = useContentStore()
 
   const newsNoFeatured = posts.filter(post => !post.isFeatured)
@@ -51,6 +52,7 @@ export default function Home() {
     fetchTweets()
     fetchVideos()
     fetchMostViewed()
+    fetchMagazineUrl()
   }, []);
 
   async function fetchTweets() {
@@ -292,6 +294,7 @@ export default function Home() {
                   </Button>
                 </form>
               </div>
+              <iframe allowFullScreen src={magazineUrl} width="100%" height="500px" />
             </aside>
           </div>
         </div>
