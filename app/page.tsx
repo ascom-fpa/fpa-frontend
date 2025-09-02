@@ -1,15 +1,12 @@
 "use client"
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { Navigation } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
 
 import type React from "react"
 
 import { useEffect, useRef, useState } from "react"
 import { ChevronLeft, ChevronRight, Menu, Search, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { useContentStore } from "@/lib/content-store"
 import Footer from '@/components/ui/footer'
 import { getRecentTweets } from '@/services/twitter'
@@ -17,6 +14,8 @@ import { VideoSlider } from '@/components/ui/video-home'
 import ColunistasSection from '@/components/ui/colunas'
 import { ContentSlider } from '@/components/ui/content-slider'
 import Link from 'next/link'
+import Newsletter from '@/components/newsletter'
+import { ToastContainer } from 'react-toastify'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -29,8 +28,6 @@ export default function Home() {
   }, []);
 
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [email, setEmail] = useState("")
-  const [name, setName] = useState("")
 
   const {
     fetchBanners, banners, webstories,
@@ -73,21 +70,13 @@ export default function Home() {
     setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)
   }
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle newsletter subscription
-    console.log("Newsletter subscription:", { name, email })
-    setName("")
-    setEmail("")
-  }
-
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-[#419672] text-white">
         {/* Top bar */}
         <div className="bg-gray-100 text-black text-xs py-1 px-4">
-          <div className="flex justify-between items-center max-w-7xl mx-auto">
+          <div className="flex justify-between items-center max-w-[1800px] mx-auto">
             <div className="flex space-x-4">
               <span>COTAÇÃO DO AGRONEGÓCIO:</span>
               <span>r - 00.0012371535770034 ↓ 1.444</span>
@@ -105,7 +94,7 @@ export default function Home() {
 
         {/* Main header */}
         <div className="py-4 px-4">
-          <div className="flex justify-between items-center max-w-7xl mx-auto">
+          <div className="flex justify-between items-center max-w-[1800px] mx-auto">
             <div className="flex items-center space-x-4">
               <Button variant="ghost" size="sm" className="text-white hover:bg-[#154B2B]">
                 <Menu className="h-6 w-6" />
@@ -176,7 +165,7 @@ export default function Home() {
 
       {/* News Articles */}
       <section className="py-8 px-4 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1800px] mx-auto">
           <div className="grid md:grid-cols-3 gap-6">
             {postsFeature.map((article, index) => (
               <article
@@ -207,7 +196,7 @@ export default function Home() {
 
       {/* Main Content Section with Recent News (75%) and Sidebar (25%) */}
       <section className="py-8 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1800px] mx-auto">
           <div className="flex gap-8">
             {/* Recent News - 75% width */}
             <div className="flex-1 w-3/4">
@@ -260,40 +249,7 @@ export default function Home() {
             {/* Sidebar - 25% width */}
             <aside className="w-1/4 space-y-8">
               {/* Newsletter Signup */}
-              <div className="bg-[#419672] text-white p-6 rounded-lg">
-                <h3 className="text-xl font-bold text-center mb-2">Cadastre-se em nossa Newsletter</h3>
-                <p className="text-sm text-center mb-6 opacity-90">
-                  Cadastre-se agora e seja o primeiro a saber sobre nossas notícias.
-                </p>
-
-                <form onSubmit={handleNewsletterSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Seu nome:</label>
-                    <Input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full bg-white text-gray-900"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Seu melhor email:</label>
-                    <Input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-white text-gray-900"
-                      required
-                    />
-                  </div>
-
-                  <Button type="submit" className="w-full bg-[#154B2B] hover:bg-[#012D1C] text-white font-medium py-2">
-                    📧 Inscrever
-                  </Button>
-                </form>
-              </div>
+              <Newsletter />
               <iframe allowFullScreen src={magazineUrl} width="100%" height="500px" />
             </aside>
           </div>
@@ -302,7 +258,7 @@ export default function Home() {
 
       {/* Highlighted Categories Section */}
       <section className="py-12 px-4 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1800px] mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
             {/* Política Agrícola Column */}
             <div className="space-y-6">
@@ -470,7 +426,7 @@ export default function Home() {
       </section>
 
       <section className="py-12 px-4 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1800px] mx-auto">
           {/* Fato em Foco */}
           <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -487,7 +443,7 @@ export default function Home() {
       <section className="px-4 bg-gray-50">
         <div className="grid">
           <div className="grid-cols-9">
-            <div className="max-w-7xl mx-auto py-12 ">
+            <div className="max-w-[1800px] mx-auto py-12 ">
               {/* Mais lidas */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
@@ -525,7 +481,7 @@ export default function Home() {
                 )}
               </div>
             </div>
-            <div className="max-w-7xl mx-auto py-12 ">
+            <div className="max-w-[1800px] mx-auto py-12 ">
               {/* Videos */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
@@ -537,7 +493,7 @@ export default function Home() {
                 <VideoSlider videos={videos} />
               </div>
             </div>
-            <div className="max-w-7xl mx-auto py-12 ">
+            <div className="max-w-[1800px] mx-auto py-12 ">
               {/* Webstories */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
@@ -568,6 +524,7 @@ export default function Home() {
 
       </section>
       <Footer />
+    <ToastContainer position="top-right" autoClose={false} />
     </div>
   )
 }
