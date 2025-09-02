@@ -1,6 +1,7 @@
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
+import Script from 'next/script'
 
 export const metadata = {
   title: 'Portal FPA',
@@ -45,6 +46,19 @@ html {
 }
         `}</style>
       </head>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-K56PQX18ME"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-K56PQX18ME');
+        `}
+      </Script>
       <body>{children}</body>
     </html>
   )

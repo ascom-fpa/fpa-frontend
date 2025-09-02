@@ -10,6 +10,7 @@ import { DashboardLayout } from "@/components/dashboard-layout"
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import Loading from "../loading"
+import Script from "next/script"
 
 export default function AdminLayout({
   children,
@@ -38,6 +39,19 @@ export default function AdminLayout({
   }
 
   return <DashboardLayout>
+    <Script
+      src="https://www.googletagmanager.com/gtag/js?id=G-K56PQX18ME"
+      strategy="afterInteractive"
+    />
+    <Script id="google-analytics" strategy="afterInteractive">
+      {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-K56PQX18ME');
+        `}
+    </Script>
     {children}
     <ToastContainer position="top-right" autoClose={false} />
     <Loading />
