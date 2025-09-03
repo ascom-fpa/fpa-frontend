@@ -107,7 +107,7 @@ export default function Home() {
   }, [isVisible, banners.length])
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F9F9F9]">
       {/* Header */}
       <header className="bg-[#419672] text-white">
         {/* Top bar */}
@@ -260,7 +260,7 @@ export default function Home() {
                 <div className="w-2/3">
                   {/* Recent Articles List */}
                   <div className="space-y-6">
-                    {newsNoFeatured.slice(1).map((post) => (
+                    {newsNoFeatured.concat(newsNoFeatured).map((post) => (
                       <article key={post.id} className="flex items-start gap-4 pb-6 border-b border-gray-200">
                         <div className="flex-1">
                           <div className="flex items-center gap-10 mb-2">
@@ -292,45 +292,49 @@ export default function Home() {
         </div>
       </section>
 
+      <hr className='mx-auto max-w-[80vw]' />
+
       {/* Highlighted Categories Section */}
-      <section className="py-12 px-4 bg-gray-50">
+      <section className="py-12 px-4 ">
         <div className="max-w-[1800px] mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
 
             {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
-              <h2 style={{ color: postCategory?.color }} className={`text-2xl font-bold mb-6`}>{postCategory?.name}</h2>
+              <h2 style={{ color: postCategory?.color }} className={`text-4xl font-semibold mb-6 capitalize cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
 
               {/* Featured Article */}
-              <article className="bg-white rounded-lg overflow-hidden shadow-md">
+              <article className="bg-white rounded-lg overflow-hidden shadow-md  cursor-pointer transition-all hover:scale-105">
                 <div className="relative">
                   <img
                     src={postCategory?.thumbnailUrl}
                     alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                    className="w-full h-48 object-cover"
+                    className="w-full h-[380px] object-cover"
                   />
-                  <div className="absolute inset-0 bg-black opacity-40 flex items-end">
+                  <div className="absolute inset-0 bg-black opacity-50 flex items-end">
                   </div>
-                  <h3 className="absolute bottom-0 text-white font-bold text-lg p-4 leading-tight">
+                  <h3 className="absolute bottom-0 text-white font-semibold text-3xl p-8 leading-tight">
                     {postCategory?.description}
                   </h3>
                 </div>
               </article>
 
               {/* Recent Articles */}
-              <div className="space-y-4">
+              <div className="space-y-8">
                 {
-                  postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].map(post =>
-                    <article className="flex gap-3 bg-white p-4 rounded-lg shadow-sm">
+                  postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].map(post => <>
+                    <hr />
+                    <article className="flex gap-4 items-center cursor-pointer transition-all hover:scale-105">
                       <img
-                        src="/political-meeting.png"
+                        src={post.thumbnailUrl}
                         alt="Audiência pública"
-                        className="w-20 h-15 object-cover rounded flex-shrink-0"
+                        className="w-[280px] h-[140px] object-cover rounded flex-shrink-0"
                       />
-                      <div className="flex-1">
-                        <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}</p>
-                        <h4 className="text-sm font-medium text-gray-900 leading-tight">{post.summary}</h4>
+                      <div className="flex-1 max-w-[282px]">
+                        <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
+                        <h4 className="text-sm  text-gray-900 leading-tight">{post.summary}</h4>
                       </div>
                     </article>
+                  </>
                   )
                 }
               </div>
@@ -341,30 +345,30 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-12 px-4 bg-gray-50">
+      <section className="py-12 px-4 bg-white">
         <div className="max-w-[1800px] mx-auto">
           {/* Fato em Foco */}
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-2xl font-bold text-[#15803D]">Fato em Foco</h2>
+                <h2 className="text-5xl font-bold text-[#419672]">Fato em Foco</h2>
                 <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
               </div>
             </div>
-            <VideoSlider perView={5} videos={relevants} width={200} height={300} />
+            <VideoSlider perView={7} videos={relevants} width={200} height={300} />
           </div>
         </div>
       </section>
 
-      <section className="px-4 bg-gray-50">
-        <div className="grid">
-          <div className="grid-cols-9">
-            <div className="max-w-[1800px] mx-auto py-12 ">
+      <section className="px-4 bg-gray-50 max-w-[1800px] mx-auto ">
+        <div className="flex ga-20">
+          <div className="w-9/12">
+            <div className="py-12 ">
               {/* Mais lidas */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h2 className="text-2xl font-bold text-[#15803D]">Mais lidas</h2>
+                    <h2 className="text-5xl font-bold text-[#419672]">Mais lidas</h2>
                     <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                   </div>
                 </div>
@@ -374,7 +378,7 @@ export default function Home() {
                       <Link
                         key={post.id}
                         href={`/noticia/${post.slug}`}
-                        className="block rounded-xl overflow-hidden bg-white shadow-md transition hover:shadow-lg"
+                        className="block rounded-xl overflow-hidden transition-all hover:translate-y-1 cursor-pointer"
                       >
                         <div className="w-full h-48 overflow-hidden">
                           <img
@@ -385,10 +389,10 @@ export default function Home() {
                         </div>
                         <div className="p-4">
                           <p className="text-sm text-gray-500">
-                            {new Date(post.updatedAt).toLocaleDateString('pt-BR')}
+                            {new Date(post.updatedAt).toLocaleDateString('pt-BR')} às {new Date(post.updatedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                           </p>
-                          <h3 className="text-md font-semibold text-gray-800 mt-1 line-clamp-2">
-                            {post.postTitle}
+                          <h3 className="text-md font-medium text-gray-800 mt-1 line-clamp-2">
+                            {post.summary} || Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi, harum consequuntur earum atque ipsam voluptatem
                           </h3>
                         </div>
                       </Link>
@@ -397,33 +401,33 @@ export default function Home() {
                 )}
               </div>
             </div>
-            <div className="max-w-[1800px] mx-auto py-12 ">
+            <div className="py-12 ">
               {/* Videos */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h2 className="text-2xl font-bold text-[#15803D]">Vídeos</h2>
+                    <h2 className="text-5xl font-bold text-[#419672]">Vídeos</h2>
                     <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                   </div>
                 </div>
-                <VideoSlider videos={videos} />
+                <VideoSlider perView={4} videos={videos} />
               </div>
             </div>
-            <div className="max-w-[1800px] mx-auto py-12 ">
+            <div className="py-12 ">
               {/* Webstories */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h2 className="text-2xl font-bold text-[#15803D]">Webstories</h2>
+                    <h2 className="text-5xl font-bold text-[#419672]">Webstories</h2>
                     <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                   </div>
                 </div>
-                <VideoSlider perView={4} videos={webstories} width={200} height={300} />
+                <VideoSlider perView={6} videos={webstories} width={200} height={300} />
               </div>
             </div>
-            < ColunistasSection />
+            <ColunistasSection />
           </div>
-          <div className="grid-cols-3">
+          <div className="w-3/12">
             <div ref={ref}>
               <a
                 className="twitter-timeline"
