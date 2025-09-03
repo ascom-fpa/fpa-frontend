@@ -109,7 +109,7 @@ export default function PostsAdminPage() {
 
     const handleUpload = async () => {
         setLoading(true)
-        if (!form.postTitle || !form.postCategoryId || !form.postStatus || !form.slug || !form.thumbnailFile) return
+        if (!form.postTitle || !form.postCategoryId || !form.postStatus || !form.slug || !form.thumbnailFile || !form.summary) return
         form.files = currentPostFiles
 
         form.postContent = editor?.getJSON() || {}

@@ -3,6 +3,7 @@ import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { newsletterSubscribe } from "@/services/newsletter"
 import { showToast } from "@/utils/show-toast"
+import { MailPlus } from "lucide-react"
 
 export default function Newsletter() {
     const [email, setEmail] = useState("")
@@ -21,39 +22,43 @@ export default function Newsletter() {
     }
 
     return (
-        <div className="bg-[#419672] text-white p-6 rounded-lg">
-            <h3 className="text-xl font-bold text-center mb-2">Cadastre-se em nossa Newsletter</h3>
-            <p className="text-sm text-center mb-6 opacity-90">
-                Cadastre-se agora e seja o primeiro a saber sobre nossas notícias.
-            </p>
+        <div
+            style={{ backgroundImage: "url('/newsletter-bg.png')", backgroundRepeat: 'no-repeat' }}
+            className=" text-white rounded-2xl max-w-[435px] bg-cover relative overflow-hidden"
+        >
+            <div className="bg-[#419672] opacity-80 absolute top-0 left-0 w-full h-full"></div>
+            <div className="relative z-20 py-10 px-5">
+                <h3 className="text-3xl font-bold text-center m-0">Cadastre-se em nossa Newsletter</h3>
+                <p className=" text-center font-light m-0">Cadastre-se agora e seja o primeiro a saber sobre nossas notícias.</p>
+                <form onSubmit={handleNewsletterSubmit} className="space-y-4 mt-4">
+                    <div>
+                        <label className="block text-sm text-center font-light mb-2">Seu nome:</label>
+                        <Input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="w-full bg-white text-gray-900"
+                            required
+                        />
+                    </div>
 
-            <form onSubmit={handleNewsletterSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium mb-2">Seu nome:</label>
-                    <Input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="w-full bg-white text-gray-900"
-                        required
-                    />
-                </div>
+                    <div>
+                        <label className="block text-sm text-center font-light mb-2">Seu melhor email:</label>
+                        <Input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full bg-white text-gray-900"
+                            required
+                        />
+                    </div>
 
-                <div>
-                    <label className="block text-sm font-medium mb-2">Seu melhor email:</label>
-                    <Input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full bg-white text-gray-900"
-                        required
-                    />
-                </div>
-
-                <Button type="submit" className="w-full bg-[#154B2B] hover:bg-[#012D1C] text-white font-medium py-2">
-                    📧 Inscrever
-                </Button>
-            </form>
+                    <Button type="submit" className="flex gap-4 w-full bg-transparent border-white border hover:bg-white hover:text-[#419672] text-white font-light text-2xl py-2">
+                        <MailPlus style={{ scale: 1.4 }} />
+                        <span>Inscrever</span>
+                    </Button>
+                </form>
+            </div>
         </div>
     )
 }

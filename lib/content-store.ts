@@ -358,6 +358,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
       form.append("postStatus", data.postStatus)
       form.append("isFeatured", data.isFeatured ? 'true' : 'false')
       form.append("slug", data.slug || '')
+      form.append("summary", data.summary || '')
       form.append("postContent", JSON.stringify(data.postContent))
       data.files?.forEach((file: File) => {
         form.append("files", file)
