@@ -45,6 +45,7 @@ html {
   --font-mono: ${GeistMono.variable};
 }
         `}</style>
+        <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
       </head>
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-K56PQX18ME"

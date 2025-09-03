@@ -111,7 +111,7 @@ export default function PostsAdminPage() {
         setLoading(true)
         if (!form.postTitle || !form.postCategoryId || !form.postStatus || !form.slug || !form.thumbnailFile) return
         form.files = currentPostFiles
-        
+
         form.postContent = editor?.getJSON() || {}
         await createPost(form)
         setForm(formInitialState)

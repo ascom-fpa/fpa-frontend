@@ -1,5 +1,11 @@
 import { PostStatusEnum } from "@/enums/post"
 import api from "./axios"
+import { Category } from "./categories"
+
+export interface PostFeatured {
+  postsByCategory: { [categoryId: string]: Post[] }
+  categories: Category[]
+}
 
 export interface Post {
   id: string
@@ -118,5 +124,10 @@ export const incrementView = async (id: string): Promise<Post[]> => {
 
 export const getMostViewed = async (): Promise<Post[]> => {
   const response = await api.get(`/posts/most-viewed`)
+  return response.data.data
+}
+
+export const getPostsCategoryFeatured = async (): Promise<PostFeatured> => {
+  const response = await api.get("/posts/category/featured/")
   return response.data.data
 }

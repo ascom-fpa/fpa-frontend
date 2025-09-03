@@ -20,6 +20,7 @@ interface ContentState {
   // Posts state
   posts: postsService.Post[]
   postsFeature: postsService.Post[]
+  postsCategoryFeatured: postsService.PostFeatured
   currentPost: postsService.Post | null
   postsLoading: boolean
   postsError: string | null
@@ -93,6 +94,7 @@ interface ContentState {
   // Posts actions
   fetchPosts: (params?: any) => Promise<void>
   fetchPostsFeatured: () => Promise<void>
+  fetchPostsCategoryFeatured: () => Promise<void>
   fetchPost: (id: string) => Promise<void>
   createPost: (data: postsService.CreatePostData) => Promise<void>
   updatePost: (data: postsService.UpdatePostData) => Promise<void>
@@ -169,6 +171,10 @@ export const useContentStore = create<ContentState>((set, get) => ({
 
   posts: [],
   postsFeature: [],
+  postsCategoryFeatured: {
+    categories: [],
+    postsByCategory: {}
+  },
   currentPost: null,
   postsLoading: false,
   postsError: null,
@@ -304,6 +310,22 @@ export const useContentStore = create<ContentState>((set, get) => ({
       const response = await postsService.getPostsFeatured()
       set({
         postsFeature: response,
+        postsLoading: false,
+      })
+    } catch (error: any) {
+      set({
+        postsLoading: false,
+        postsError: error.response?.data?.message || "Failed to fetch posts",
+      })
+    }
+  },
+
+  fetchPostsCategoryFeatured: async () => {
+    set({ postsLoading: true, postsError: null })
+    try {
+      const response = await postsService.getPostsCategoryFeatured()
+      set({
+        postsCategoryFeatured: response,
         postsLoading: false,
       })
     } catch (error: any) {
@@ -811,7 +833,17 @@ export const useContentStore = create<ContentState>((set, get) => ({
   createCategory: async (data) => {
     set({ categoriesLoading: true, categoriesError: null })
     try {
-      const newCategory = await categoriesService.createCategory(data)
+
+      const form = new FormData()
+      form.append("name", data.name)
+      form.append("description", data.description || "")
+      form.append("slug", data.slug)
+
+      if (data.color) form.append("color", data.color)
+      if (data.isFeatured) form.append("isFeatured", data.isFeatured.toString())
+      if (data.file) form.append("file", data.file)
+
+      const newCategory = await categoriesService.createCategory(form)
       set((state) => ({
         categories: [...state.categories, newCategory],
         categoriesLoading: false,

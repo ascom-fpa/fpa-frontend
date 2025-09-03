@@ -26,12 +26,12 @@ const formInitialState: CreateCategoryData = {
     description: "",
     slug: "",
     color: "#000000",
+    isFeatured: false,
+    file: null
 }
 
 export default function CategoryPage() {
     const [form, setForm] = useState<CreateCategoryData>(formInitialState)
-    const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null)
-    const [categoryToDeleteData, setCategoryToDeleteData] = useState<any | null>(null)
 
     const {
         fetchCategories,
@@ -91,6 +91,16 @@ export default function CategoryPage() {
                         value={form.description}
                         onChange={(e) => setForm({ ...form, description: e.target.value })}
                     />
+                    <div className="flex gap-4 ms-2 items-center">
+                        <label>Categoria será destaque na home?</label>
+                        <Input
+                            placeholder="Destaque na home?"
+                            checked={form.isFeatured}
+                            onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
+                            type="checkbox"
+                            className="w-4 cursor-pointer"
+                        />
+                    </div>
                     <Input
                         placeholder="Slug. Ex: tecnologia"
                         value={form.slug}
@@ -105,13 +115,12 @@ export default function CategoryPage() {
                             onChange={(e) => setForm({ ...form, color: e.target.value })}
                         />
                     </div>
-
-                    {/* <LabelInputFile
-                        id="icon-upload"
-                        label="Selecionar ícone"
+                    <LabelInputFile
+                        id="cover-file"
+                        label="Selecionar capa da categoria"
                         accept="image/*"
-                        onChange={(file) => setForm({ ...form, iconFile: file })}
-                    /> */}
+                        onChange={(file) => setForm({ ...form, file: file })}
+                    />
                 </CardContent>
                 <CardFooter className="flex justify-end">
                     <Button onClick={handleUpload} disabled={!form.name}>
@@ -153,7 +162,7 @@ function SortableCard({ category, onDelete }: { category: any, onDelete: () => v
                     <p className="text-xs text-muted-foreground">{category.description}</p>
                     <div className="flex gap-2">
                         <p className="text-xs">Cor: #{category.color || '000000'}</p>
-                        <div className="rounded-full w-4 h-4" style={{backgroundColor: category?.color}}></div>
+                        <div className="rounded-full w-4 h-4" style={{ backgroundColor: category?.color }}></div>
                     </div>
                     {category.iconUrl && (
                         <img src={category.iconUrl} alt="ícone" className="w-20 h-20 object-contain" />

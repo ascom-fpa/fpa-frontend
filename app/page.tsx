@@ -34,7 +34,8 @@ export default function Home() {
     fetchWebStories, fetchPosts, posts,
     fetchRelevants, relevants, fetchPostsFeatured,
     postsFeature, fetchVideos, videos, fetchMostViewed, mostViewed,
-    fetchMagazineUrl, magazineUrl
+    fetchMagazineUrl, magazineUrl, fetchPostsCategoryFeatured,
+    postsCategoryFeatured
   } = useContentStore()
 
   const newsNoFeatured = posts.filter(post => !post.isFeatured)
@@ -50,6 +51,7 @@ export default function Home() {
     fetchVideos()
     fetchMostViewed()
     fetchMagazineUrl()
+    fetchPostsCategoryFeatured()
   }, []);
 
   async function fetchTweets() {
@@ -250,7 +252,7 @@ export default function Home() {
             <aside className="w-1/4 space-y-8">
               {/* Newsletter Signup */}
               <Newsletter />
-              <iframe allowFullScreen src={magazineUrl} width="100%" height="500px" />
+              {magazineUrl && <iframe allowFullScreen src={magazineUrl} width="100%" height="500px" />}
             </aside>
           </div>
         </div>
@@ -260,167 +262,47 @@ export default function Home() {
       <section className="py-12 px-4 bg-gray-50">
         <div className="max-w-[1800px] mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Política Agrícola Column */}
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-[#B8860B] mb-6">Política Agrícola</h2>
+
+            {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
+              <h2 style={{ color: postCategory?.color }} className={`text-2xl font-bold mb-6`}>{postCategory?.name}</h2>
 
               {/* Featured Article */}
               <article className="bg-white rounded-lg overflow-hidden shadow-md">
                 <div className="relative">
                   <img
-                    src="/agricultural-worker-in-field.png"
+                    src={postCategory?.thumbnailUrl}
                     alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
                     className="w-full h-48 object-cover"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end">
-                    <h3 className="text-white font-bold text-lg p-4 leading-tight">
-                      Incentivo ao desenvolvimento e à produção de biocombustíveis é aprovado na CAPADR
-                    </h3>
+                  <div className="absolute inset-0 bg-black opacity-40 flex items-end">
                   </div>
+                  <h3 className="absolute bottom-0 text-white font-bold text-lg p-4 leading-tight">
+                    {postCategory?.description}
+                  </h3>
                 </div>
               </article>
 
               {/* Recent Articles */}
               <div className="space-y-4">
-                <article className="flex gap-3 bg-white p-4 rounded-lg shadow-sm">
-                  <img
-                    src="/political-meeting.png"
-                    alt="Audiência pública"
-                    className="w-20 h-15 object-cover rounded flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-500 mb-1">10 de setembro às 10:20</p>
-                    <h4 className="text-sm font-medium text-gray-900 leading-tight">
-                      Uma audiência pública realizada nesta terça-feira (15), na Comissão de Relações Exteriores (CRE)
-                      do Senado Federal, discutiu os possíveis caminhos...
-                    </h4>
-                  </div>
-                </article>
-
-                <article className="flex gap-3 bg-white p-4 rounded-lg shadow-sm">
-                  <img
-                    src="/agricultural-policy-discussion.png"
-                    alt="Audiência pública"
-                    className="w-20 h-15 object-cover rounded flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-500 mb-1">10 de setembro às 10:20</p>
-                    <h4 className="text-sm font-medium text-gray-900 leading-tight">
-                      Uma audiência pública realizada nesta terça-feira (15), na Comissão de Relações Exteriores (CRE)
-                      do Senado Federal, discutiu os possíveis caminhos...
-                    </h4>
-                  </div>
-                </article>
+                {
+                  postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].map(post =>
+                    <article className="flex gap-3 bg-white p-4 rounded-lg shadow-sm">
+                      <img
+                        src="/political-meeting.png"
+                        alt="Audiência pública"
+                        className="w-20 h-15 object-cover rounded flex-shrink-0"
+                      />
+                      <div className="flex-1">
+                        <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}</p>
+                        <h4 className="text-sm font-medium text-gray-900 leading-tight">{post.summary}</h4>
+                      </div>
+                    </article>
+                  )
+                }
               </div>
             </div>
+            )}
 
-            {/* Internacional Column */}
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-[#419672] mb-6">Internacional</h2>
-
-              {/* Featured Article */}
-              <article className="bg-white rounded-lg overflow-hidden shadow-md">
-                <div className="relative">
-                  <img
-                    src="/international-political-meeting-with-flags.png"
-                    alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end">
-                    <h3 className="text-white font-bold text-lg p-4 leading-tight">
-                      Incentivo ao desenvolvimento e à produção de biocombustíveis é aprovado na CAPADR
-                    </h3>
-                  </div>
-                </div>
-              </article>
-
-              {/* Recent Articles */}
-              <div className="space-y-4">
-                <article className="flex gap-3 bg-white p-4 rounded-lg shadow-sm">
-                  <img
-                    src="/international-conference.png"
-                    alt="Audiência pública"
-                    className="w-20 h-15 object-cover rounded flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-500 mb-1">10 de setembro às 10:20</p>
-                    <h4 className="text-sm font-medium text-gray-900 leading-tight">
-                      Uma audiência pública realizada nesta terça-feira (15), na Comissão de Relações Exteriores (CRE)
-                      do Senado Federal, discutiu os possíveis caminhos...
-                    </h4>
-                  </div>
-                </article>
-
-                <article className="flex gap-3 bg-white p-4 rounded-lg shadow-sm">
-                  <img
-                    src="/international-trade-meeting.png"
-                    alt="Audiência pública"
-                    className="w-20 h-15 object-cover rounded flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-500 mb-1">10 de setembro às 10:20</p>
-                    <h4 className="text-sm font-medium text-gray-900 leading-tight">
-                      Uma audiência pública realizada nesta terça-feira (15), na Comissão de Relações Exteriores (CRE)
-                      do Senado Federal, discutiu os possíveis caminhos...
-                    </h4>
-                  </div>
-                </article>
-              </div>
-            </div>
-
-            {/* Economia Column */}
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-[#DC2626] mb-6">Economia</h2>
-
-              {/* Featured Article */}
-              <article className="bg-white rounded-lg overflow-hidden shadow-md">
-                <div className="relative">
-                  <img
-                    src="/economic-conference-with-international-flags.png"
-                    alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end">
-                    <h3 className="text-white font-bold text-lg p-4 leading-tight">
-                      Incentivo ao desenvolvimento e à produção de biocombustíveis é aprovado na CAPADR
-                    </h3>
-                  </div>
-                </div>
-              </article>
-
-              {/* Recent Articles */}
-              <div className="space-y-4">
-                <article className="flex gap-3 bg-white p-4 rounded-lg shadow-sm">
-                  <img
-                    src="/economic-meeting.png"
-                    alt="Audiência pública"
-                    className="w-20 h-15 object-cover rounded flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-500 mb-1">10 de setembro às 10:20</p>
-                    <h4 className="text-sm font-medium text-gray-900 leading-tight">
-                      Uma audiência pública realizada nesta terça-feira (15), na Comissão de Relações Exteriores (CRE)
-                      do Senado Federal, discutiu os possíveis caminhos...
-                    </h4>
-                  </div>
-                </article>
-
-                <article className="flex gap-3 bg-white p-4 rounded-lg shadow-sm">
-                  <img
-                    src="/economic-policy-discussion.png"
-                    alt="Audiência pública"
-                    className="w-20 h-15 object-cover rounded flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-500 mb-1">10 de setembro às 10:20</p>
-                    <h4 className="text-sm font-medium text-gray-900 leading-tight">
-                      Uma audiência pública realizada nesta terça-feira (15), na Comissão de Relações Exteriores (CRE)
-                      do Senado Federal, discutiu os possíveis caminhos...
-                    </h4>
-                  </div>
-                </article>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -524,7 +406,7 @@ export default function Home() {
 
       </section>
       <Footer />
-    <ToastContainer position="top-right" autoClose={false} />
+      <ToastContainer position="top-right" autoClose={false} />
     </div>
   )
 }

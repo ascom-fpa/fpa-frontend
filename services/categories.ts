@@ -12,6 +12,7 @@ export interface Category {
   created_at: string
   updated_at: string
   children?: Category[]
+  thumbnailUrl?: string
 }
 
 export interface CreateCategoryData {
@@ -21,7 +22,8 @@ export interface CreateCategoryData {
   // parentId?: string
   color?: string
   isVisible?: boolean
-  iconFile?: File
+  isFeatured?: boolean
+  file?: File | null
 }
 
 export interface UpdateCategoryData extends Partial<CreateCategoryData> {
@@ -66,8 +68,8 @@ export const getCategoryBySlug = async (slug: string): Promise<Category> => {
 }
 
 // Create new category
-export const createCategory = async (data: CreateCategoryData): Promise<Category> => {
-  const response = await api.post("/categories", data)
+export const createCategory = async (data: FormData): Promise<Category> => {
+  const response = await api.postForm("/categories", data)
   return response.data
 }
 
