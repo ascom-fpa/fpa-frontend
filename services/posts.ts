@@ -68,7 +68,7 @@ export const getPosts = async (params?: {
 // Get single post by ID
 export const getPost = async (id: string): Promise<Post> => {
   const response = await api.get(`/posts/${id}`)
-  return response.data
+  return response.data.data
 }
 
 // Create new post

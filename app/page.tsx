@@ -22,6 +22,7 @@ import { getPauta } from '@/services/pauta'
 import { showToast } from '@/utils/show-toast'
 import RespondeAgroDirect from '@/components/agro'
 import PostsFeature from '@/components/posts-feature'
+import Header from '@/components/ui/header'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -36,10 +37,6 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const sliderRef = useRef<HTMLDivElement>(null)
-  const [live, setLive] = useState<UpdateLiveData>({
-    isEnabled: false,
-    link: ''
-  });
   const [pautaImage, setPautaImage] = useState('');
 
   const {
@@ -65,14 +62,8 @@ export default function Home() {
     fetchMostViewed()
     fetchMagazineUrl()
     fetchPostsCategoryFeatured()
-    fetchLiveUrl()
     fetchPauta()
   }, []);
-
-  async function fetchLiveUrl() {
-    getLive()
-      .then(res => setLive(res))
-  }
 
   async function fetchPauta() {
     getPauta()
@@ -132,40 +123,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#F9F9F9]">
       {/* Header */}
-      <header className="bg-[#419672] text-white">
-        {/* Top bar */}
-        <RespondeAgroDirect />
-
-        {/* Main header */}
-        <div className="py-4 px-4">
-          <div className="flex justify-between items-center max-w-[1800px] mx-auto">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-[#154B2B]">
-                <Menu className="h-6 w-6" />
-              </Button>
-              <div className="text-center">
-                <div className="text-sm font-medium">FRENTE PARLAMENTAR DA</div>
-                <div className="text-2xl font-bold">AGROPECUÁRIA</div>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              {live.isEnabled && <Link href={live.link} className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                <span className="font-medium">AO VIVO</span>
-              </Link>}
-              {/* <Link href="/admin">
-                <Button
-                  variant="outline"
-                  className="text-white border-white hover:bg-white hover:text-[#419672] bg-transparent"
-                >
-                  LOGIN
-                </Button>
-              </Link> */}
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section ref={sliderRef} className="relative h-[600px] overflow-hidden">
@@ -303,20 +261,23 @@ export default function Home() {
               <h2 style={{ color: postCategory?.color }} className={`text-4xl font-semibold mb-6 capitalize cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
 
               {/* Featured Article */}
-              <article className="bg-white rounded-lg overflow-hidden shadow-md  cursor-pointer transition-all hover:scale-105">
-                <div className="relative">
-                  <img
-                    src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
-                    alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                    className="w-full h-[380px] object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black opacity-50 flex items-end">
+              {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
+              <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postsCategoryFeatured?.postsByCategory[postCategory.id][0].id}`}>
+                <article className="bg-white rounded-lg overflow-hidden shadow-md  cursor-pointer transition-all hover:scale-105">
+                  <div className="relative">
+                    <img
+                      src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
+                      alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
+                      className="w-full h-[380px] object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black opacity-50 flex items-end">
+                    </div>
+                    <h3 className="absolute bottom-0 text-white font-semibold text-3xl p-8 leading-tight">
+                      {postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.summary}
+                    </h3>
                   </div>
-                  <h3 className="absolute bottom-0 text-white font-semibold text-3xl p-8 leading-tight">
-                    {postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.summary}
-                  </h3>
-                </div>
-              </article>
+                </article>
+              </Link>
 
               {/* Recent Articles */}
               <div className="space-y-8">
@@ -339,7 +300,7 @@ export default function Home() {
                 }
               </div>
 
-              <Link style={{color: postCategory.color}} className='flex gap-2' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}>
+              <Link style={{ color: postCategory.color }} className='flex gap-2' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}>
                 <span>Ver mais em {postCategory.name}</span>
                 <ArrowRight className='w-4' />
               </Link>
