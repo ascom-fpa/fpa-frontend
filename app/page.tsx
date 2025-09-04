@@ -5,7 +5,7 @@ import 'swiper/css/navigation'
 import type React from "react"
 
 import { useEffect, useRef, useState } from "react"
-import { ChevronLeft, ChevronRight, Menu, Search, Share2 } from "lucide-react"
+import { ArrowRight, ChevronLeft, ChevronRight, Menu, Search, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useContentStore } from "@/lib/content-store"
 import Footer from '@/components/ui/footer'
@@ -338,6 +338,11 @@ export default function Home() {
                   )
                 }
               </div>
+
+              <Link style={{color: postCategory.color}} className='flex gap-2' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}>
+                <span>Ver mais em {postCategory.name}</span>
+                <ArrowRight className='w-4' />
+              </Link>
             </div>
             )}
 
