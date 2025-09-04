@@ -16,9 +16,10 @@ interface Props {
   width?: number
   height?: number
   perView?: number
+  id?: 'videos'
 }
 
-export function VideoSlider({ videos, width = 330, height = 220, perView = 3 }: Props) {
+export function VideoSlider({ id, videos, width = 330, height = 220, perView = 3 }: Props) {
   const [sliderRef, slider] = useKeenSlider<HTMLDivElement>({
     slides: {
       perView,
@@ -47,14 +48,19 @@ export function VideoSlider({ videos, width = 330, height = 220, perView = 3 }: 
     <div className="relative">
       <div ref={sliderRef} className="keen-slider">
         {videos.map((video) => (
-          <div className="keen-slider__slide h-[240px]" key={video.id}>
+          <div onClick={() => {
+            const videoElement = document.getElementById(`video-${video.id}`);
+            if (videoElement?.requestFullscreen) {
+              videoElement.requestFullscreen();
+            }
+          }} className={`cursor-pointer keen-slider__slide ${id == 'videos' && "h-[240px]"}`} key={video.id}>
             <div style={{ width, height }} className="relative rounded-xl mx-auto overflow-hidden bg-black">
-              <video className="w-full h-full object-cover" src={video.url || video.videoUrl} controls />
+              <video id={`video-${video.id}`} className="w-full h-full object-cover" src={video.url || video.videoUrl} controls />
               <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
                 {new Date(video.updatedAt).toLocaleDateString('pt-BR')}
               </div>
             </div>
-            <span className='text-black capitalize'>{video.description}</span>
+            {id == 'videos' && <span className='text-black capitalize'>{video.description}</span>}
           </div>
         ))}
       </div>

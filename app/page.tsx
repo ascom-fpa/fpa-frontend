@@ -19,6 +19,9 @@ import { ToastContainer } from 'react-toastify'
 import Script from 'next/script'
 import { getLive, UpdateLiveData } from '@/services/live'
 import { getPauta } from '@/services/pauta'
+import { showToast } from '@/utils/show-toast'
+import RespondeAgroDirect from '@/components/agro'
+import PostsFeature from '@/components/posts-feature'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -220,31 +223,7 @@ export default function Home() {
       </section>
 
       {/* Featured news */}
-      <section className="py-8 px-4">
-        <div className="max-w-[1800px] mx-auto">
-          <div className="grid md:grid-cols-4 gap-6">
-            {postsFeature.map((article, index) => (
-              <article
-                key={index}
-                className={` rounded-lg overflow-hidden relative p-4 h-[300px] cursor-pointer hover:scale-105 transition-all flex ${index == 0 ? `items-end` : `items-center`}`}
-                style={{ backgroundImage: index == 0 ? `url(${article.thumbnailUrl})` : '' }}
-              >
-                {index == 0 && <div className="absolute w-full h-full top-0 left-0 bg-black opacity-30 z-10"></div>}
-                <div className="relative z-20">
-
-                </div>
-                <div className="relative z-20 flex flex-col gap-4">
-                  <span style={{ color: article.postCategory.color }} className={`text-white text-sm font-light uppercase`}>
-                    {article.postCategory.name}
-                  </span>
-                  <h3 className={`font-bold text-2xl ${index == 0 ? 'text-white' : 'text-[#3D3D3D]'} leading-tight m-0`}>{article.postTitle}</h3>
-                  <p className={`${index == 0 ? 'text-white' : 'text-[#787878]'} text-sm leading-relaxed m-0`}>{article.summary?.slice(0, 100)}...</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <PostsFeature postsFeature={postsFeature} />
 
       {/* Main Content Section with Recent News (75%) and Sidebar (25%) */}
       <section className="py-8 px-4 bg-white">
@@ -287,7 +266,19 @@ export default function Home() {
                             <span style={{ color: post.postCategory.color }} className={`text-xs font-medium uppercase tracking-wide`}>
                               {post.postCategory.name}
                             </span>
-                            <Share2 className="h-4 w-4 hover:scale-110 transition-all text-gray-500 cursor-pointer" />
+                            <Share2
+                              onClick={() => {
+                                navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.slug}`)
+                                  .then(() => {
+                                    console.log('Link copiado para a área de transferência!');
+                                    // Opcional: notifique o usuário (alert, toast, etc.)
+                                    showToast({ type: 'success', children: 'Link copiado para a área de transferência' })
+                                  })
+                                  .catch(err => {
+                                    console.error('Erro ao copiar link:', err);
+                                  });
+                              }}
+                              className="h-4 w-4 hover:scale-110 transition-all text-gray-500 cursor-pointer" />
                           </div>
                           <h3 className="text-3xl font-semibold text-gray-900 mb-2 leading-tight">{post.postTitle}</h3>
                           {post.summary && (
@@ -434,7 +425,7 @@ export default function Home() {
                     <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                   </div>
                 </div>
-                <VideoSlider perView={4} videos={videos} />
+                <VideoSlider id="videos" perView={4} videos={videos} />
               </div>
             </div>
             <div className="py-12 ">
