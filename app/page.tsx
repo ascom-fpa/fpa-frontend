@@ -134,22 +134,7 @@ export default function Home() {
       {/* Header */}
       <header className="bg-[#419672] text-white">
         {/* Top bar */}
-        <div className="bg-gray-100 text-black text-xs py-1 px-4">
-          <div className="flex justify-between items-center max-w-[1800px] mx-auto">
-            <div className="flex space-x-4">
-              <span>COTAÇÃO DO AGRONEGÓCIO:</span>
-              <span>r - 00.0012371535770034 ↓ 1.444</span>
-              <span>Libra Esterlina - 00.0014039844541947 ↑ 2.3973</span>
-              <span>WTI - 00.0020651541319644862</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span>SITE FPA</span>
-              <Button variant="ghost" size="sm" className="text-black hover:bg-gray-200">
-                <Search className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
+        <RespondeAgroDirect />
 
         {/* Main header */}
         <div className="py-4 px-4">
@@ -237,7 +222,7 @@ export default function Home() {
               <div className="flex gap-20">
                 <div className="w-1/3">
                   {newsNoFeatured.slice(0, 3).map(post =>
-                    <article className="mb-8">
+                    <article className="mb-8" key={post.id}>
                       <div className="relative mb-4">
                         <img
                           src={post.thumbnailUrl || "/placeholder.svg"}
@@ -297,9 +282,9 @@ export default function Home() {
             <aside className="w-1/4 space-y-8">
               {/* Newsletter Signup */}
               <Newsletter />
-              {magazineUrl && <iframe  allowFullScreen src={magazineUrl+'#toolbar=0&navpanes=0&scrollbar=0"'} width="100%" height="500px" />}
+              {magazineUrl && <iframe allowFullScreen src={magazineUrl + '#toolbar=0&navpanes=0&scrollbar=0"'} width="100%" height="500px" />}
               <div className="relative flex justify-center">
-                <img className='overflow-hidden rounded-2xl' src={pautaImage} width={435} height={518} />
+                {pautaImage && <img className='overflow-hidden rounded-2xl' src={pautaImage} width={435} height={518} />}
                 <Button className='absolute bottom-20 text-2xl p-6'><Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link></Button>
               </div>
             </aside>

@@ -1,65 +1,60 @@
 'use client'
 
-import { useState } from 'react'
+import { getAgroData } from '@/services/agro'
+import { useEffect, useState } from 'react'
+
+type AgroData = {
+    temperaturaMaxima: number[]
+    temperaturaMinima: number[]
+    produtividadeAlmejada: number[]
+    produtividadeMediaMunicipio: number[]
+    balancoHidrico: number[]
+}
 
 export default function RespondeAgroDirect() {
-    const [query, setQuery] = useState('')
-    const [results, setResults] = useState<any[]>([])
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const [data, setData] = useState<AgroData | null>(null)
 
-    const handleSearch = async () => {
-        setLoading(true)
-        setError(null)
-
-        try {
-            const response = await fetch(`https://api.cnptia.embrapa.br/respondeagro/v1/search?query=${encodeURIComponent(query)}`, {
-                headers: {
-                    Authorization: `Bearer SEU_TOKEN_AQUI`, // ⚠️ Cuidado: não exponha tokens sensíveis
-                },
+    useEffect(() => {
+        getAgroData()
+            .then(result => {
+                console.log(result)
+                setData(result.data)
             })
+            .catch(console.error);
+    }, []);
 
-            const data = await response.json()
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Erro ao buscar dados')
-            }
-
-            setResults(data.data || [])
-        } catch (err: any) {
-            setError(err.message || 'Erro desconhecido')
-        } finally {
-            setLoading(false)
-        }
-    }
+    const tickerItems = [
+        {
+            label: 'Temp. Máxima',
+            value: `${data ? data.temperaturaMaxima[0]?.toFixed(1) : 0}°C`,
+        },
+        {
+            label: 'Temp. Mínima',
+            value: `${data ? data.temperaturaMinima[0]?.toFixed(1) : 0}°C`,
+        },
+        {
+            label: 'Prod. Almejada',
+            value: `${data ? data.produtividadeAlmejada[0]?.toFixed(2) : 0} t/ha`,
+        },
+        {
+            label: 'Prod. Média Município',
+            value: `${data ? data.produtividadeMediaMunicipio[0]?.toFixed(2) : 0} t/ha`,
+        },
+        {
+            label: 'Balanço Hídrico',
+            value: `${data ? data.balancoHidrico[0]?.toFixed(2) : 0} mm`,
+        },
+    ]
 
     return (
-        <div className="space-y-4">
-            <input
-                type="text"
-                placeholder="Digite uma dúvida do agro..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="border p-2 w-full rounded"
-            />
-            <button
-                onClick={handleSearch}
-                disabled={!query || loading}
-                className="bg-green-700 text-white px-4 py-2 rounded"
-            >
-                {loading ? 'Buscando...' : 'Buscar na Embrapa'}
-            </button>
-
-            {error && <p className="text-red-500">{error}</p>}
-
-            <ul className="space-y-3">
-                {results.map((item, i) => (
-                    <li key={i} className="border p-3 rounded">
-                        <p className="font-bold text-green-800">{item.question}</p>
-                        <p className="text-gray-700">{item.answer}</p>
-                    </li>
+        <div className="bg-white text-black w-full overflow-hidden py-1 text-sm">
+            <div className="animate-marquee whitespace-nowrap px-4">
+                {tickerItems.map((item, idx) => (
+                    <span key={idx} className="mx-6 inline-block">
+                        <strong>{item.label}:</strong> {item.value}
+                    </span>
                 ))}
-            </ul>
+            </div>
         </div>
     )
 }
