@@ -297,7 +297,7 @@ export default function Home() {
             <aside className="w-1/4 space-y-8">
               {/* Newsletter Signup */}
               <Newsletter />
-              {magazineUrl && <iframe allowFullScreen src={magazineUrl} width="100%" height="500px" />}
+              {magazineUrl && <iframe  allowFullScreen src={magazineUrl+'#toolbar=0&navpanes=0&scrollbar=0"'} width="100%" height="500px" />}
               <div className="relative flex justify-center">
                 <img className='overflow-hidden rounded-2xl' src={pautaImage} width={435} height={518} />
                 <Button className='absolute bottom-20 text-2xl p-6'><Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link></Button>
