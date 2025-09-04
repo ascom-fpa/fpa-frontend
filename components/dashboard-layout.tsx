@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { FileText, ImageIcon, Video, Tag, FolderOpen, BarChart3, Settings, LogOut, Menu, Search, Plus, UserCircle2, FocusIcon, ChevronsLeft, ChevronsRight, VideoIcon, Book, Mail } from "lucide-react"
+import { FileText, ImageIcon, Video, Tag, FolderOpen, BarChart3, Settings, LogOut, Menu, Search, Plus, UserCircle2, FocusIcon, ChevronsLeft, ChevronsRight, VideoIcon, Book, Mail, BookDashed, Videotape } from "lucide-react"
 import { useContentStore } from "@/lib/content-store"
 
 interface DashboardLayoutProps {
@@ -37,6 +37,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: Book, label: "Revista FPA", href: "/admin/magazine", count: 1 },
     { icon: UserCircle2, label: "Usuários", href: "/admin/users", count: totalCounts?.totalUsers },
     { icon: Mail, label: "Newsletter", href: "/admin/newsletter" },
+    { icon: BookDashed, label: "Pauta", href: "/admin/pauta" },
+    { icon: Videotape, label: "Ao vivo", href: "/admin/live" },
     { icon: Settings, label: "Configurações", href: "/admin/settings" },
   ]
 

@@ -47,13 +47,14 @@ export function VideoSlider({ videos, width = 330, height = 220, perView = 3 }: 
     <div className="relative">
       <div ref={sliderRef} className="keen-slider">
         {videos.map((video) => (
-          <div className="keen-slider__slide" key={video.id}>
+          <div className="keen-slider__slide h-[240px]" key={video.id}>
             <div style={{ width, height }} className="relative rounded-xl mx-auto overflow-hidden bg-black">
               <video className="w-full h-full object-cover" src={video.url || video.videoUrl} controls />
               <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
                 {new Date(video.updatedAt).toLocaleDateString('pt-BR')}
               </div>
             </div>
+            <span className='text-black capitalize'>{video.description}</span>
           </div>
         ))}
       </div>

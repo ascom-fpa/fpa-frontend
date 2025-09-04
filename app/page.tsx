@@ -16,6 +16,9 @@ import { ContentSlider } from '@/components/ui/content-slider'
 import Link from 'next/link'
 import Newsletter from '@/components/newsletter'
 import { ToastContainer } from 'react-toastify'
+import Script from 'next/script'
+import { getLive, UpdateLiveData } from '@/services/live'
+import { getPauta } from '@/services/pauta'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -30,6 +33,11 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const sliderRef = useRef<HTMLDivElement>(null)
+  const [live, setLive] = useState<UpdateLiveData>({
+    isEnabled: false,
+    link: ''
+  });
+  const [pautaImage, setPautaImage] = useState('');
 
   const {
     fetchBanners, banners, webstories,
@@ -54,7 +62,19 @@ export default function Home() {
     fetchMostViewed()
     fetchMagazineUrl()
     fetchPostsCategoryFeatured()
+    fetchLiveUrl()
+    fetchPauta()
   }, []);
+
+  async function fetchLiveUrl() {
+    getLive()
+      .then(res => setLive(res))
+  }
+
+  async function fetchPauta() {
+    getPauta()
+      .then(res => setPautaImage(res.imageUrl!))
+  }
 
   async function fetchTweets() {
     try {
@@ -142,10 +162,10 @@ export default function Home() {
             </div>
 
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
+              {live.isEnabled && <Link href={live.link} className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
                 <span className="font-medium">AO VIVO</span>
-              </div>
+              </Link>}
               {/* <Link href="/admin">
                 <Button
                   variant="outline"
@@ -287,6 +307,10 @@ export default function Home() {
               {/* Newsletter Signup */}
               <Newsletter />
               {magazineUrl && <iframe allowFullScreen src={magazineUrl} width="100%" height="500px" />}
+              <div className="relative flex justify-center">
+                <img className='overflow-hidden rounded-2xl' src={pautaImage} width={435} height={518} />
+                <Button className='absolute bottom-20 text-2xl p-6'><Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link></Button>
+              </div>
             </aside>
           </div>
         </div>
@@ -306,14 +330,14 @@ export default function Home() {
               <article className="bg-white rounded-lg overflow-hidden shadow-md  cursor-pointer transition-all hover:scale-105">
                 <div className="relative">
                   <img
-                    src={postCategory?.thumbnailUrl}
+                    src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
                     alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
                     className="w-full h-[380px] object-cover"
                   />
                   <div className="absolute inset-0 bg-black opacity-50 flex items-end">
                   </div>
                   <h3 className="absolute bottom-0 text-white font-semibold text-3xl p-8 leading-tight">
-                    {postCategory?.description}
+                    {postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.summary}
                   </h3>
                 </div>
               </article>
@@ -321,7 +345,7 @@ export default function Home() {
               {/* Recent Articles */}
               <div className="space-y-8">
                 {
-                  postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].map(post => <>
+                  postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post => <>
                     <hr />
                     <article className="flex gap-4 items-center cursor-pointer transition-all hover:scale-105">
                       <img
@@ -428,15 +452,24 @@ export default function Home() {
             <ColunistasSection />
           </div>
           <div className="w-3/12">
+            <Script strategy="afterInteractive">
+              {`
+           twttr.widgets.createTimeline(
+              {
+                sourceType: "profile",
+              screenName: "TwitterDev"
+               },
+              document.getElementById("twitter-timeline")
+              );
+        `}
+            </Script>
             <div ref={ref}>
-              <a
-                className="twitter-timeline"
-                data-height="600"
-                data-theme="light"
-                data-chrome="nofooter noheader"
-                href="https://twitter.com/FPAgropecuaria?ref_src=twsrc%5Etfw"
+              <a className="twitter-timeline"
+                href="https://twitter.com/fpagropecuaria"
+                data-width="300"
+                data-height="300"
               >
-                Tweets by FPAgropecuaria
+                Tweets by @fpagropecuaria
               </a>
             </div>
           </div>
