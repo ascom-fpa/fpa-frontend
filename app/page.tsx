@@ -5,7 +5,7 @@ import 'swiper/css/navigation'
 import type React from "react"
 
 import { useEffect, useRef, useState } from "react"
-import { ArrowRight, ChevronLeft, ChevronRight, Menu, Search, Share2 } from "lucide-react"
+import { ArrowRight, ChevronLeft, ChevronRight, Menu, MessageSquare, Search, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useContentStore } from "@/lib/content-store"
 import Footer from '@/components/ui/footer'
@@ -23,6 +23,8 @@ import { showToast } from '@/utils/show-toast'
 import RespondeAgroDirect from '@/components/agro'
 import PostsFeature from '@/components/posts-feature'
 import Header from '@/components/ui/header'
+import { getInstagramPosts } from '@/services/instagram'
+import InstagramGrid from '@/components/ui/instagram-grid'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -50,6 +52,7 @@ export default function Home() {
 
   const newsNoFeatured = posts.filter(post => !post.isFeatured)
   const [tweets, setTweets] = useState();
+  const [instagramPosts, setInstagramPosts] = useState([]);
 
   useEffect(() => {
     fetchBanners()
@@ -63,6 +66,7 @@ export default function Home() {
     fetchMagazineUrl()
     fetchPostsCategoryFeatured()
     fetchPauta()
+    fetchInstagramPosts()
   }, []);
 
   async function fetchPauta() {
@@ -75,6 +79,16 @@ export default function Home() {
       const tweets = await getRecentTweets("fpagroupecuaria")
       console.log(tweets)
       setTweets(tweets)
+    } catch (error) {
+      console.error("Error fetching tweets:", error)
+    }
+  }
+
+  async function fetchInstagramPosts() {
+    try {
+      const instagramPosts = await getInstagramPosts()
+      console.log(instagramPosts)
+      setInstagramPosts(instagramPosts)
     } catch (error) {
       console.error("Error fetching tweets:", error)
     }
@@ -180,23 +194,25 @@ export default function Home() {
               <div className="flex gap-20">
                 <div className="w-1/3">
                   {newsNoFeatured.slice(0, 3).map(post =>
-                    <article className="mb-8" key={post.id}>
-                      <div className="relative mb-4">
-                        <img
-                          src={post.thumbnailUrl || "/placeholder.svg"}
-                          alt={post.postTitle}
-                          className="w-full h-64 object-cover rounded-lg"
-                        />
-                      </div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">{post.postTitle}</h3>
-                      <div className="flex items-center text-sm text-gray-600 mb-4">
-                        <span>{new Date(post.createdAt).toLocaleDateString('pt-BR')}</span>
-                        <span className="mx-2">/</span>
-                        <span className='uppercase'>{post.postCategory.name}</span>
-                        <span className="mx-2">/</span>
-                        <span>{`${post.postAuthor.firstName} ${post.postAuthor.lastName}`}</span>
-                      </div>
-                    </article>
+                    <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                      <article className="mb-8" key={post.id}>
+                        <div className="relative mb-4">
+                          <img
+                            src={post.thumbnailUrl || "/placeholder.svg"}
+                            alt={post.postTitle}
+                            className="w-full h-64 object-cover rounded-lg"
+                          />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{post.postTitle}</h3>
+                        <div className="flex items-center text-sm text-gray-600 mb-4">
+                          <span>{new Date(post.createdAt).toLocaleDateString('pt-BR')}</span>
+                          <span className="mx-2">/</span>
+                          <span className='uppercase'>{post.postCategory.name}</span>
+                          <span className="mx-2">/</span>
+                          <span>{`${post.postAuthor.firstName} ${post.postAuthor.lastName}`}</span>
+                        </div>
+                      </article>
+                    </Link>
                   )}
                 </div>
                 <div className="w-2/3">
@@ -209,21 +225,35 @@ export default function Home() {
                             <span style={{ color: post.postCategory.color }} className={`text-xs font-medium uppercase tracking-wide`}>
                               {post.postCategory.name}
                             </span>
-                            <Share2
-                              onClick={() => {
-                                navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.slug}`)
-                                  .then(() => {
-                                    console.log('Link copiado para a área de transferência!');
-                                    // Opcional: notifique o usuário (alert, toast, etc.)
-                                    showToast({ type: 'success', children: 'Link copiado para a área de transferência' })
-                                  })
-                                  .catch(err => {
-                                    console.error('Erro ao copiar link:', err);
-                                  });
-                              }}
-                              className="h-4 w-4 hover:scale-110 transition-all text-gray-500 cursor-pointer" />
+                            <div className="flex gap-5">
+                              <Share2
+                                onClick={() => {
+                                  navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.slug}`)
+                                    .then(() => {
+                                      console.log('Link copiado para a área de transferência!');
+                                      // Opcional: notifique o usuário (alert, toast, etc.)
+                                      showToast({ type: 'success', children: 'Link copiado para a área de transferência' })
+                                    })
+                                    .catch(err => {
+                                      console.error('Erro ao copiar link:', err);
+                                    });
+                                }}
+                                className="h-4 w-4 hover:scale-110 transition-all text-gray-500 cursor-pointer" />
+                              <img
+                                width={16} height={16} src='/wpp.svg'
+                                onClick={() => {
+                                  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.slug}`)}`;
+                                  window.open(whatsappUrl, '_blank');
+                                }}
+                                className="h-4 w-4 hover:scale-110 transition-all text-green-600 cursor-pointer"
+                              />
+                            </div>
+
                           </div>
-                          <h3 className="text-3xl font-semibold text-gray-900 mb-2 leading-tight">{post.postTitle}</h3>
+                          <Link className="text-3xl font-semibold text-gray-900 mb-2 leading-tight" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                            <h3 >{post.postTitle}</h3>
+                          </Link>
+
                           {post.summary && (
                             <p className="text-sm font-light text-gray-600 leading-relaxed">{post.summary}</p>
                           )}
@@ -243,7 +273,9 @@ export default function Home() {
               {magazineUrl && <iframe allowFullScreen src={magazineUrl + '#toolbar=0&navpanes=0&scrollbar=0"'} width="100%" height="500px" />}
               <div className="relative flex justify-center">
                 {pautaImage && <img className='overflow-hidden rounded-2xl' src={pautaImage} width={435} height={518} />}
-                <Button className='absolute bottom-20 text-2xl p-6'><Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link></Button>
+                <Button className='absolute bottom-20 lg:text-2xl p-6 w-5/6 lg:whitespace-pre whitespace-normal'>
+                  <Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link>
+                </Button>
               </div>
             </aside>
           </div>
@@ -284,17 +316,19 @@ export default function Home() {
                 {
                   postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post => <>
                     <hr />
-                    <article className="flex gap-4 items-center cursor-pointer transition-all hover:scale-105">
-                      <img
-                        src={post.thumbnailUrl}
-                        alt="Audiência pública"
-                        className="w-[280px] h-[140px] object-cover rounded flex-shrink-0"
-                      />
-                      <div className="flex-1 max-w-[282px]">
-                        <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
-                        <h4 className="text-sm  text-gray-900 leading-tight">{post.summary}</h4>
-                      </div>
-                    </article>
+                    <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                      <article className="flex gap-4 items-center cursor-pointer transition-all hover:scale-105">
+                        <img
+                          src={post.thumbnailUrl}
+                          alt="Audiência pública"
+                          className="w-[280px] h-[140px] object-cover rounded flex-shrink-0"
+                        />
+                        <div className="flex-1 max-w-[282px]">
+                          <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
+                          <h4 className="text-sm  text-gray-900 leading-tight">{post.summary}</h4>
+                        </div>
+                      </article>
+                    </Link>
                   </>
                   )
                 }
@@ -327,7 +361,7 @@ export default function Home() {
       </section>
 
       <section className="px-4 bg-gray-50 max-w-[1800px] mx-auto ">
-        <div className="flex ga-20">
+        <div className="flex gap-20">
           <div className="w-9/12">
             <div className="py-12 ">
               {/* Mais lidas */}
@@ -343,7 +377,7 @@ export default function Home() {
                     {mostViewed.map((post) => (
                       <Link
                         key={post.id}
-                        href={`/noticia/${post.slug}`}
+                        href={`/noticia/${post.id}`}
                         className="block rounded-xl overflow-hidden transition-all hover:translate-y-1 cursor-pointer"
                       >
                         <div className="w-full h-48 overflow-hidden">
@@ -393,7 +427,8 @@ export default function Home() {
             </div>
             <ColunistasSection />
           </div>
-          <div className="w-3/12">
+          <div className="w-3/12 flex flex-col">
+            <InstagramGrid posts={instagramPosts} />
             <Script strategy="afterInteractive">
               {`
            twttr.widgets.createTimeline(
