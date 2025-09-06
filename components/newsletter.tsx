@@ -24,7 +24,7 @@ export default function Newsletter() {
     return (
         <div
             style={{ backgroundImage: "url('/newsletter-bg.png')", backgroundRepeat: 'no-repeat' }}
-            className=" text-white rounded-2xl max-w-[435px] bg-cover relative overflow-hidden"
+            className=" text-white rounded-2xl w-full lg:max-w-[435px] bg-cover relative overflow-hidden"
         >
             <div className="bg-[#419672] opacity-80 absolute top-0 left-0 w-full h-full"></div>
             <div className="relative z-20 py-10 px-5">

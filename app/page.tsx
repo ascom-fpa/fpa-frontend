@@ -14,7 +14,6 @@ import { VideoSlider } from '@/components/ui/video-home'
 import ColunistasSection from '@/components/ui/colunas'
 import { ContentSlider } from '@/components/ui/content-slider'
 import Link from 'next/link'
-import Newsletter from '@/components/newsletter'
 import { ToastContainer } from 'react-toastify'
 import Script from 'next/script'
 import { getLive, UpdateLiveData } from '@/services/live'
@@ -196,8 +195,8 @@ export default function Home() {
                     />
                     <div className="absolute inset-0 bg-black opacity-50 flex items-end">
                     </div>
-                    <h3 className="absolute bottom-0 text-white font-semibold text-3xl p-8 leading-tight">
-                      {postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.summary}
+                    <h3 className="absolute bottom-0 text-white font-semibold md:text-3xl text-2xl p-8 leading-tight">
+                      {postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.postTitle}
                     </h3>
                   </div>
                 </article>
@@ -213,7 +212,7 @@ export default function Home() {
                         <img
                           src={post.thumbnailUrl}
                           alt="Audiência pública"
-                          className="w-[280px] h-[140px] object-cover rounded flex-shrink-0"
+                          className="w-[280px] h-[140px] object-cover rounded flex-shrink-0 md:block hidden"
                         />
                         <div className="flex-1 max-w-[282px]">
                           <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
@@ -253,8 +252,8 @@ export default function Home() {
       </section>
 
       <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1800px] mx-auto ">
-        <div className="flex gap-20">
-          <div className="w-9/12">
+        <div className="flex gap-20 lg:flex-nowrap flex-wrap lg:flex-row flex-col-reverse">
+          <div className="w-full lg:w-9/12">
             <div className="py-12 ">
               {/* Mais lidas */}
               <div className="space-y-4">
@@ -319,7 +318,7 @@ export default function Home() {
             </div>
             <ColunistasSection />
           </div>
-          <div className="w-3/12 flex flex-col">
+          <div className="w-full lg:w-3/12 flex flex-col">
             <InstagramGrid posts={instagramPosts} />
             <Script strategy="afterInteractive">
               {`

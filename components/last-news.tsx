@@ -32,14 +32,14 @@ export default function LastNews({ category }: IProps) {
     return (
         <section className="py-8 px-4">
             <div className="max-w-[1800px] mx-auto">
-                <div className="flex gap-8">
+                <div className="flex gap-8 flex-wrap">
                     {/* Recent News - 75% width */}
-                    <div className="flex-1 w-3/4">
+                    <div className="flex-1 lg:w-3/4 w-full">
                         <h2 className="text-5xl font-bold text-[#419672] mb-8">Mais Recentes</h2>
 
                         {/* Featured Article */}
-                        <div className="flex gap-20">
-                            <div className="w-1/3">
+                        <div className="flex gap-20 lg:flex-nowrap flex-wrap">
+                            <div className="w-full lg:w-1/3">
                                 {newsNoFeatured.slice(0, 3).map(post =>
                                     <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
                                         <article className="mb-8" key={post.id}>
@@ -62,7 +62,7 @@ export default function LastNews({ category }: IProps) {
                                     </Link>
                                 )}
                             </div>
-                            <div className="w-2/3">
+                            <div className="w-full lg:w-2/3">
                                 {/* Recent Articles List */}
                                 <div className="space-y-6">
                                     {newsNoFeatured.concat(newsNoFeatured).map((post) => (
@@ -114,12 +114,12 @@ export default function LastNews({ category }: IProps) {
                     </div>
 
                     {/* Sidebar - 25% width */}
-                    <aside className="w-1/4 space-y-8">
+                    <aside className="w-full lg:w-1/4 space-y-8">
                         {/* Newsletter Signup */}
                         <Newsletter />
                         {magazineUrl && <iframe allowFullScreen src={magazineUrl + '#toolbar=0&navpanes=0&scrollbar=0"'} width="100%" height="500px" />}
                         <div className="relative flex justify-center">
-                            {pautaImage && <img className='overflow-hidden rounded-2xl' src={pautaImage} width={435} height={518} />}
+                            {pautaImage && <img className='overflow-hidden rounded-2xl lg:w-auto w-full' src={pautaImage} width={435} height={518} />}
                             <Button className='absolute bottom-20 lg:text-2xl p-2 w-5/6 h-fit whitespace-pre-wrap break-words'>
                                 <Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link>
                             </Button>

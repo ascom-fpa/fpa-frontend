@@ -1,7 +1,7 @@
 // /components/InstagramGrid.tsx
 export default function InstagramGrid({ posts }: any) {
     return (
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 justify-center">
             {posts?.map((post: any) => (
                 <a
                     key={post.id}
