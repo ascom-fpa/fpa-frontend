@@ -301,7 +301,12 @@ export default function Home() {
                     <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                   </div>
                 </div>
-                <VideoSlider id="videos" perView={4} videos={videos} />
+                <ContentSlider perView={2}>
+                  {
+                    videos.map(video => <div className='rounded-2xl overflow-hidden' dangerouslySetInnerHTML={{__html: video.embed}}></div>)
+                  }
+                </ContentSlider>
+                {/* <VideoSlider id="videos" perView={4} videos={videos} /> */}
               </div>
             </div>
             <div id='webstories' className="py-12 ">

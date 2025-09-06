@@ -4,6 +4,7 @@ export interface Video {
   id: string
   description: string
   url?: string
+  embed: string
   createdAt: string
   updatedAt: string
 }
@@ -27,8 +28,8 @@ export const getActiveVideos = async (): Promise<Video[]> => {
 }
 
 // Create new video
-export const createVideo = async (payload: FormData): Promise<Video> => {
-  const response = await api.postForm("/videos", payload)
+export const createVideo = async (payload: any): Promise<Video> => {
+  const response = await api.post("/videos", payload)
   return response.data.data
 }
 
