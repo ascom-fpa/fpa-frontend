@@ -37,7 +37,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: Book, label: "Revista FPA", href: "/admin/magazine", count: 1 },
     { icon: UserCircle2, label: "Usuários", href: "/admin/users", count: totalCounts?.totalUsers },
     { icon: Mail, label: "Newsletter", href: "/admin/newsletter" },
-    { icon: BookDashed, label: "Pauta", href: "/admin/pauta" },
+    { icon: BookDashed, label: "Aviso de Pauta", href: "/admin/pauta" },
     { icon: Videotape, label: "Ao vivo", href: "/admin/live" },
     { icon: BookText, label: "Sobre", href: "/admin/sobre" },
     { icon: Contact, label: "Contato", href: "/admin/contato" },

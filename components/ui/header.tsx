@@ -1,59 +1,111 @@
-import { Menu } from "lucide-react";
+'use client'
+
+import { ChevronDown, ChevronUp, Menu, X } from "lucide-react";
 import RespondeAgroDirect from "../agro";
 import { Button } from "./button";
 import Link from "next/link";
 import { getLive, UpdateLiveData } from "@/services/live";
 import { useEffect, useState } from "react";
+import { useContentStore } from "@/lib/content-store";
 
 export default function Header() {
+    const { categories, fetchCategories } = useContentStore()
+
     const [live, setLive] = useState<UpdateLiveData>({
         isEnabled: false,
         link: ''
     });
 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+
     useEffect(() => {
-        fetchLiveUrl()
+        fetchLiveUrl();
+        fetchCategories()
     }, []);
 
     async function fetchLiveUrl() {
-        getLive()
-            .then(res => setLive(res))
+        const res = await getLive();
+        setLive(res);
     }
 
     return (
-        <header className="bg-[#419672] text-white">
-            {/* Top bar */}
-            <RespondeAgroDirect />
+        <>
+            {/* Sidebar Overlay */}
+            <div
+                className={`fixed inset-0 z-40 backdrop-blur-xs opacity-50 transition-opacity ${isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+                onClick={() => setIsSidebarOpen(false)}
+            ></div>
 
-            {/* Main header */}
-            <div className="py-4 px-4">
-                <div className="flex justify-between items-center max-w-[1800px] mx-auto">
-                    <div className="flex items-center space-x-4">
-                        <Button variant="ghost" size="sm" className="text-white hover:bg-[#154B2B]">
-                            <Menu className="h-6 w-6" />
-                        </Button>
-                        <div className="text-center">
-                            <div className="text-sm font-medium">FRENTE PARLAMENTAR DA</div>
-                            <div className="text-2xl font-bold">AGROPECUÁRIA</div>
+            {/* Sidebar */}
+            <aside className={`fixed top-0 left-0 h-full w-64 bg-[#419672] text-white z-50 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                <div className="p-4 flex justify-between items-center border-b border-gray-200">
+                    <h2 className="text-lg font-bold">Menu</h2>
+                    <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)}>
+                        <X className="h-5 w-5" />
+                    </Button>
+                </div>
+
+                <nav className="p-4 space-y-4">
+                    <Link href="/sobre" className="block hover:scale-105 transition">Sobre</Link>
+                    <Link href="/contato" className="block hover:scale-105 transition">Contato</Link>
+                    {/* Categorias com submenu */}
+                    <div className="space-y-2">
+                        <button
+                            onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                            className="cursor-pointer flex items-center justify-between w-full hover:scale-105 transition"
+                        >
+                            <span>Categorias de matérias</span>
+                            {isCategoriesOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                        </button>
+                        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isCategoriesOpen ? 'max-h-96' : 'max-h-0'}`}>
+                            <ul className="pl-4 mt-2 space-y-2">
+                                {/* Exemplo fixo — substitua por .map futuramente */}
+                                {categories.map(cat => <li><Link href={`/categoria/${cat.id}`} className="block hover:scale-105">{cat.name}</Link></li>)}
+                            </ul>
                         </div>
                     </div>
+                    <Link onClick={() => setIsSidebarOpen(false)} href="/#videos" className="block hover:scale-105 transition">Vídeos</Link>
+                    <Link onClick={() => setIsSidebarOpen(false)} href="/#webstories" className="block hover:scale-105 transition">Webstories</Link>
+                    <Link onClick={() => setIsSidebarOpen(false)} href="/#fato-em-foco" className="block hover:scale-105 transition">Fato em foco</Link>
+                    <Link onClick={() => setIsSidebarOpen(false)} href="/#mais-lidas" className="block hover:scale-105 transition">Mais lidas</Link>
+                </nav>
+            </aside>
 
-                    <div className="flex items-center space-x-4">
-                        {live.isEnabled && <Link href={live.link} className="flex items-center space-x-2">
-                            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                            <span className="font-medium">AO VIVO</span>
-                        </Link>}
-                        {/* <Link href="/admin">
-                <Button
-                  variant="outline"
-                  className="text-white border-white hover:bg-white hover:text-[#419672] bg-transparent"
-                >
-                  LOGIN
-                </Button>
-              </Link> */}
+            {/* Header */}
+            <header className="bg-[#419672] text-white">
+                {/* Top bar */}
+                <RespondeAgroDirect />
+
+                {/* Main header */}
+                <div className="py-4 px-4">
+                    <div className="flex justify-between items-center max-w-[1800px] mx-auto">
+                        <div className="flex items-center space-x-4">
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-white hover:bg-[#154B2B]"
+                                onClick={() => setIsSidebarOpen(true)}
+                            >
+                                <Menu className="h-6 w-6" />
+                            </Button>
+                            <Link href="/" className="text-center">
+                                <div className="text-sm font-medium">FRENTE PARLAMENTAR DA</div>
+                                <div className="text-2xl font-bold">AGROPECUÁRIA</div>
+                            </Link>
+                        </div>
+
+                        <div className="flex items-center space-x-4">
+                            {live.isEnabled && (
+                                <Link href={live.link} className="flex items-center space-x-2">
+                                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                                    <span className="font-medium">AO VIVO</span>
+                                </Link>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
+        </>
     )
 }

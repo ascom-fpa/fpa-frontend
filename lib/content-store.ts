@@ -65,6 +65,7 @@ interface ContentState {
   }
 
   // Categories state
+  currentCategory: categoriesService.Category | null
   categories: categoriesService.Category[]
   categoriesTree: categoriesService.Category[]
   categoriesLoading: boolean
@@ -92,7 +93,7 @@ interface ContentState {
   totalCountsError: string | null
 
   // Posts actions
-  fetchPosts: (params?: any) => Promise<void>
+  fetchPosts: (params?: postsService.IPostParam) => Promise<void>
   fetchPostsFeatured: () => Promise<void>
   fetchPostsCategoryFeatured: () => Promise<void>
   fetchPost: (id: string) => Promise<void>
@@ -142,6 +143,7 @@ interface ContentState {
   reorderRelevants: (id: string, newIndex: number) => Promise<void>
 
   // Categories actions
+  fetchCategory: (id: string) => Promise<void>
   fetchCategories: (params?: any) => Promise<void>
   fetchCategoriesTree: () => Promise<void>
   createCategory: (data: categoriesService.CreateCategoryData) => Promise<void>
@@ -201,6 +203,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
   relevantsError: null,
   relevantsPagination: { total: 0, page: 1, limit: 10 },
 
+  currentCategory: null,
   categories: [],
   categoriesTree: [],
   categoriesLoading: false,
@@ -805,6 +808,18 @@ export const useContentStore = create<ContentState>((set, get) => ({
   },
 
   // Categories actions
+  fetchCategory: async (id:string) => {
+    set({ categoriesLoading: true, categoriesError: null })
+    try {
+      const response = await categoriesService.getCategory(id)
+      set({ currentCategory: response, categoriesLoading: false })
+    } catch (error: any) {
+      set({
+        categoriesLoading: false,
+        categoriesError: error.response?.data?.message || "Failed to fetch categories",
+      })
+    }
+  },
   fetchCategories: async (params) => {
     set({ categoriesLoading: true, categoriesError: null })
     try {

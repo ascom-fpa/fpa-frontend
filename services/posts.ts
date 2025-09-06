@@ -53,14 +53,16 @@ export interface PostsResponse {
   limit: number
 }
 
-// Get all posts with pagination and filters
-export const getPosts = async (params?: {
+export interface IPostParam {
   page?: number
   limit?: number
   status?: string
-  category_id?: string
+  categoryId?: string
   search?: string
-}): Promise<Post[]> => {
+}
+
+// Get all posts with pagination and filters
+export const getPosts = async (params?: IPostParam): Promise<Post[]> => {
   const response = await api.get("/posts", { params })
   return response.data.data
 }

@@ -6,17 +6,23 @@ import { useEffect, useState } from "react";
 import { getPauta } from "@/services/pauta";
 import { Share2 } from "lucide-react";
 import { showToast } from "@/utils/show-toast";
+import { usePathname } from "next/navigation";
 
-export default function LastNews() {
-    const { fetchPosts, posts, magazineUrl } = useContentStore()
+interface IProps {
+    category?: string
+}
+
+export default function LastNews({ category }: IProps) {
+    const { fetchPosts, posts, fetchMagazineUrl, magazineUrl } = useContentStore()
 
     const newsNoFeatured = posts.filter(post => !post.isFeatured)
     const [pautaImage, setPautaImage] = useState('');
 
     useEffect(() => {
         fetchPauta()
-        fetchPosts()
-    }, []);
+        category ? fetchPosts({ categoryId: category }) : fetchPosts()
+        fetchMagazineUrl()
+    }, [category]);
 
     async function fetchPauta() {
         getPauta()
@@ -24,7 +30,7 @@ export default function LastNews() {
     }
 
     return (
-        <section className="py-8 px-4 bg-white">
+        <section className="py-8 px-4">
             <div className="max-w-[1800px] mx-auto">
                 <div className="flex gap-8">
                     {/* Recent News - 75% width */}
@@ -114,7 +120,7 @@ export default function LastNews() {
                         {magazineUrl && <iframe allowFullScreen src={magazineUrl + '#toolbar=0&navpanes=0&scrollbar=0"'} width="100%" height="500px" />}
                         <div className="relative flex justify-center">
                             {pautaImage && <img className='overflow-hidden rounded-2xl' src={pautaImage} width={435} height={518} />}
-                            <Button className='absolute bottom-20 lg:text-2xl p-6 w-5/6 lg:whitespace-pre whitespace-normal'>
+                            <Button className='absolute bottom-20 lg:text-2xl p-2 w-5/6 h-fit whitespace-pre-wrap break-words'>
                                 <Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link>
                             </Button>
                         </div>

@@ -17,7 +17,6 @@ export default function RespondeAgroDirect() {
     useEffect(() => {
         getAgroData()
             .then(result => {
-                console.log(result)
                 setData(result.data)
             })
             .catch(console.error);

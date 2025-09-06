@@ -43,11 +43,9 @@ export default function Home() {
 
   const {
     fetchBanners, banners, webstories,
-    fetchWebStories, fetchPosts, posts,
-    fetchRelevants, relevants, fetchPostsFeatured,
+    fetchWebStories, fetchRelevants, relevants, fetchPostsFeatured,
     postsFeature, fetchVideos, videos, fetchMostViewed, mostViewed,
-    fetchMagazineUrl, magazineUrl, fetchPostsCategoryFeatured,
-    postsCategoryFeatured
+    fetchPostsCategoryFeatured, postsCategoryFeatured
   } = useContentStore()
 
   const [tweets, setTweets] = useState();
@@ -61,7 +59,6 @@ export default function Home() {
     fetchTweets()
     fetchVideos()
     fetchMostViewed()
-    fetchMagazineUrl()
     fetchPostsCategoryFeatured()
     fetchInstagramPosts()
   }, []);
@@ -240,7 +237,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-12 px-4 bg-white">
+      <section id='fato-em-foco' className="py-12 px-4 bg-white">
         <div className="max-w-[1800px] mx-auto">
           {/* Fato em Foco */}
           <div className="space-y-4">
@@ -255,7 +252,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-4 bg-gray-50 max-w-[1800px] mx-auto ">
+      <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1800px] mx-auto ">
         <div className="flex gap-20">
           <div className="w-9/12">
             <div className="py-12 ">
@@ -296,7 +293,7 @@ export default function Home() {
                 )}
               </div>
             </div>
-            <div className="py-12 ">
+            <div className="py-12 " id='videos'>
               {/* Videos */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
@@ -308,7 +305,7 @@ export default function Home() {
                 <VideoSlider id="videos" perView={4} videos={videos} />
               </div>
             </div>
-            <div className="py-12 ">
+            <div id='webstories' className="py-12 ">
               {/* Webstories */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">

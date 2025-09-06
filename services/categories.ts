@@ -58,7 +58,7 @@ export const getActiveCategories = async (): Promise<Category[]> => {
 // Get single category by ID
 export const getCategory = async (id: string): Promise<Category> => {
   const response = await api.get(`/categories/${id}`)
-  return response.data
+  return response.data.data
 }
 
 // Get category by slug
