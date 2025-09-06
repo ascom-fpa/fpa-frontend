@@ -17,7 +17,7 @@ export interface Post {
   featured_image?: string
   postAuthorId: string
   postCategoryId: string
-  tags: string[]
+  relatedTags: any[]
   published_at?: string
   createdAt: string
   updatedAt: string

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { FileText, ImageIcon, Video, Tag, FolderOpen, BarChart3, Settings, LogOut, Menu, Search, Plus, UserCircle2, FocusIcon, ChevronsLeft, ChevronsRight, VideoIcon, Book, Mail, BookDashed, Videotape } from "lucide-react"
+import { FileText, ImageIcon, Video, Tag, FolderOpen, BarChart3, Settings, LogOut, Menu, Search, Plus, UserCircle2, FocusIcon, ChevronsLeft, ChevronsRight, VideoIcon, Book, Mail, BookDashed, Videotape, BookText, Contact, Handshake } from "lucide-react"
 import { useContentStore } from "@/lib/content-store"
 
 interface DashboardLayoutProps {
@@ -39,7 +39,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: Mail, label: "Newsletter", href: "/admin/newsletter" },
     { icon: BookDashed, label: "Pauta", href: "/admin/pauta" },
     { icon: Videotape, label: "Ao vivo", href: "/admin/live" },
-    { icon: Settings, label: "Configurações", href: "/admin/settings" },
+    { icon: BookText, label: "Sobre", href: "/admin/sobre" },
+    { icon: Contact, label: "Contato", href: "/admin/contato" },
+    { icon: Handshake, label: "Termos de Uso", href: "/admin/termos-de-uso" },
   ]
 
 
@@ -137,14 +139,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </Button>
 
           <div className="flex-1 flex items-center gap-4">
-            <div className="relative flex-1 max-w-md">
+            {/* <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="search"
                 placeholder="Search posts, categories..."
                 className="w-full rounded-lg border border-input bg-background pl-10 pr-4 py-2 text-sm focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="flex items-center gap-2">

@@ -14,7 +14,7 @@ import { PostStatusEnum } from "@/enums/post"
 import { CreatePostData } from "@/services/posts"
 import { MultiSelect } from "@/components/ui/multi-select"
 import { TipTapEditor } from "./tiptap-editor"
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
+import { useEditor } from "@tiptap/react"
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
@@ -31,7 +31,6 @@ import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/ho
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 import content from "@/components/tiptap-templates/data/content.json"
 import ViewPost from "./view-post"
-import { randomUUID } from "crypto"
 
 const formInitialState: CreatePostData = {
     postTitle: "",

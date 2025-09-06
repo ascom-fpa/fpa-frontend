@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
 export default function PostsFeature({ postsFeature }: any) {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -13,6 +14,7 @@ export default function PostsFeature({ postsFeature }: any) {
             const isActive = index === activeIndex
 
             return (
+            <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${article.id}`}>
               <article
                 key={index}
                 className={`rounded-lg overflow-hidden relative p-4 h-[300px] cursor-pointer transition-all duration-300 ease-in-out flex ${isActive ? 'items-end' : 'items-center'} hover:scale-105`}
@@ -41,6 +43,7 @@ export default function PostsFeature({ postsFeature }: any) {
                   </p>
                 </div>
               </article>
+              </Link>
             )
           })}
         </div>

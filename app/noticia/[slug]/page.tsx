@@ -1,5 +1,7 @@
 'use client'
 import ViewPost from '@/app/admin/posts/view-post';
+import LastNews from '@/components/last-news';
+import Footer from '@/components/ui/footer';
 import Header from '@/components/ui/header';
 import { useContentStore } from '@/lib/content-store';
 import { useEffect } from 'react';
@@ -46,7 +48,19 @@ export default function Page({ params }: PageProps) {
                 <article>
                     {currentPost?.postContent && <ViewPost postContent={currentPost.postContent} />}
                 </article>
+
+                {
+                    Boolean(currentPost?.relatedTags?.length) &&
+                    <div className="flex flex-col gap-4">
+                        <h6 className="font-semibold text-2xl text-[#006B2D]">Tags</h6>
+                        {currentPost?.relatedTags?.map(tag => <div className="flex gap-3">{tag?.name}</div>
+                        )}
+                    </div>
+                }
+
+                <LastNews />
             </div>
+            <Footer />
         </main>
     );
 }
