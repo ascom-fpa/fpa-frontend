@@ -32,19 +32,16 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { LabelInputFile } from "@/components/ui/label-input-file"
-import { CreateWebStoryData } from "@/services/webstories"
 
-const formInitialState: CreateWebStoryData = {
-    title: "",
-    description: "",
-    videoFile: null,
-    coverFile: null,
+interface SlideInput {
+    file: File;
+    text?: string;
 }
 
 export default function WebstoriesPage() {
-    const [form, setForm] = useState<CreateWebStoryData>(formInitialState)
-    const [webstoryToDelete, setWebstoryToDelete] = useState<string | null>(null)
-    const [webstoryToDeleteData, setWebstoryToDeleteData] = useState<any | null>(null)
+    const [title, setTitle] = useState("")
+    const [description, setDescription] = useState("")
+    const [slides, setSlides] = useState<SlideInput[]>([])
 
     const { fetchWebStories, webstories, createWebStory, deleteWebStory, reorderWebstories } = useContentStore()
     const [orderedWebstories, setOrderedWebstories] = useState<any[]>([])
@@ -59,10 +56,12 @@ export default function WebstoriesPage() {
     }, [webstories])
 
     const handleUpload = async () => {
-        if (!form.videoFile || !form.title) return
+        if (!title || slides.length === 0) return
 
-        await createWebStory(form)
-        setForm(formInitialState)
+        await createWebStory({ slides, title, description })
+        setTitle("")
+        setDescription("")
+        setSlides([])
         fetchWebStories()
     }
 
@@ -79,39 +78,45 @@ export default function WebstoriesPage() {
         fetchWebStories()
     }
 
-    const confirmDelete = async () => {
-        if (webstoryToDelete) {
-            await deleteWebStory(webstoryToDelete)
-            setWebstoryToDelete(null)
-            setWebstoryToDeleteData(null)
-            fetchWebStories()
-        }
-    }
-
     return (
         <div className="space-y-6">
             <h1 className="text-2xl font-semibold">Gerenciamento de Webstories</h1>
 
             <Card>
                 <CardContent className="p-4 flex flex-col gap-4">
-                    <Input placeholder="Título" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
-                    <Input placeholder="Descrição opcional" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-                    <LabelInputFile
-                        id="video-upload"
-                        label="Selecionar vídeo"
-                        accept="video/*"
-                        onChange={(file) => setForm({ ...form, videoFile: file })}
-                    />
+                    <Input placeholder="Título" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <Input placeholder="Descrição opcional" value={description} onChange={(e) => setDescription(e.target.value)} />
 
-                    <LabelInputFile
-                        id="cover-upload"
-                        label="Selecionar imagem de capa"
-                        accept="image/*"
-                        onChange={(file) => setForm({ ...form, coverFile: file })}
-                    />
+                    {slides.map((slide, index) => (
+                        <div key={index} className="flex gap-4 items-center">
+                            <LabelInputFile
+                                id={`slide-${index}`}
+                                label={`Slide ${index + 1}`}
+                                accept="image/*"
+                                onChange={(file) => {
+                                    const updated = [...slides]
+                                    updated[index].file = file!
+                                    setSlides(updated)
+                                }}
+                            />
+                            <Input
+                                placeholder="Texto do slide"
+                                value={slide.text || ""}
+                                onChange={(e) => {
+                                    const updated = [...slides]
+                                    updated[index].text = e.target.value
+                                    setSlides(updated)
+                                }}
+                            />
+                        </div>
+                    ))}
+
+                    <Button type="button" variant="outline" onClick={() => setSlides([...slides, { file: new File([], "") }])}>
+                        + Adicionar Slide
+                    </Button>
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                    <Button onClick={handleUpload} disabled={!form.videoFile || !form.title}>
+                    <Button onClick={handleUpload} disabled={!title || slides.length === 0}>
                         <UploadCloud className="mr-2 h-4 w-4" /> Enviar Webstory
                     </Button>
                 </CardFooter>
@@ -124,9 +129,9 @@ export default function WebstoriesPage() {
                             <SortableCard
                                 key={webstory.id}
                                 webstory={webstory}
-                                onDelete={() => {
-                                    setWebstoryToDelete(webstory.id)
-                                    setWebstoryToDeleteData(webstory)
+                                onDelete={async () => {
+                                    await deleteWebStory(webstory.id)
+                                    fetchWebStories()
                                 }}
                             />
                         ))}
@@ -149,8 +154,8 @@ function SortableCard({ webstory, onDelete }: { webstory: any, onDelete: () => v
             <Card className="p-0">
                 <CardContent {...attributes} {...listeners} className="relative cursor-grab active:cursor-grabbing flex flex-col gap-4 ">
                     <p className="font-semibold text-sm">{webstory.title}</p>
-                    {webstory.videoUrl && (
-                        <video className="object-contain max-h-64" controls src={webstory.videoUrl}></video>
+                    {webstory.slides?.[0]?.imageUrl && (
+                        <img className="object-contain max-h-64" src={webstory.slides[0].imageUrl} alt="webstory preview" />
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-between bg-[rgba(245,245,245)] py-2">
@@ -165,15 +170,12 @@ function SortableCard({ webstory, onDelete }: { webstory: any, onDelete: () => v
                                 <AlertDialogTitle>Deseja realmente excluir?</AlertDialogTitle>
                             </AlertDialogHeader>
                             <div className="mb-4">
-                                <img
-                                    src={webstory.imageUrl}
-                                    alt="webstory-preview"
-                                    className="w-full h-80 object-contain rounded"
-                                />
-                                {webstory.text && (
-                                    <p className="mt-2 text-sm text-center text-muted-foreground">
-                                        {webstory.text}
-                                    </p>
+                                {webstory.slides?.[0]?.imageUrl && (
+                                    <img
+                                        src={webstory.slides[0].imageUrl}
+                                        alt="webstory-preview"
+                                        className="w-full h-80 object-contain rounded"
+                                    />
                                 )}
                             </div>
                             <AlertDialogFooter>

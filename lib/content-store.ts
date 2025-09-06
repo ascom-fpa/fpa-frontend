@@ -623,10 +623,17 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ webstoriesLoading: true, webstoriesError: null })
 
     const formData = new FormData()
-    formData.append("title", data.title)
-    if (data.description) formData.append("description", data.description)
-    formData.append("videoFile", data.videoFile!)
-    if (data.coverFile) formData.append("coverFile", data.coverFile)
+    formData.append("title", data.title);
+    if (data.description) {
+      formData.append("description", data.description);
+    }
+
+    data.slides.forEach((slide, index) => {
+      formData.append("slides", slide.file); // ✅ arquivo de imagem
+      if (slide.text) {
+        formData.append(`slideTexts[${index}]`, slide.text); // ✅ texto individual do slide
+      }
+    });
 
     try {
       const newWebStory = await webstoriesService.createWebStory(formData)
@@ -808,7 +815,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
   },
 
   // Categories actions
-  fetchCategory: async (id:string) => {
+  fetchCategory: async (id: string) => {
     set({ categoriesLoading: true, categoriesError: null })
     try {
       const response = await categoriesService.getCategory(id)

@@ -25,6 +25,7 @@ import Header from '@/components/ui/header'
 import { getInstagramPosts } from '@/services/instagram'
 import InstagramGrid from '@/components/ui/instagram-grid'
 import LastNews from '@/components/last-news'
+import WebstoriesCarousel from '@/components/ui/webstory-carousel'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -303,24 +304,13 @@ export default function Home() {
                 </div>
                 <ContentSlider perView={2}>
                   {
-                    videos.map(video => <div className='rounded-2xl overflow-hidden' dangerouslySetInnerHTML={{__html: video.embed}}></div>)
+                    videos.map(video => <div className='rounded-2xl overflow-hidden' dangerouslySetInnerHTML={{ __html: video.embed }}></div>)
                   }
                 </ContentSlider>
                 {/* <VideoSlider id="videos" perView={4} videos={videos} /> */}
               </div>
             </div>
-            <div id='webstories' className="py-12 ">
-              {/* Webstories */}
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h2 className="text-5xl font-bold text-[#419672]">Webstories</h2>
-                    <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
-                  </div>
-                </div>
-                <VideoSlider perView={6} videos={webstories} width={200} height={300} />
-              </div>
-            </div>
+            <WebstoriesCarousel webstories={webstories} />
             <ColunistasSection />
           </div>
           <div className="w-full lg:w-3/12 flex flex-col">

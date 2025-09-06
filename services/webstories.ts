@@ -4,20 +4,23 @@ export interface WebStory {
   id: string
   title: string
   description?: string
-  videoUrl: string
-  coverImageUrl: string
-  duration: number
-  isActive: boolean
-  viewCount: number
+  slides: WebstorySlideData[]
   createdAt: string
   updatedAt: string
 }
 
+export interface WebstorySlideData {
+  file: File;
+  imageUrl?: string
+  text?: string;
+  order?: number;
+}
+
+
 export interface CreateWebStoryData {
   title: string
   description?: string
-  videoFile: File | null
-  coverFile?: File | null
+  slides: WebstorySlideData[]
 }
 
 export interface UpdateWebStoryData extends Partial<CreateWebStoryData> {
