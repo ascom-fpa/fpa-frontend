@@ -47,28 +47,28 @@ export default function Header() {
                 </div>
 
                 <nav className="p-4 space-y-4">
-                    <Link href="/sobre" className="block hover:scale-105 transition">Sobre</Link>
-                    <Link href="/contato" className="block hover:scale-105 transition">Contato</Link>
                     {/* Categorias com submenu */}
                     <div className="space-y-2">
                         <button
                             onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
                             className="cursor-pointer flex items-center justify-between w-full hover:scale-105 transition"
                         >
-                            <span>Categorias de matérias</span>
+                            <span>Categorias</span>
                             {isCategoriesOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                         </button>
                         <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isCategoriesOpen ? 'max-h-96' : 'max-h-0'}`}>
                             <ul className="pl-4 mt-2 space-y-2">
                                 {/* Exemplo fixo — substitua por .map futuramente */}
-                                {categories.map(cat => <li><Link href={`/categoria/${cat.id}`} className="block hover:scale-105">{cat.name}</Link></li>)}
+                                {categories.map(cat => <li key={cat.id}><Link href={`/categoria/${cat.id}`} className="block hover:scale-105">{cat.name}</Link></li>)}
                             </ul>
                         </div>
                     </div>
+                    <Link onClick={() => setIsSidebarOpen(false)} href="/#mais-lidas" className="block hover:scale-105 transition">Mais lidas</Link>
+                    <Link onClick={() => setIsSidebarOpen(false)} href="/#fato-em-foco" className="block hover:scale-105 transition">Fato em foco</Link>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#videos" className="block hover:scale-105 transition">Vídeos</Link>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#webstories" className="block hover:scale-105 transition">Webstories</Link>
-                    <Link onClick={() => setIsSidebarOpen(false)} href="/#fato-em-foco" className="block hover:scale-105 transition">Fato em foco</Link>
-                    <Link onClick={() => setIsSidebarOpen(false)} href="/#mais-lidas" className="block hover:scale-105 transition">Mais lidas</Link>
+                    <Link href="/sobre" className="block hover:scale-105 transition">Sobre</Link>
+                    <Link href="/contato" className="block hover:scale-105 transition">Contato</Link>
                 </nav>
             </aside>
 

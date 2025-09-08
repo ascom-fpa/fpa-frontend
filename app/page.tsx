@@ -26,6 +26,12 @@ import { getInstagramPosts } from '@/services/instagram'
 import InstagramGrid from '@/components/ui/instagram-grid'
 import LastNews from '@/components/last-news'
 import WebstoriesCarousel from '@/components/ui/webstory-carousel'
+import FatoEmFocoSkeleton from '@/components/skeletons/fato-em-foco-skeleton'
+import PostsCategorySectionSkeleton from '@/components/skeletons/post-category-featured-skeleton'
+import MostViewedSkeleton from '@/components/skeletons/most-viewed-skeleton'
+import VideosSkeleton from '@/components/skeletons/videos-skeleton'
+import TwitterInstagramSkeleton from '@/components/skeletons/twitter-instagram-skeleton'
+import WebstoriesCarouselSkeleton from '@/components/skeletons/webstory-skeleton'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -177,67 +183,73 @@ export default function Home() {
       <hr className='mx-auto max-w-[80vw]' />
 
       {/* Highlighted Categories Section */}
-      <section className="py-12 px-4 ">
-        <div className="max-w-[1800px] mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
+      {
+        postsCategoryFeatured?.categories?.length > 0
+          ? <section className="py-12 px-4 ">
+            <div className="max-w-[1800px] mx-auto">
+              <div className="grid md:grid-cols-3 gap-8">
 
-            {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
-              <h2 style={{ color: postCategory?.color }} className={`text-4xl font-semibold mb-6 capitalize cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
+                {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
+                  <h2 style={{ color: postCategory?.color }} className={`text-4xl font-semibold mb-6 capitalize cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
 
-              {/* Featured Article */}
-              {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
-              <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postsCategoryFeatured?.postsByCategory[postCategory.id][0].id}`}>
-                <article className="bg-white rounded-lg overflow-hidden shadow-md  cursor-pointer transition-all hover:scale-105">
-                  <div className="relative">
-                    <img
-                      src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
-                      alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                      className="w-full h-[380px] object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black opacity-50 flex items-end">
-                    </div>
-                    <h3 className="absolute bottom-0 text-white font-semibold md:text-3xl text-2xl p-8 leading-tight">
-                      {postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.postTitle}
-                    </h3>
-                  </div>
-                </article>
-              </Link>
-
-              {/* Recent Articles */}
-              <div className="space-y-8">
-                {
-                  postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post => <>
-                    <hr />
-                    <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
-                      <article className="flex gap-4 items-center cursor-pointer transition-all hover:scale-105">
+                  {/* Featured Article */}
+                  {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
+                  <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postsCategoryFeatured?.postsByCategory[postCategory.id][0].id}`}>
+                    <article className="bg-white rounded-lg overflow-hidden shadow-md  cursor-pointer transition-all hover:scale-105">
+                      <div className="relative">
                         <img
-                          src={post.thumbnailUrl}
-                          alt="Audiência pública"
-                          className="w-[280px] h-[140px] object-cover rounded flex-shrink-0 md:block hidden"
+                          src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
+                          alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
+                          className="w-full h-[380px] object-cover"
                         />
-                        <div className="flex-1 max-w-[282px]">
-                          <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
-                          <h4 className="text-sm  text-gray-900 leading-tight">{post.summary}</h4>
+                        <div className="absolute inset-0 bg-black opacity-50 flex items-end">
                         </div>
-                      </article>
-                    </Link>
-                  </>
-                  )
-                }
+                        <h3 className="absolute bottom-0 text-white font-semibold md:text-3xl text-2xl p-8 leading-tight">
+                          {postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.postTitle}
+                        </h3>
+                      </div>
+                    </article>
+                  </Link>
+
+                  {/* Recent Articles */}
+                  <div className="space-y-8">
+                    {
+                      postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post => <>
+                        <hr />
+                        <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                          <article className="flex gap-4 items-center cursor-pointer transition-all hover:scale-105">
+                            <img
+                              src={post.thumbnailUrl}
+                              alt="Audiência pública"
+                              className="w-[280px] h-[140px] object-cover rounded flex-shrink-0 md:block hidden"
+                            />
+                            <div className="flex-1 max-w-[282px]">
+                              <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
+                              <h4 className="text-sm  text-gray-900 leading-tight">{post.summary}</h4>
+                            </div>
+                          </article>
+                        </Link>
+                      </>
+                      )
+                    }
+                  </div>
+
+                  <Link style={{ color: postCategory.color }} className='flex gap-2' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}>
+                    <span>Ver mais em {postCategory.name}</span>
+                    <ArrowRight className='w-4' />
+                  </Link>
+                </div>
+                )}
+
               </div>
-
-              <Link style={{ color: postCategory.color }} className='flex gap-2' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}>
-                <span>Ver mais em {postCategory.name}</span>
-                <ArrowRight className='w-4' />
-              </Link>
             </div>
-            )}
+          </section> :
+          <PostsCategorySectionSkeleton />
+      }
 
-          </div>
-        </div>
-      </section>
-
-      <section id='fato-em-foco' className="py-12 px-4 bg-white">
+      {relevants.length === 0 ? (
+        <FatoEmFocoSkeleton />
+      ) : <section id='fato-em-foco' className="py-12 px-4 bg-white">
         <div className="max-w-[1800px] mx-auto">
           {/* Fato em Foco */}
           <div className="space-y-4">
@@ -251,72 +263,80 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      }
       <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1800px] mx-auto ">
         <div className="flex gap-20 lg:flex-nowrap flex-wrap lg:flex-row flex-col-reverse">
           <div className="w-full lg:w-9/12">
-            <div className="py-12 ">
-              {/* Mais lidas */}
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h2 className="text-5xl font-bold text-[#419672]">Mais lidas</h2>
-                    <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
+            {mostViewed.length === 0
+              ? <MostViewedSkeleton />
+              : <div className="py-12 ">
+                {/* Mais lidas */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h2 className="text-5xl font-bold text-[#419672]">Mais lidas</h2>
+                      <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
+                    </div>
                   </div>
+                  {mostViewed.length > 0 && (
+                    <ContentSlider perView={4}>
+                      {mostViewed.map((post) => (
+                        <Link
+                          key={post.id}
+                          href={`/noticia/${post.id}`}
+                          className="block rounded-xl overflow-hidden transition-all hover:translate-y-1 cursor-pointer"
+                        >
+                          <div className="w-full h-48 overflow-hidden">
+                            <img
+                              src={post.thumbnailUrl || '/placeholder.jpg'}
+                              alt={post.postTitle}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="p-4">
+                            <p className="text-sm text-gray-500">
+                              {new Date(post.updatedAt).toLocaleDateString('pt-BR')} às {new Date(post.updatedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                            <h3 className="text-md font-medium text-gray-800 mt-1 line-clamp-2">
+                              {post.summary} || Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi, harum consequuntur earum atque ipsam voluptatem
+                            </h3>
+                          </div>
+                        </Link>
+                      ))}
+                    </ContentSlider>
+                  )}
                 </div>
-                {mostViewed.length > 0 && (
-                  <ContentSlider perView={4}>
-                    {mostViewed.map((post) => (
-                      <Link
-                        key={post.id}
-                        href={`/noticia/${post.id}`}
-                        className="block rounded-xl overflow-hidden transition-all hover:translate-y-1 cursor-pointer"
-                      >
-                        <div className="w-full h-48 overflow-hidden">
-                          <img
-                            src={post.thumbnailUrl || '/placeholder.jpg'}
-                            alt={post.postTitle}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="p-4">
-                          <p className="text-sm text-gray-500">
-                            {new Date(post.updatedAt).toLocaleDateString('pt-BR')} às {new Date(post.updatedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                          </p>
-                          <h3 className="text-md font-medium text-gray-800 mt-1 line-clamp-2">
-                            {post.summary} || Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi, harum consequuntur earum atque ipsam voluptatem
-                          </h3>
-                        </div>
-                      </Link>
-                    ))}
+              </div>}
+            {videos.length === 0
+              ? <VideosSkeleton />
+              : <div className="py-12 " id='videos'>
+                {/* Videos */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h2 className="text-5xl font-bold text-[#419672]">Vídeos</h2>
+                      <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
+                    </div>
+                  </div>
+                  <ContentSlider perView={2}>
+                    {
+                      videos.map(video => <div className='rounded-2xl overflow-hidden' dangerouslySetInnerHTML={{ __html: video.embed }}></div>)
+                    }
                   </ContentSlider>
-                )}
-              </div>
-            </div>
-            <div className="py-12 " id='videos'>
-              {/* Videos */}
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h2 className="text-5xl font-bold text-[#419672]">Vídeos</h2>
-                    <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
-                  </div>
+                  {/* <VideoSlider id="videos" perView={4} videos={videos} /> */}
                 </div>
-                <ContentSlider perView={2}>
-                  {
-                    videos.map(video => <div className='rounded-2xl overflow-hidden' dangerouslySetInnerHTML={{ __html: video.embed }}></div>)
-                  }
-                </ContentSlider>
-                {/* <VideoSlider id="videos" perView={4} videos={videos} /> */}
-              </div>
-            </div>
-            <WebstoriesCarousel webstories={webstories} />
+              </div>}
+            {webstories.length == 0
+              ? <WebstoriesCarouselSkeleton />
+              : <WebstoriesCarousel webstories={webstories} />}
             <ColunistasSection />
           </div>
-          <div className="w-full lg:w-3/12 flex flex-col">
-            <InstagramGrid posts={instagramPosts} />
-            <Script strategy="afterInteractive">
-              {`
+          {instagramPosts.length == 0
+            ? <TwitterInstagramSkeleton />
+            : <div className="w-full lg:w-3/12 flex flex-col">
+              <InstagramGrid posts={instagramPosts} />
+              <Script strategy="afterInteractive">
+                {`
            twttr.widgets.createTimeline(
               {
                 sourceType: "profile",
@@ -325,17 +345,17 @@ export default function Home() {
               document.getElementById("twitter-timeline")
               );
         `}
-            </Script>
-            <div ref={ref}>
-              <a className="twitter-timeline"
-                href="https://twitter.com/fpagropecuaria"
-                data-width="300"
-                data-height="300"
-              >
-                Tweets by @fpagropecuaria
-              </a>
-            </div>
-          </div>
+              </Script>
+              <div ref={ref}>
+                <a className="twitter-timeline"
+                  href="https://twitter.com/fpagropecuaria"
+                  data-width="300"
+                  data-height="300"
+                >
+                  Tweets by @fpagropecuaria
+                </a>
+              </div>
+            </div>}
         </div>
 
       </section>

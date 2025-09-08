@@ -8,14 +8,14 @@ export default function InstagramGrid({ posts }: any) {
                     href={post.permalink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="overflow-hidden h-60"
+                    className="overflow-hidden aspect-square"
                 >
                     {post.media_type == "VIDEO" ?
-                        <video className="object-cover h-full w-full" src={post.media_url}></video>
+                        <video className="object-cover h-full w-full " src={post.media_url}></video>
                         : <img
                             src={post.media_url}
                             alt={post.caption?.slice(0, 50) || "Instagram post"}
-                            className=" object-cover h-full w-48"
+                            className="h-full w-36 "
                         />
                     }
                 </a>

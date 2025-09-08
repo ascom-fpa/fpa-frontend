@@ -74,7 +74,7 @@ export default function LastNews({ category }: IProps) {
                                         ? Array.from({ length: 6 }).map((_, index) => (
                                             <RecentPostRowSkeleton key={index} />
                                         ))
-                                        : newsNoFeatured.concat(newsNoFeatured).map((post) => (
+                                        : newsNoFeatured.slice(3).map((post) => (
                                             <article key={post.id} className="flex items-start gap-4 pb-6 border-b border-gray-200">
                                                 <div className="flex-1">
                                                     <div className="flex items-center gap-10 mb-2">
