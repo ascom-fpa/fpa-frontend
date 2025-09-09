@@ -3,18 +3,15 @@ import { NextResponse, NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value
-  console.log('here 6', token)
   if (!token) {
     const url = new URL('/login', request.url)
     url.searchParams.set('redirect', request.nextUrl.pathname)
     return NextResponse.redirect(url)
   }
-  console.log('here 12', token)
 
   try {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET)
     const { payload } = await jwtVerify(token, secret)
-    console.log(payload)
     // Opcional: valida role
     if (!payload.role || payload.role === 'READER') {
       return NextResponse.redirect(new URL('/unauthorized', request.url))

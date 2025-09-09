@@ -22,7 +22,6 @@ export default function Page({ params }: PageProps) {
 
     async function getPost() {
         const { slug } = await params
-        console.log(slug)
         fetchPost(slug)
     }
 

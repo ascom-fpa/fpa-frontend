@@ -38,7 +38,6 @@ export function AdminLogin() {
   } = useAuthStore()
 
   useEffect(() => {
-    console.log(isLoggedIn)
     if (isLoggedIn) {
       router.push("/admin")
     }

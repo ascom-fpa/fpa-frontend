@@ -35,12 +35,14 @@ export default function ColunistasSection() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                     {columnists.map((colunista) => (
                         <div key={colunista.id} className="flex flex-col items-start space-y-2">
-                            <img
-                                src={colunista.image}
-                                alt={colunista.name}
-                                className="w-16 h-16 rounded-lg object-cover"
-                            />
-                            <h3 className="font-semibold text-gray-800">{colunista.name}</h3>
+                            <div className="flex gap-2 items-center">
+                                <img
+                                    src={colunista.image}
+                                    alt={colunista.name}
+                                    className="w-16 h-16 rounded-lg object-cover"
+                                />
+                                <h3 className="font-semibold text-gray-800">{colunista.name}</h3>
+                            </div>
                             <p className="text-sm text-gray-500">{colunista.description}</p>
                         </div>
                     ))}

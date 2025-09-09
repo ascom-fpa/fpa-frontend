@@ -68,7 +68,6 @@ export default function Page({ params }: PageProps) {
                                                         onClick={() => {
                                                             navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.slug}`)
                                                                 .then(() => {
-                                                                    console.log('Link copiado para a área de transferência!');
                                                                     // Opcional: notifique o usuário (alert, toast, etc.)
                                                                     showToast({ type: 'success', children: 'Link copiado para a área de transferência' })
                                                                 })

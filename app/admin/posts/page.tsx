@@ -120,7 +120,6 @@ export default function PostsAdminPage() {
 
     async function handleDuplicate(duplicatedPost: CreatePostData) {
         setLoading(true)
-        console.log(duplicatedPost)
         await createPost(duplicatedPost)
         await fetchPosts()
         setLoading(false)

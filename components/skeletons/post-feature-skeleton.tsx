@@ -5,7 +5,7 @@ interface Props {
 export default function PostsFeatureSkeleton({ highlighted }: Props) {
     return (
         <div
-            className={`animate-pulse rounded-lg overflow-hidden relative p-4 h-[300px] flex items-end ${highlighted ? 'bg-gray-200' : 'bg-white'
+            className={`w-full animate-pulse rounded-lg overflow-hidden relative p-4 h-[300px] flex items-end ${highlighted ? 'bg-gray-200' : 'bg-white'
                 }`}
         >
             <div className={`absolute inset-0 ${highlighted ? 'bg-gray-300' : 'bg-gray-100'}`} />

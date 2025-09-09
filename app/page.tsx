@@ -72,7 +72,6 @@ export default function Home() {
   async function fetchTweets() {
     try {
       const tweets = await getRecentTweets("fpagroupecuaria")
-      console.log(tweets)
       setTweets(tweets)
     } catch (error) {
       console.error("Error fetching tweets:", error)
@@ -82,7 +81,6 @@ export default function Home() {
   async function fetchInstagramPosts() {
     try {
       const instagramPosts = await getInstagramPosts()
-      console.log(instagramPosts)
       setInstagramPosts(instagramPosts)
     } catch (error) {
       console.error("Error fetching tweets:", error)
@@ -195,12 +193,12 @@ export default function Home() {
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
                   <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postsCategoryFeatured?.postsByCategory[postCategory.id][0].id}`}>
-                    <article className="bg-white rounded-lg overflow-hidden shadow-md  cursor-pointer transition-all hover:scale-105">
+                    <article className="bg-white rounded-2xl overflow-hidden shadow-md  cursor-pointer transition-all hover:scale-105">
                       <div className="relative">
                         <img
                           src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
                           alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                          className="w-full h-[380px] object-cover"
+                          className="w-full h-[340px] object-cover"
                         />
                         <div className="absolute inset-0 bg-black opacity-50 flex items-end">
                         </div>
@@ -215,13 +213,13 @@ export default function Home() {
                   <div className="space-y-8">
                     {
                       postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post => <>
-                        <hr />
+                         <hr className='mt-6'/>
                         <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
-                          <article className="flex gap-4 items-center cursor-pointer transition-all hover:scale-105">
+                          <article className={`flex gap-4 items-center cursor-pointer transition-all hover:scale-105`}>
                             <img
                               src={post.thumbnailUrl}
                               alt="Audiência pública"
-                              className="w-[280px] h-[140px] object-cover rounded flex-shrink-0 md:block hidden"
+                              className="w-[280px] h-[140px] object-cover rounded-2xl flex-shrink-0 md:block hidden"
                             />
                             <div className="flex-1 max-w-[282px]">
                               <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
@@ -284,16 +282,16 @@ export default function Home() {
                         <Link
                           key={post.id}
                           href={`/noticia/${post.id}`}
-                          className="block rounded-xl overflow-hidden transition-all hover:translate-y-1 cursor-pointer"
+                          className="block overflow-hidden transition-all hover:translate-y-1 cursor-pointer"
                         >
                           <div className="w-full h-48 overflow-hidden">
                             <img
                               src={post.thumbnailUrl || '/placeholder.jpg'}
                               alt={post.postTitle}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover rounded-2xl"
                             />
                           </div>
-                          <div className="p-4">
+                          <div className="py-4 px-2">
                             <p className="text-sm text-gray-500">
                               {new Date(post.updatedAt).toLocaleDateString('pt-BR')} às {new Date(post.updatedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                             </p>

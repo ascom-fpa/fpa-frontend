@@ -12,7 +12,7 @@ export default function PostsFeature({ postsFeature }: any) {
   return (
     <section className="py-8 px-4">
       <div className="max-w-[1800px] mx-auto">
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="flex gap-6 overflow-x-auto md:overflow-visible">
           {isLoading
             ? Array.from({ length: 4 }).map((_, index) => (
               <PostsFeatureSkeleton key={index} highlighted={index === 0} />
@@ -21,25 +21,36 @@ export default function PostsFeature({ postsFeature }: any) {
               const isActive = index === activeIndex
 
               return (
-                <Link href={`/noticia/${article.id}`} key={index} prefetch>
+                <Link
+                  key={index}
+                  href={`/noticia/${article.id}`}
+                  prefetch
+                  className={`
+                      transition-all duration-500 ease-in-out 
+                      flex-shrink-0 
+                      ${isActive ? 'grow basis-[30%]' : 'basis-[22%]'}
+                    `}
+                  onMouseEnter={() => setActiveIndex(index)}
+                >
                   <article
-                    className={`rounded-lg overflow-hidden relative p-4 h-[300px] cursor-pointer transition-all duration-300 ease-in-out flex ${isActive ? 'items-end' : 'items-center'} hover:scale-105`}
-                    onMouseEnter={() => setActiveIndex(index)}
+                    className={`rounded-lg overflow-hidden relative p-4 h-[300px] cursor-pointer flex 
+                        ${isActive ? 'items-end' : 'items-center'} 
+                        hover:scale-105 transition-all duration-300 ease-in-out`}
                   >
-                    {/* Image substitui background */}
                     <Image
                       src={article.thumbnailUrl}
                       alt={article.postTitle}
                       fill
                       className="object-cover transition-opacity duration-500 z-0"
                       style={{ opacity: isActive ? 1 : 0 }}
-                      priority={index === 0} // carrega a primeira imagem com prioridade
+                      priority={index === 0}
                     />
 
-                    {/* Overlay escura */}
-                    <div className={`absolute w-full h-full top-0 left-0 bg-black ${isActive ? 'opacity-30' : 'opacity-0'} z-10 transition-opacity duration-500`} />
+                    <div
+                      className={`absolute w-full h-full top-0 left-0 bg-black ${isActive ? 'opacity-30' : 'opacity-0'
+                        } z-10 transition-opacity duration-500`}
+                    />
 
-                    {/* Text content */}
                     <div className="relative z-20 flex flex-col gap-4">
                       <span
                         style={{ color: isActive ? '#fff' : article.postCategory.color }}
@@ -47,10 +58,16 @@ export default function PostsFeature({ postsFeature }: any) {
                       >
                         {article.postCategory.name}
                       </span>
-                      <h3 className={`font-bold text-2xl ${isActive ? 'text-white' : 'text-[#3D3D3D]'} leading-tight`}>
+                      <h3
+                        className={`font-bold text-2xl ${isActive ? 'text-white' : 'text-[#3D3D3D]'
+                          } leading-tight`}
+                      >
                         {article.postTitle}
                       </h3>
-                      <p className={`${isActive ? 'text-white' : 'text-[#787878]'} text-sm leading-relaxed`}>
+                      <p
+                        className={`${isActive ? 'text-white' : 'text-[#787878]'
+                          } text-sm leading-relaxed`}
+                      >
                         {article.summary?.slice(0, 100)}...
                       </p>
                     </div>

@@ -232,7 +232,6 @@ export const useContentStore = create<ContentState>((set, get) => ({
 
       const form = new FormData()
       form.append("file", file)
-      console.log('here 226', form)
       const result = await createMagazine(form)
       set({ magazineUrl: result.pdfUrl || '' })
     } catch (error) {
@@ -606,7 +605,6 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ webstoriesLoading: true, webstoriesError: null })
     try {
       const response = await webstoriesService.getWebStories(params)
-      console.log('line 382:', response)
       set({
         webstories: response,
         webstoriesLoading: false,
@@ -713,7 +711,6 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ relevantsLoading: true, relevantsError: null })
     try {
       const response = await relevantsService.getRelevants(params)
-      console.log('line 382:', response)
       set({
         relevants: response,
         relevantsLoading: false,

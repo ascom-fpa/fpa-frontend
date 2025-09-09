@@ -1,12 +1,22 @@
+import { Document, Page } from 'react-pdf';
+
+import { pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.mjs',
+    import.meta.url,
+).toString();
+
 import Link from "next/link";
 import Newsletter from "./newsletter";
 import { Button } from "./ui/button";
 import { useContentStore } from "@/lib/content-store";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getPauta } from "@/services/pauta";
-import { Share2 } from "lucide-react";
+import { Maximize2, Minimize2, Share2 } from "lucide-react";
 import { showToast } from "@/utils/show-toast";
 import { RecentPostCardSkeleton, RecentPostRowSkeleton } from "./skeletons/recent-posts-skeleton";
+
 
 interface IProps {
     category?: string
@@ -19,6 +29,13 @@ export default function LastNews({ category }: IProps) {
     const newsNoFeatured = posts.filter(post => !post.isFeatured)
     const [pautaImage, setPautaImage] = useState('');
 
+    const containerRef = useRef<HTMLDivElement>(null)
+    const [isFullscreen, setIsFullscreen] = useState(false)
+
+    const toggleFullscreen = () => {
+        setIsFullscreen(!isFullscreen)
+    }
+
     useEffect(() => {
         fetchPauta()
         category ? fetchPosts({ categoryId: category }) : fetchPosts()
@@ -28,6 +45,12 @@ export default function LastNews({ category }: IProps) {
     async function fetchPauta() {
         getPauta()
             .then(res => setPautaImage(res.imageUrl!))
+    }
+
+    async function urlToFile(url: string, filename: string, mimeType: string): Promise<File> {
+        const response = await fetch(url)
+        const blob = await response.blob()
+        return new File([blob], filename, { type: mimeType })
     }
 
     return (
@@ -47,12 +70,12 @@ export default function LastNews({ category }: IProps) {
                                     ))
                                     : newsNoFeatured.slice(0, 3).map(post =>
                                         <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
-                                            <article className="mb-8" key={post.id}>
+                                            <article className="mb-8 w-fit" key={post.id}>
                                                 <div className="relative mb-4">
                                                     <img
                                                         src={post.thumbnailUrl || "/placeholder.svg"}
                                                         alt={post.postTitle}
-                                                        className="w-full h-64 object-cover rounded-lg"
+                                                        className="w-full h-64  md:min-w-[480px] object-cover rounded-lg"
                                                     />
                                                 </div>
                                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{post.postTitle}</h3>
@@ -86,7 +109,6 @@ export default function LastNews({ category }: IProps) {
                                                                 onClick={() => {
                                                                     navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.slug}`)
                                                                         .then(() => {
-                                                                            console.log('Link copiado para a área de transferência!');
                                                                             // Opcional: notifique o usuário (alert, toast, etc.)
                                                                             showToast({ type: 'success', children: 'Link copiado para a área de transferência' })
                                                                         })
@@ -119,14 +141,46 @@ export default function LastNews({ category }: IProps) {
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     {/* Sidebar - 25% width */}
                     <aside className="w-full lg:w-1/4 space-y-8">
                         {/* Newsletter Signup */}
                         <Newsletter />
-                        {magazineUrl ? <iframe allowFullScreen src={magazineUrl + '#toolbar=0&navpanes=0&scrollbar=0"'} width="100%" height="500px" /> : <div className="w-full h-[500px] bg-gray-200 animate-pulse rounded-md" />}
+
+                        {magazineUrl
+                            ? <div className='relative'>
+                                <div className="absolute z-20 border-[14px] top-0 left-0 w-full bg-transparent border-white h-[500px]"></div>
+                                <iframe
+                                    src={`https://docs.google.com/gview?url=${encodeURIComponent(magazineUrl)}&embedded=true`}
+                                    className='h-[500px] w-full'
+                                    frameBorder={0}
+                                />
+                            </div>
+                            // <div
+                            //     ref={containerRef}
+                            //     className={`relative flex justify-center bg-gray-100 rounded-xl mx-auto transition-all ${isFullscreen ? 'w-[90vw] h-[90vh]' : 'w-full h-[580px]'
+                            //         }`}
+                            // >
+                            //     {/* Botão de fullscreen */}
+                            //     <button
+                            //         onClick={toggleFullscreen}
+                            //         className="absolute top-4 right-4 z-10 bg-white shadow p-2 rounded-full hover:scale-110 transition-all cursor-pointer"
+                            //         title={isFullscreen ? 'Sair do modo tela cheia' : 'Ver em tela cheia'}
+                            //     >
+                            //         {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+                            //     </button>
+
+                            //     {/* PDF */}
+                            //     <Document file={magazineUrl}>
+                            //         <Page
+                            //             pageNumber={1}
+                            //             height={isFullscreen ? window.innerHeight * 0.9 : 580}
+                            //         />
+                            //     </Document>
+                            // </div>
+                            : <div className="w-full h-[500px] bg-gray-200 animate-pulse rounded-md" />
+                        }
                         <div className="relative flex justify-center">
                             {pautaImage ? <img className='overflow-hidden rounded-2xl lg:w-auto w-full' src={pautaImage} width={435} height={518} /> : <div className="overflow-hidden rounded-2xl lg:w-auto w-full h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
                             <Button className='absolute bottom-20 lg:text-2xl p-2 w-5/6 h-fit whitespace-pre-wrap break-words'>

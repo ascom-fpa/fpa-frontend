@@ -23,7 +23,6 @@ import StarterKit from "@tiptap/starter-kit"
 import React from "react"
 
 export default function ViewPost({ postContent }: any) {
-    console.log(postContent)
     const isMobile = useIsMobile()
     const [mobileView, setMobileView] = React.useState<"main" | "highlighter" | "link">("main")
 

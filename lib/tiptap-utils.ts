@@ -293,7 +293,6 @@ export const handleImageUpload = async (
   abortSignal?: AbortSignal,
   pushCurrentPostFiles?: (file: File) => void
 ): Promise<string> => {
-  console.log('here 294')
 
   // Validate file
   if (!file) {
@@ -316,7 +315,6 @@ export const handleImageUpload = async (
     onProgress?.({ progress })
   }
 
-  console.log(file)
   pushCurrentPostFiles && pushCurrentPostFiles(file)
 
   const previewUrl = URL.createObjectURL(file);
