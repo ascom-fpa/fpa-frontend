@@ -37,7 +37,7 @@ export default function Page({ params }: PageProps) {
         < div className="min-h-screen bg-[#F9F9F9]" >
             <Header />
 
-            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-4xl text-center my-10">{currentCategory?.name || 'Categoria'}</h1>
+            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-4xl text-center my-6">{currentCategory?.name || 'Categoria'}</h1>
 
             <div className="max-w-[1800px] mx-auto">
                 {
@@ -56,7 +56,7 @@ export default function Page({ params }: PageProps) {
                                 }
                             </div>
                             <div className="w-full lg:w-4/12 flex flex-col gap-10">
-                                {newsNoFeatured.concat(newsNoFeatured).slice(1, 4).map((post) => (
+                                {newsNoFeatured.slice(1, 4).map((post) => (
                                     <article key={post.id} className="flex items-start gap-4 pb-6 border-b border-gray-200">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-10 mb-2">

@@ -232,7 +232,7 @@ export default function Home() {
                     }
                   </div>
 
-                  <Link style={{ color: postCategory.color }} className='flex gap-2' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}>
+                  <Link style={{ color: postCategory.color }} className='flex gap-2' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/categoria/${postCategory.id}`}>
                     <span>Ver mais em {postCategory.name}</span>
                     <ArrowRight className='w-4' />
                   </Link>
