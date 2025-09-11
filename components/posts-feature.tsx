@@ -28,7 +28,7 @@ export default function PostsFeature({ postsFeature }: any) {
                   className={`
                       transition-all duration-500 ease-in-out 
                       flex-shrink-0 
-                      ${isActive ? 'grow basis-[30%]' : 'basis-[22%]'}
+                         ${isActive ? 'flex-[2_1_0%] max-w-[540px]' : 'flex-[1_1_0%]'}
                     `}
                   onMouseEnter={() => setActiveIndex(index)}
                 >
@@ -60,13 +60,13 @@ export default function PostsFeature({ postsFeature }: any) {
                       </span>
                       <h3
                         className={`font-bold text-2xl ${isActive ? 'text-white' : 'text-[#3D3D3D]'
-                          } leading-tight`}
+                          } leading-tight  max-w-[400px]`}
                       >
                         {article.postTitle}
                       </h3>
                       <p
                         className={`${isActive ? 'text-white' : 'text-[#787878]'
-                          } text-sm leading-relaxed`}
+                          } text-sm leading-relaxed  max-w-[300px]`}
                       >
                         {article.summary?.slice(0, 100)}...
                       </p>

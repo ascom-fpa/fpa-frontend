@@ -68,7 +68,7 @@ export default function LastNews({ category }: IProps) {
                                                     <img
                                                         src={post.thumbnailUrl || "/placeholder.svg"}
                                                         alt={post.postTitle}
-                                                        className="w-full h-64  md:min-w-[480px] object-cover rounded-lg"
+                                                        className="w-full h-64  md:min-w-[540px] object-cover rounded-lg"
                                                     />
                                                 </div>
                                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{post.postTitle}</h3>
