@@ -192,7 +192,7 @@ export default function Home() {
 
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
-                  <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postsCategoryFeatured?.postsByCategory[postCategory.id][0].id}`}>
+                  <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.id}`}>
                     <article className="bg-white rounded-2xl overflow-hidden shadow-md  cursor-pointer transition-all hover:scale-105">
                       <div className="relative">
                         <img

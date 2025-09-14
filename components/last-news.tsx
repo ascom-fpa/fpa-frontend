@@ -55,8 +55,8 @@ export default function LastNews({ category }: IProps) {
                         <h2 className="text-5xl font-bold text-[#419672] mb-8">Mais Recentes</h2>
 
                         {/* Featured Article */}
-                        <div className="flex gap-20 lg:flex-nowrap flex-wrap">
-                            <div className="w-full lg:w-1/3">
+                        <div className="flex gap-10 lg:flex-nowrap flex-wrap">
+                            <div className="w-full lg:max-w-[540px]">
                                 {isLoading
                                     ? Array.from({ length: 3 }).map((_, index) => (
                                         <RecentPostCardSkeleton key={index} highlighted={index === 0} />
