@@ -99,11 +99,11 @@ function SortableCard({ video, onDelete }: { video: any, onDelete: () => void })
 
     return (
         <div ref={setNodeRef} style={style}>
-            <Card className="p-0 w-fit">
+            <Card className="p-0 overflow-hidden">
                 <CardContent {...attributes} {...listeners} className="relative cursor-grab active:cursor-grabbing flex flex-col gap-4">
                     <p className="font-semibold text-sm">{video.description}</p>
                     {video.embed && (
-                        <div className="w-full" dangerouslySetInnerHTML={{ __html: video.embed }}>
+                        <div className="scale-95 flex justify-center" dangerouslySetInnerHTML={{ __html: video.embed }}>
 
                         </div>
                     )}
