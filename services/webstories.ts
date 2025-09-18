@@ -21,6 +21,7 @@ export interface CreateWebStoryData {
   title: string
   description?: string
   slides: WebstorySlideData[]
+  isFeatured?:boolean
 }
 
 export interface UpdateWebStoryData extends Partial<CreateWebStoryData> {

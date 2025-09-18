@@ -17,7 +17,7 @@ export default function WebstoriesCarousel({ webstories }: IProps) {
             <div className="space-y-4">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2 className="text-4xl md:text-5xl font-bold text-[#419672]">Webstories</h2>
+                        <h2 className="text-4xl md:text-5xl font-bold text-[#1C9658]">Webstories</h2>
                         <p className="text-gray-600">As matérias mais lidas do nosso portal</p>
                     </div>
                 </div>
@@ -29,7 +29,7 @@ export default function WebstoriesCarousel({ webstories }: IProps) {
                             className="flex-shrink-0 cursor-pointer"
                             onClick={() => setSelectedStory(story)}
                         >
-                            <div className="w-[200px] h-[340px] rounded-xl overflow-hidden border-2 border-[#419672]">
+                            <div className="w-[200px] h-[340px] rounded-xl overflow-hidden border-2 border-[#1C9658]">
                                 <Image
                                     src={story.slides?.[0]?.imageUrl || "/placeholder.jpg"}
                                     alt={story.title}

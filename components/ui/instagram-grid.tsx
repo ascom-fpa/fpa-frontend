@@ -1,8 +1,14 @@
+import { Instagram } from "lucide-react";
+import Link from "next/link";
+
 // /components/InstagramGrid.tsx
 export default function InstagramGrid({ posts }: any) {
     return (
         <div className="flex flex-col gap-4 my-4">
-            <h3 className="text-[#419672] font-medium text-xl text-center">Instagram FPA</h3>
+            <Link target="_blank" href="https://www.instagram.com/fpagro/" className="flex text-[#1C9658] gap-2 items-center justify-center">
+                <h3 className=" font-medium text-xl text-center">Instagram FPA</h3>
+                <Instagram className="w-5 h-5" />
+            </Link>
             <div className="flex flex-wrap gap-3 justify-center">
                 {posts?.map((post: any) => (
                     <a

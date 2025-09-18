@@ -42,6 +42,7 @@ export default function WebstoriesPage() {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [slides, setSlides] = useState<SlideInput[]>([])
+    const [isFeatured, setIsFeatured] = useState(false)
 
     const { fetchWebStories, webstories, createWebStory, deleteWebStory, reorderWebstories } = useContentStore()
     const [orderedWebstories, setOrderedWebstories] = useState<any[]>([])
@@ -58,7 +59,7 @@ export default function WebstoriesPage() {
     const handleUpload = async () => {
         if (!title || slides.length === 0) return
 
-        await createWebStory({ slides, title, description })
+        await createWebStory({ slides, title, description, isFeatured })
         setTitle("")
         setDescription("")
         setSlides([])
@@ -108,6 +109,17 @@ export default function WebstoriesPage() {
                                     setSlides(updated)
                                 }}
                             />
+                            <div className="flex gap-2 items-center">
+                                <label className="flex items-center space-x-2 text-sm ps-2">Webstory em destaque?</label>
+                                <Input
+                                    className="cursor-pointer"
+                                    style={{ width: '20px', height: '20px' }}
+                                    type="checkbox"
+                                    placeholder="Slug (URL amigável)"
+                                    checked={isFeatured}
+                                    onChange={(e) => setIsFeatured(e.target.checked)}
+                                />
+                            </div>
                         </div>
                     ))}
 

@@ -10,7 +10,7 @@ export default function FatoEmFocoSkeleton() {
                     {/* Título */}
                     <div className="flex justify-between items-center">
                         <div>
-                            <h2 className="text-5xl font-bold text-[#419672]">Fato em Foco</h2>
+                            <h2 className="text-5xl font-bold text-[#1C9658]">Fato em Foco</h2>
                             <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
                         </div>
                     </div>

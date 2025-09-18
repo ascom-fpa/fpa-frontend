@@ -26,7 +26,7 @@ export default function Newsletter() {
             style={{ backgroundImage: "url('/newsletter-bg.png')", backgroundRepeat: 'no-repeat' }}
             className=" text-white rounded-2xl w-full lg:max-w-[435px] bg-cover relative overflow-hidden"
         >
-            <div className="bg-[#419672] opacity-80 absolute top-0 left-0 w-full h-full"></div>
+            <div className="bg-[#1C9658] opacity-80 absolute top-0 left-0 w-full h-full"></div>
             <div className="relative z-20 py-10 px-5">
                 <h3 className="text-3xl font-bold text-center m-0">Cadastre-se em nossa Newsletter</h3>
                 <p className=" text-center font-light m-0">Cadastre-se agora e seja o primeiro a saber sobre nossas notícias.</p>
@@ -53,7 +53,7 @@ export default function Newsletter() {
                         />
                     </div>
 
-                    <Button type="submit" className="flex gap-4 w-full bg-transparent border-white border hover:bg-white hover:text-[#419672] text-white font-light text-2xl py-2">
+                    <Button type="submit" className="flex gap-4 w-full bg-transparent border-white border hover:bg-white hover:text-[#1C9658] text-white font-light text-2xl py-2">
                         <MailPlus style={{ scale: 1.4 }} />
                         <span>Inscrever</span>
                     </Button>

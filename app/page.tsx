@@ -213,7 +213,7 @@ export default function Home() {
                   <div className="space-y-8">
                     {
                       postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post => <>
-                         <hr className='mt-6'/>
+                        <hr className='mt-6' />
                         <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
                           <article className={`flex gap-4 items-center cursor-pointer transition-all hover:scale-105`}>
                             <img
@@ -223,7 +223,7 @@ export default function Home() {
                             />
                             <div className="flex-1 max-w-[282px]">
                               <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
-                              <h4 className="text-sm  text-gray-900 leading-tight">{post.summary}</h4>
+                              <h4 className="text-sm  text-gray-900 leading-tight">{post.postTitle}</h4>
                             </div>
                           </article>
                         </Link>
@@ -253,7 +253,7 @@ export default function Home() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-5xl font-bold text-[#419672]">Fato em Foco</h2>
+                <h2 className="text-5xl font-bold text-[#1C9658]">Fato em Foco</h2>
                 <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
               </div>
             </div>
@@ -265,46 +265,7 @@ export default function Home() {
       <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1800px] mx-auto ">
         <div className="flex gap-20 lg:flex-nowrap flex-wrap lg:flex-row flex-col-reverse">
           <div className="w-full lg:w-9/12">
-            {mostViewed.length === 0
-              ? <MostViewedSkeleton />
-              : <div className="py-12 ">
-                {/* Mais lidas */}
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h2 className="text-5xl font-bold text-[#419672]">Mais lidas</h2>
-                      <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
-                    </div>
-                  </div>
-                  {mostViewed.length > 0 && (
-                    <ContentSlider perView={4}>
-                      {mostViewed.map((post) => (
-                        <Link
-                          key={post.id}
-                          href={`/noticia/${post.id}`}
-                          className="block overflow-hidden transition-all hover:translate-y-1 cursor-pointer"
-                        >
-                          <div className="w-full h-48 overflow-hidden">
-                            <img
-                              src={post.thumbnailUrl || '/placeholder.jpg'}
-                              alt={post.postTitle}
-                              className="w-full h-full object-cover rounded-2xl"
-                            />
-                          </div>
-                          <div className="py-4 px-2">
-                            <p className="text-sm text-gray-500">
-                              {new Date(post.updatedAt).toLocaleDateString('pt-BR')} às {new Date(post.updatedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                            </p>
-                            <h3 className="text-md font-medium text-gray-800 mt-1 line-clamp-2">
-                              {post.summary} || Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi, harum consequuntur earum atque ipsam voluptatem
-                            </h3>
-                          </div>
-                        </Link>
-                      ))}
-                    </ContentSlider>
-                  )}
-                </div>
-              </div>}
+            <ColunistasSection />
             {videos.length === 0
               ? <VideosSkeleton />
               : <div className="py-12 " id='videos'>
@@ -312,7 +273,7 @@ export default function Home() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h2 className="text-5xl font-bold text-[#419672]">Vídeos</h2>
+                      <h2 className="text-5xl font-bold text-[#1C9658]">Vídeos</h2>
                       <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                     </div>
                   </div>
@@ -327,7 +288,6 @@ export default function Home() {
             {webstories.length == 0
               ? <WebstoriesCarouselSkeleton />
               : <WebstoriesCarousel webstories={webstories} />}
-            <ColunistasSection />
           </div>
           {instagramPosts.length == 0
             ? <TwitterInstagramSkeleton />

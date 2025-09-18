@@ -88,7 +88,7 @@ export function AdminLogin() {
             <CardHeader className="text-center pb-8">
               <div
                 className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                style={{ backgroundColor: "#419672" }}
+                style={{ backgroundColor: "#1C9658" }}
               >
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -131,7 +131,7 @@ export function AdminLogin() {
                     required
                     maxLength={6}
                     className="h-12 rounded-xl border-gray-200 shadow-sm focus:shadow-md transition-all duration-200 focus:border-transparent focus:ring-2 text-black placeholder:text-gray-400"
-                    style={{ "--tw-ring-color": "#419672" } as React.CSSProperties}
+                    style={{ "--tw-ring-color": "#1C9658" } as React.CSSProperties}
                   />
                 </div>
                 <div className="space-y-2">
@@ -147,7 +147,7 @@ export function AdminLogin() {
                     required
                     minLength={6}
                     className="h-12 rounded-xl border-gray-200 shadow-sm focus:shadow-md transition-all duration-200 focus:border-transparent focus:ring-2 text-black placeholder:text-gray-400"
-                    style={{ "--tw-ring-color": "#419672" } as React.CSSProperties}
+                    style={{ "--tw-ring-color": "#1C9658" } as React.CSSProperties}
                   />
                 </div>
                 <div className="space-y-2">
@@ -163,7 +163,7 @@ export function AdminLogin() {
                     required
                     minLength={6}
                     className="h-12 rounded-xl border-gray-200 shadow-sm focus:shadow-md transition-all duration-200 focus:border-transparent focus:ring-2 text-black placeholder:text-gray-400"
-                    style={{ "--tw-ring-color": "#419672" } as React.CSSProperties}
+                    style={{ "--tw-ring-color": "#1C9658" } as React.CSSProperties}
                   />
                 </div>
                 <div className="space-y-3">
@@ -173,7 +173,7 @@ export function AdminLogin() {
                     className="w-full h-12 rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
                     style={
                       {
-                        backgroundColor: "#419672",
+                        backgroundColor: "#1C9658",
                         "--tw-shadow-color": "rgba(65, 150, 114, 0.3)",
                       } as React.CSSProperties
                     }
@@ -181,7 +181,7 @@ export function AdminLogin() {
                       e.currentTarget.style.backgroundColor = "#154B2B"
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "#419672"
+                      e.currentTarget.style.backgroundColor = "#1C9658"
                     }}
                   >
                     {isVerifying ? (
@@ -218,7 +218,7 @@ export function AdminLogin() {
             <CardHeader className="text-center pb-8">
               <div
                 className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4"
-                style={{ backgroundColor: "#419672" }}
+                style={{ backgroundColor: "#1C9658" }}
               >
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -248,7 +248,7 @@ export function AdminLogin() {
                     onChange={(e) => setResetEmail(e.target.value)}
                     required
                     className="h-12 rounded-xl border-gray-200 shadow-sm focus:shadow-md transition-all duration-200 focus:border-transparent focus:ring-2 text-black placeholder:text-gray-400"
-                    style={{ "--tw-ring-color": "#419672" } as React.CSSProperties}
+                    style={{ "--tw-ring-color": "#1C9658" } as React.CSSProperties}
                   />
                 </div>
                 <div className="space-y-3">
@@ -258,7 +258,7 @@ export function AdminLogin() {
                     className="w-full h-12 rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
                     style={
                       {
-                        backgroundColor: "#419672",
+                        backgroundColor: "#1C9658",
                         "--tw-shadow-color": "rgba(65, 150, 114, 0.3)",
                       } as React.CSSProperties
                     }
@@ -266,7 +266,7 @@ export function AdminLogin() {
                       e.currentTarget.style.backgroundColor = "#154B2B"
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "#419672"
+                      e.currentTarget.style.backgroundColor = "#1C9658"
                     }}
                   >
                     {isResetting ? (
@@ -302,7 +302,7 @@ export function AdminLogin() {
           <CardHeader className="text-center pb-8">
             <div
               className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4"
-              style={{ backgroundColor: "#419672" }}
+              style={{ backgroundColor: "#1C9658" }}
             >
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -330,7 +330,7 @@ export function AdminLogin() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="h-12 rounded-xl border-gray-200 shadow-sm focus:shadow-md transition-all duration-200 focus:border-transparent focus:ring-2 text-black placeholder:text-gray-400"
-                  style={{ "--tw-ring-color": "#419672" } as React.CSSProperties}
+                  style={{ "--tw-ring-color": "#1C9658" } as React.CSSProperties}
                 />
               </div>
               <div className="space-y-2">
@@ -345,7 +345,7 @@ export function AdminLogin() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="h-12 rounded-xl border-gray-200 shadow-sm focus:shadow-md transition-all duration-200 focus:border-transparent focus:ring-2 text-black placeholder:text-gray-400"
-                  style={{ "--tw-ring-color": "#419672" } as React.CSSProperties}
+                  style={{ "--tw-ring-color": "#1C9658" } as React.CSSProperties}
                 />
               </div>
               <div className="flex justify-end">
@@ -353,7 +353,7 @@ export function AdminLogin() {
                   type="button"
                   onClick={showForgotPasswordForm}
                   className="text-sm font-medium hover:underline transition-colors duration-200"
-                  style={{ color: "#419672" }}
+                  style={{ color: "#1C9658" }}
                 >
                   Forgot your password?
                 </button>
@@ -364,7 +364,7 @@ export function AdminLogin() {
                 className="cursor-pointer w-full h-12 rounded-xl font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
                 style={
                   {
-                    backgroundColor: "#419672",
+                    backgroundColor: "#1C9658",
                     "--tw-shadow-color": "rgba(65, 150, 114, 0.3)",
                   } as React.CSSProperties
                 }
@@ -372,7 +372,7 @@ export function AdminLogin() {
                   e.currentTarget.style.backgroundColor = "#154B2B"
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#419672"
+                  e.currentTarget.style.backgroundColor = "#1C9658"
                 }}
               >
                 {isLoading ? (

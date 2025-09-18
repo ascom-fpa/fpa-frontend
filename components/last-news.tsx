@@ -52,7 +52,7 @@ export default function LastNews({ category }: IProps) {
                 <div className="flex gap-8 flex-wrap">
                     {/* Recent News - 75% width */}
                     <div className="flex-1 lg:w-3/4 w-full">
-                        <h2 className="text-5xl font-bold text-[#419672] mb-8">Mais Recentes</h2>
+                        <h2 className="text-5xl font-bold text-[#1C9658] mb-8">Mais Recentes</h2>
 
                         {/* Featured Article */}
                         <div className="flex gap-10 lg:flex-nowrap flex-wrap">

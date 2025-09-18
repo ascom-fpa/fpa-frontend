@@ -15,6 +15,7 @@ import { CSS } from "@dnd-kit/utilities"
 export default function VideoPage() {
     const [description, setDescription] = useState("")
     const [embed, setEmbed] = useState("")
+    const [isFeatured, setIsFeatured] = useState(false)
 
     const { fetchVideos, videos } = useContentStore()
     const sensors = useSensors(useSensor(PointerSensor))
@@ -30,7 +31,7 @@ export default function VideoPage() {
 
     const handleUpload = async () => {
         if (!embed) return
-        const payload = { embed, description }
+        const payload = { embed, description, isFeatured }
         await createVideo(payload)
         setDescription("")
         setEmbed("")
@@ -48,6 +49,17 @@ export default function VideoPage() {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
+                    <div className="flex gap-2 items-center">
+                        <label className="flex items-center space-x-2 text-sm ps-2">Vídeo em destaque?</label>
+                        <Input
+                            className="cursor-pointer"
+                            style={{ width: '20px', height: '20px' }}
+                            type="checkbox"
+                            placeholder="Slug (URL amigável)"
+                            checked={isFeatured}
+                            onChange={(e) => setIsFeatured(e.target.checked)}
+                        />
+                    </div>
                     <Input
                         placeholder="Embed do YouTube"
                         value={embed}
@@ -91,8 +103,8 @@ function SortableCard({ video, onDelete }: { video: any, onDelete: () => void })
                 <CardContent {...attributes} {...listeners} className="relative cursor-grab active:cursor-grabbing flex flex-col gap-4">
                     <p className="font-semibold text-sm">{video.description}</p>
                     {video.embed && (
-                        <div className="w-full" dangerouslySetInnerHTML={{__html: video.embed}}>
-                            
+                        <div className="w-full" dangerouslySetInnerHTML={{ __html: video.embed }}>
+
                         </div>
                     )}
                 </CardContent>
