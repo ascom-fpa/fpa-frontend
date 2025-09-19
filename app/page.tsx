@@ -198,7 +198,7 @@ export default function Home() {
                         <img
                           src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
                           alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                          className="w-[540px] h-[340px] object-cover"
+                          className="md:w-[540px] h-[340px] object-cover"
                         />
                         <div className="absolute inset-0 bg-black opacity-50 flex items-end">
                         </div>
