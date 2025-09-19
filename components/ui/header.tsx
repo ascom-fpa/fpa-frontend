@@ -18,6 +18,16 @@ export default function Header() {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY >= 200); // change threshold if needed
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     useEffect(() => {
         fetchLiveUrl();
@@ -89,8 +99,13 @@ export default function Header() {
                             <Menu className="h-6 w-6" />
                         </Button>
                         <Link href="/" className="text-center">
-                            <div className="text-sm font-medium">FRENTE PARLAMENTAR DA</div>
-                            <div className="text-2xl font-bold">AGROPECUÁRIA</div>
+                            <img
+                                src={isScrolled ? "/fpa-pequena.png" : "/fpa-grande.png"}
+                                alt="logo FPA"
+                                className=""
+                            />
+                            <link rel="preload" as="image" href="/fpa-pequena.png" />
+                            <link rel="preload" as="image" href="/fpa-grande.png" />
                         </Link>
                         {live.isEnabled && (
                             <Link href={live.link} className="flex items-center space-x-2">
