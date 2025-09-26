@@ -102,7 +102,7 @@ export default function Header() {
                             <img
                                 src={isScrolled ? "/fpa-pequena.png" : "/fpa-grande.png"}
                                 alt="logo FPA"
-                                className=""
+                                className={`${isScrolled ? 'max-w-[140px]':'max-w-[60px]'}`}
                             />
                             <link rel="preload" as="image" href="/fpa-pequena.png" />
                             <link rel="preload" as="image" href="/fpa-grande.png" />
