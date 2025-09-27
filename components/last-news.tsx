@@ -48,7 +48,7 @@ export default function LastNews({ category }: IProps) {
 
     return (
         <section className="py-8 px-4">
-            <div className="max-w-[1500px] mx-auto">
+            <div className="max-w-[1200px] mx-auto">
                 <div className="flex gap-8 flex-wrap">
                     {/* Recent News - 75% width */}
                     <div className="flex-1 lg:w-3/4 w-full">

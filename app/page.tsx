@@ -184,7 +184,7 @@ export default function Home() {
       {
         postsCategoryFeatured?.categories?.length > 0
           ? <section className="py-12 px-4 ">
-            <div className="max-w-[1500px] mx-auto">
+            <div className="max-w-[1200px] mx-auto">
               <div className="grid md:grid-cols-3 gap-8">
 
                 {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
@@ -248,7 +248,7 @@ export default function Home() {
       {relevants.length === 0 ? (
         <FatoEmFocoSkeleton />
       ) : <section id='fato-em-foco' className="py-12 px-4 bg-white">
-        <div className="max-w-[1500px] mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           {/* Minuto FPA */}
           <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -262,7 +262,7 @@ export default function Home() {
         </div>
       </section>
       }
-      <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1500px] mx-auto ">
+      <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1200px] mx-auto ">
         <div className="flex gap-20 lg:flex-nowrap flex-wrap lg:flex-row flex-col-reverse">
           <div className="w-full lg:w-9/12">
             <ColunistasSection />

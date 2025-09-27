@@ -89,7 +89,7 @@ export default function Header() {
 
                 {/* Main header */}
                 <div className="py-4 px-4">
-                    <div className="flex justify-between items-center max-w-[1500px] mx-auto">
+                    <div className="flex justify-between items-center max-w-[1200px] mx-auto">
                         <Button
                             variant="ghost"
                             size="sm"
