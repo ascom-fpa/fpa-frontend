@@ -216,7 +216,7 @@ export default function Home() {
                       postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post => <>
                         <hr className='mt-6' />
                         <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
-                          <article className={`flex gap-4 items-center cursor-pointer transition-all hover:scale-105`}>
+                          <article className={`flex gap-4 items-start cursor-pointer transition-all hover:scale-105`}>
                             <img
                               src={post.thumbnailUrl}
                               alt="Audiência pública"
