@@ -14,10 +14,10 @@ export default function PostsFeature({ postsFeature }: any) {
       <div className="max-w-[1200px] mx-auto">
         <div className="flex gap-6 overflow-x-auto md:overflow-visible">
           {isLoading
-            ? Array.from({ length: 4 }).map((_, index) => (
+            ? Array.from({ length: 3 }).map((_, index) => (
               <PostsFeatureSkeleton key={index} highlighted={index === 0} />
             ))
-            : postsFeature.map((article: any, index: number) => {
+            : postsFeature.slice(0,3).map((article: any, index: number) => {
               const isActive = index === activeIndex
 
               return (

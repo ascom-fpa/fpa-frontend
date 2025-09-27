@@ -121,7 +121,7 @@ export default function LastNews({ category }: IProps) {
                                                         </div>
 
                                                     </div>
-                                                    <Link className="text-3xl font-semibold text-gray-900 mb-2 leading-tight" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                                                    <Link className="text-2xl font-semibold text-gray-900 mb-2 leading-tight" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
                                                         <h3 >{post.postTitle}</h3>
                                                     </Link>
 

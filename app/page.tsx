@@ -188,7 +188,7 @@ export default function Home() {
               <div className="grid md:grid-cols-3 gap-8">
 
                 {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
-                  <h2 style={{ color: postCategory?.color }} className={`text-4xl font-semibold mb-6 capitalize cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
+                  <h2 style={{ color: postCategory?.color }} className={`text-3xl font-semibold mb-6 capitalize cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
 
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
@@ -198,11 +198,11 @@ export default function Home() {
                         <img
                           src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
                           alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                          className="md:w-[540px] h-[340px] object-cover"
+                          className="md:w-[540px] h-[340px] max-w-[400px] object-cover"
                         />
                         <div className="absolute inset-0 bg-black opacity-50 flex items-end">
                         </div>
-                        <h3 className="absolute bottom-0 text-white font-semibold md:text-3xl text-2xl p-8 leading-tight">
+                        <h3 className="absolute bottom-0 text-white font-semibold text-2xl p-8 leading-tight">
                           {postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.postTitle}
                         </h3>
                       </div>
@@ -219,7 +219,7 @@ export default function Home() {
                             <img
                               src={post.thumbnailUrl}
                               alt="Audiência pública"
-                              className="w-[280px] h-[140px] object-cover rounded-2xl flex-shrink-0 md:block hidden"
+                              className="w-[180px] h-[120px] object-cover rounded-2xl flex-shrink-0 md:block hidden"
                             />
                             <div className="flex-1 max-w-[282px]">
                               <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
