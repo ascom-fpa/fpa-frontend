@@ -4,6 +4,7 @@ export interface Video {
   id: string
   description: string
   url?: string
+  videoUrl?: string
   embed: string
   createdAt: string
   updatedAt: string

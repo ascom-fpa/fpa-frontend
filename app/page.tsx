@@ -257,7 +257,25 @@ export default function Home() {
                 <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
               </div>
             </div>
-            <VideoSlider perView={7} videos={relevants} width={200} height={300} />
+            <ContentSlider perView={4}>
+              {relevants.map((video) => (
+                <div onClick={() => {
+                  const videoElement = document.getElementById(`video-${video.id}`);
+                  if (videoElement?.requestFullscreen) {
+                    videoElement.requestFullscreen();
+                  }
+                }} className={`cursor-pointer`} key={video.id}>
+                  <div className="relative rounded-xl mx-auto overflow-hidden bg-black">
+                    <video id={`video-${video.id}`} className="w-full h-full object-cover" src={video.videoUrl || ""} controls />
+                    <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
+                      {new Date(video.updatedAt).toLocaleDateString('pt-BR')}
+                    </div>
+                  </div>
+                  {/* <span className='text-black capitalize'>{video.description}</span> */}
+                </div>
+              ))}
+              {/* <VideoSlider perView={7} videos={relevants} width={200} height={300} /> */}
+            </ContentSlider>
           </div>
         </div>
       </section>
