@@ -24,7 +24,7 @@ export default function Page() {
         <main>
             <Header />
 
-            <div className='max-w-[1200px] mx-auto px-4 my-10'>
+            <div className='max-w-[1300px] mx-auto px-4 my-10'>
                 <h1 className="text-6xl font-bold mb-4">Contato</h1>
 
                 <article>

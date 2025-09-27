@@ -97,7 +97,7 @@ export default function WebstoryViewer({ open, onClose, webstory }: Props) {
                       src={webstory.slides[index].imageUrl!}
                       alt={`Slide ${index + 1}`}
                       layout="fill"
-                      objectFit="cover"
+                      objectFit="contain"
                       className="rounded-md"
                       priority
                     />

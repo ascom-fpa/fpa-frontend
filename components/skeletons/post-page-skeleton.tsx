@@ -2,7 +2,7 @@
 
 export default function PostPageSkeleton() {
   return (
-    <div className="max-w-[1200px] mx-auto px-4 my-10 animate-pulse">
+    <div className="max-w-[1300px] mx-auto px-4 my-10 animate-pulse">
       {/* Título */}
       <div className="h-10 bg-gray-300 rounded w-2/3 mb-4" />
 

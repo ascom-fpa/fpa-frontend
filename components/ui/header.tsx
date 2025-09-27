@@ -85,11 +85,11 @@ export default function Header() {
             {/* Header */}
             <header className="bg-[#1C9658] text-white sticky top-0 left-0 z-40">
                 {/* Top bar */}
-                <RespondeAgroDirect />
+                {/* <RespondeAgroDirect /> */}
 
                 {/* Main header */}
                 <div className="py-4 px-4">
-                    <div className="flex justify-between items-center max-w-[1200px] mx-auto">
+                    <div className="flex justify-between items-center max-w-[1300px] mx-auto">
                         <Button
                             variant="ghost"
                             size="sm"
@@ -102,17 +102,19 @@ export default function Header() {
                             <img
                                 src={isScrolled ? "/fpa-pequena.png" : "/fpa-grande.png"}
                                 alt="logo FPA"
-                                className={`${isScrolled ? 'max-w-[140px]':'max-w-[60px]'}`}
+                                className={`${isScrolled ? 'max-w-[140px]' : 'max-w-[60px]'}`}
                             />
                             <link rel="preload" as="image" href="/fpa-pequena.png" />
                             <link rel="preload" as="image" href="/fpa-grande.png" />
                         </Link>
-                        {live.isEnabled && (
+                        {live.isEnabled ?
                             <Link href={live.link} className="flex items-center space-x-2">
                                 <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
                                 <span className="font-medium">AO VIVO</span>
                             </Link>
-                        )}
+                            :
+                            <span className="font-medium"></span>
+                        }
                     </div>
                 </div>
             </header>

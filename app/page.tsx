@@ -32,6 +32,7 @@ import MostViewedSkeleton from '@/components/skeletons/most-viewed-skeleton'
 import VideosSkeleton from '@/components/skeletons/videos-skeleton'
 import TwitterInstagramSkeleton from '@/components/skeletons/twitter-instagram-skeleton'
 import WebstoriesCarouselSkeleton from '@/components/skeletons/webstory-skeleton'
+import Newsletter from '@/components/newsletter'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -43,6 +44,7 @@ export default function Home() {
     ref.current?.appendChild(script);
   }, []);
 
+  const [pautaImage, setPautaImage] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const sliderRef = useRef<HTMLDivElement>(null)
@@ -50,12 +52,12 @@ export default function Home() {
   const {
     fetchBanners, banners, webstories,
     fetchWebStories, fetchRelevants, relevants, fetchPostsFeatured,
-    postsFeature, fetchVideos, videos, fetchMostViewed, mostViewed,
-    fetchPostsCategoryFeatured, postsCategoryFeatured
+    postsFeature, fetchVideos, videos, fetchMostViewed,
+    fetchPostsCategoryFeatured, postsCategoryFeatured,
+    fetchPosts, fetchMagazineUrl, magazineUrl
   } = useContentStore()
 
   const [tweets, setTweets] = useState();
-  const [instagramPosts, setInstagramPosts] = useState([]);
 
   useEffect(() => {
     fetchBanners()
@@ -66,22 +68,23 @@ export default function Home() {
     fetchVideos()
     fetchMostViewed()
     fetchPostsCategoryFeatured()
-    fetchInstagramPosts()
+    fetchPosts()
   }, []);
+
+  useEffect(() => {
+    fetchPauta()
+    fetchMagazineUrl()
+  }, []);
+
+  async function fetchPauta() {
+    getPauta()
+      .then(res => setPautaImage(res.imageUrl!))
+  }
 
   async function fetchTweets() {
     try {
       const tweets = await getRecentTweets("fpagroupecuaria")
       setTweets(tweets)
-    } catch (error) {
-      console.error("Error fetching tweets:", error)
-    }
-  }
-
-  async function fetchInstagramPosts() {
-    try {
-      const instagramPosts = await getInstagramPosts()
-      setInstagramPosts(instagramPosts)
     } catch (error) {
       console.error("Error fetching tweets:", error)
     }
@@ -178,14 +181,12 @@ export default function Home() {
       {/* Main Content Section with Recent News (75%) and Sidebar (25%) */}
       <LastNews />
 
-      <hr className='mx-auto max-w-[80vw]' />
-
       {/* Highlighted Categories Section */}
       {
         postsCategoryFeatured?.categories?.length > 0
-          ? <section className="py-12 px-4 ">
-            <div className="max-w-[1200px] mx-auto">
-              <div className="grid md:grid-cols-3 gap-8">
+          ? <section className="py-20 px-4 ">
+            <div className="max-w-[1300px] mx-auto">
+              <div className="grid md:grid-cols-3 gap-12">
 
                 {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
                   <h2 style={{ color: postCategory?.color }} className={`text-3xl font-bold mb-6 capitalize cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
@@ -194,15 +195,15 @@ export default function Home() {
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
                   <Link className='' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postsCategoryFeatured?.postsByCategory[postCategory?.id][0]?.id}`}>
                     <article className="bg-white rounded-2xl overflow-hidden shadow-md flex self-center cursor-pointer transition-all hover:scale-105 w-fit">
-                      <div className="relative max-w-[540px]">
+                      <div className="relative max-w-[460px]">
                         <img
                           src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
                           alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                          className="md:w-[540px] h-[340px] max-w-[400px] object-cover"
+                          className="h-[320px] max-w-[400px] object-cover"
                         />
                         <div className="absolute inset-0 bg-black opacity-50 flex items-end">
                         </div>
-                        <h3 className="absolute bottom-0 text-white font-semibold text-2xl p-8 leading-tight">
+                        <h3 className="absolute bottom-0 text-white font-semibold text-xl p-8 leading-tight">
                           {postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.postTitle}
                         </h3>
                       </div>
@@ -248,7 +249,7 @@ export default function Home() {
       {relevants.length === 0 ? (
         <FatoEmFocoSkeleton />
       ) : <section id='fato-em-foco' className="py-12 px-4 bg-white">
-        <div className="max-w-[1200px] mx-auto">
+        <div className="max-w-[1300px] mx-auto">
           {/* Minuto FPA */}
           <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -280,7 +281,7 @@ export default function Home() {
         </div>
       </section>
       }
-      <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1200px] mx-auto ">
+      <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1300px] mx-auto ">
         <div className="flex gap-10 lg:flex-nowrap flex-wrap lg:flex-row flex-col-reverse">
           <div className="w-full lg:w-9/12">
             <ColunistasSection />
@@ -295,9 +296,9 @@ export default function Home() {
                       <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                     </div>
                   </div>
-                  <ContentSlider perView={2}>
+                  <ContentSlider perView={1}>
                     {
-                      videos.map(video => <div className='rounded-2xl overflow-hidden' dangerouslySetInnerHTML={{ __html: video.embed }}></div>)
+                      videos.map(video => <div className='rounded-2xl video-wrapper' dangerouslySetInnerHTML={{ __html: video.embed }}></div>)
                     }
                   </ContentSlider>
                   {/* <VideoSlider id="videos" perView={4} videos={videos} /> */}
@@ -307,31 +308,28 @@ export default function Home() {
               ? <WebstoriesCarouselSkeleton />
               : <WebstoriesCarousel webstories={webstories} />}
           </div>
-          {instagramPosts.length == 0
-            ? <TwitterInstagramSkeleton />
-            : <div className="w-full lg:w-3/12 flex flex-col">
-              <InstagramGrid posts={instagramPosts} />
-              <Script strategy="afterInteractive">
-                {`
-           twttr.widgets.createTimeline(
-              {
-                sourceType: "profile",
-              screenName: "TwitterDev"
-               },
-              document.getElementById("twitter-timeline")
-              );
-        `}
-              </Script>
-              <div ref={ref}>
-                <a className="twitter-timeline"
-                  href="https://twitter.com/fpagropecuaria"
-                  data-width="300"
-                  data-height="300"
-                >
-                  Tweets by @fpagropecuaria
-                </a>
+          <div>
+            {/* Newsletter Signup */}
+            <Newsletter />
+
+            {magazineUrl
+              ? <div className='relative'>
+                <div className="absolute z-20 border-[14px] top-0 left-0 w-full bg-transparent border-white h-[460px]"></div>
+                <iframe
+                  src={`https://docs.google.com/gview?url=${encodeURIComponent(magazineUrl)}&embedded=true`}
+                  className='h-[460px] w-full'
+                  frameBorder={0}
+                />
               </div>
-            </div>}
+              : <div className="w-full h-[460px] bg-gray-200 animate-pulse rounded-md" />
+            }
+            <div className="relative flex justify-center">
+              {pautaImage ? <img className='overflow-hidden rounded-2xl lg:w-auto w-full' src={pautaImage} width={435} height={518} /> : <div className="overflow-hidden rounded-2xl lg:w-auto w-full h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
+              <Button className='absolute bottom-20 lg:text-2xl p-2 w-5/6 h-fit whitespace-pre-wrap break-words'>
+                <Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link>
+              </Button>
+            </div>
+          </div>
         </div>
 
       </section>

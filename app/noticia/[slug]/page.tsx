@@ -34,8 +34,8 @@ export default function Page({ params }: PageProps) {
                 !currentPost
                     ? <PostPageSkeleton />
                     : <div>
-                        <div className='max-w-[1200px] mx-auto px-4 my-10'>
-                            <h1 className="text-6xl font-bold mb-4">{currentPost?.postTitle}</h1>
+                        <div className='max-w-[1000px] mx-auto px-4 my-10'>
+                            <h1 className="text-4xl font-bold mb-4">{currentPost?.postTitle}</h1>
 
                             <div className="text-sm text-gray-500 mb-6">
                                 Publicado em {new Date(currentPost?.createdAt || new Date()).toLocaleDateString('pt-BR')} por {`${currentPost?.postAuthor?.firstName} ${currentPost?.postAuthor?.lastName}`}
@@ -63,7 +63,7 @@ export default function Page({ params }: PageProps) {
                             }
 
                         </div>
-                        <LastNews />
+                        <LastNews internalPage category={currentPost.postCategoryId} />
                     </div>
 
             }

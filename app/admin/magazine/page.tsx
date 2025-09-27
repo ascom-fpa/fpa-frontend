@@ -50,7 +50,7 @@ export default function MagazinePage() {
                 <CardContent className="relative flex flex-col gap-4 ">
                     {Boolean(magazineUrl || previewUrl) && (
                         <div className="w-full overflow-auto">
-                            <iframe allowFullScreen src={magazineUrl || previewUrl} width="100%" height="500px" />
+                            <iframe allowFullScreen src={magazineUrl || previewUrl} width="100%" height="460px" />
                             <a
                                 href={magazineUrl || previewUrl}
                                 target="_blank"

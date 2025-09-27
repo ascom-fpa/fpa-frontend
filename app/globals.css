@@ -441,3 +441,8 @@
   --tt-color-highlight-orange-contrast: rgba(233, 126, 37, 0.2);
   --tt-color-highlight-pink-contrast: rgba(220, 76, 145, 0.22);
 }
+
+.video-wrapper iframe {
+  width: 80%;       /* optional */
+  border-radius: 1rem; /* keep rounded corners if needed */
+}

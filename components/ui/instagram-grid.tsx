@@ -23,7 +23,7 @@ export default function InstagramGrid({ posts }: any) {
                             : <img
                                 src={post.media_url}
                                 alt={post.caption?.slice(0, 50) || "Instagram post"}
-                                className="h-full w-full object-contain"
+                                className="w-[140px] object-contain"
                             />
                         }
                     </a>

@@ -11,7 +11,7 @@ export default function PostsFeature({ postsFeature }: any) {
 
   return (
     <section className="py-8 px-4">
-      <div className="max-w-[1200px] mx-auto">
+      <div className="max-w-[1300px] mx-auto">
         <div className="flex gap-6 overflow-x-auto md:overflow-visible">
           {isLoading
             ? Array.from({ length: 3 }).map((_, index) => (
@@ -28,7 +28,7 @@ export default function PostsFeature({ postsFeature }: any) {
                   className={`
                       transition-all duration-500 ease-in-out 
                       flex-shrink-0 
-                         ${isActive ? 'flex-[2_1_0%] max-w-[540px]' : 'flex-[1_1_0%]'}
+                         ${isActive ? 'flex-[2_1_0%] max-w-[460px]' : 'flex-[1_1_0%]'}
                     `}
                   onMouseEnter={() => setActiveIndex(index)}
                 >
