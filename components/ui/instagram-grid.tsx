@@ -9,7 +9,7 @@ export default function InstagramGrid({ posts }: any) {
                 <h3 className=" font-medium text-xl text-center">Instagram FPA</h3>
                 <Instagram className="w-5 h-5" />
             </Link>
-            <div className="flex flex-wrap gap-3 justify-center">
+            <div className="flex flex-wrap gap-4 justify-center">
                 {posts?.map((post: any) => (
                     <a
                         key={post.id}
@@ -23,7 +23,7 @@ export default function InstagramGrid({ posts }: any) {
                             : <img
                                 src={post.media_url}
                                 alt={post.caption?.slice(0, 50) || "Instagram post"}
-                                className="h-full w-36 object-contain"
+                                className="h-full w-full object-contain"
                             />
                         }
                     </a>

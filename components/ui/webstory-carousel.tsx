@@ -4,6 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import WebstoryViewer from "./webstory-viewer"
 import { WebStory } from "@/services/webstories"
+import { ContentSlider } from "./content-slider"
 
 interface IProps {
     webstories: WebStory[]
@@ -22,7 +23,7 @@ export default function WebstoriesCarousel({ webstories }: IProps) {
                     </div>
                 </div>
 
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide">
+                <ContentSlider perView={4}>
                     {webstories.map((story) => (
                         <div
                             key={story.id}
@@ -41,7 +42,8 @@ export default function WebstoriesCarousel({ webstories }: IProps) {
                             <p className="text-xs text-center mt-2 w-[100px] truncate">{story.title}</p>
                         </div>
                     ))}
-                </div>
+                </ContentSlider>
+
             </div>
 
             <WebstoryViewer
