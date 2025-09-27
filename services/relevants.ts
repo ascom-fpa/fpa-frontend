@@ -48,16 +48,55 @@ export const getRelevant = async (id: string): Promise<Relevant> => {
 }
 
 // Create new relevant
-export const createRelevant = async (data: FormData): Promise<Relevant> => {
-  const response = await api.postForm("/relevants", data, {
-    onUploadProgress: (event) => {
-      if (event.total) {
-        const percent = Math.round((event.loaded * 100) / event.total)
-        // if (event.progress! < 1) showToast({ children: `Enviando... ${percent}%`, progress: percent / 100, isLoading: true })
-        // else showToast({ children: `Enviado... ${percent}%`, progress: percent / 100, isLoading: true, })
-      }
+export const createRelevant = async (data: {
+  title: string
+  description?: string
+  videoFile: File
+  coverFile?: File
+}): Promise<Relevant> => {
+  // 1. Get signed URL for video
+  const videoRes = await api.get("/relevants/signed-url", {
+    params: {
+      filename: data.videoFile.name,
+      contentType: data.videoFile.type,
     },
   })
+
+  const { url: videoUrl, key: videoKey } = videoRes.data.data
+  // 2. Upload video directly to R2
+  await fetch(videoUrl, {
+    method: "PUT",
+    headers: { "Content-Type": data.videoFile.type },
+    body: data.videoFile,
+  })
+
+  let coverKey: string | undefined
+  if (data.coverFile) {
+    const coverRes = await api.get("/relevants/signed-url", {
+      params: {
+        filename: data.coverFile.name,
+        contentType: data.coverFile.type,
+      },
+    })
+    const { url: coverUrl, key } = coverRes.data
+
+    await fetch(coverUrl, {
+      method: "PUT",
+      headers: { "Content-Type": data.coverFile.type },
+      body: data.coverFile,
+    })
+
+    coverKey = key
+  }
+
+  // 3. Send metadata to backend
+  const response = await api.post("/relevants", {
+    title: data.title,
+    description: data.description,
+    videoKey,
+    coverKey,
+  })
+
   return response.data
 }
 
