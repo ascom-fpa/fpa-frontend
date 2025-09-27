@@ -28,7 +28,7 @@ export default function Page({ params }: PageProps) {
     return (
         <main>
             <Header />
-            <div style={{ background: currentPost?.postCategory.color }} className="p-5 capitalize text-white text-4xl text-center mt-5 mb-10">{currentPost?.postCategory.name}</div>
+            <div style={{ background: currentPost?.postCategory.color }} className="p-5 capitalize text-white text-3xl text-center mt-5 mb-10">{currentPost?.postCategory.name}</div>
 
             {
                 !currentPost

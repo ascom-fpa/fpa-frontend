@@ -37,7 +37,7 @@ export default function Page({ params }: PageProps) {
         < div className="min-h-screen bg-[#F9F9F9]" >
             <Header />
 
-            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-4xl text-center my-6">{currentCategory?.name || 'Categoria'}</h1>
+            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">{currentCategory?.name || 'Categoria'}</h1>
 
             <div className="max-w-[1200px] mx-auto">
                 {

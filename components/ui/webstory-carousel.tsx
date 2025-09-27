@@ -17,7 +17,7 @@ export default function WebstoriesCarousel({ webstories }: IProps) {
             <div className="space-y-4">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2 className="text-4xl md:text-4xl font-bold text-[#1C9658]">Webstories</h2>
+                        <h2 className="text-3xl md:text-3xl font-bold text-[#1C9658]">Webstories</h2>
                         <p className="text-gray-600">As matérias mais lidas do nosso portal</p>
                     </div>
                 </div>

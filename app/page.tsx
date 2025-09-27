@@ -152,7 +152,7 @@ export default function Home() {
 
         {/* Texto acima das imagens */}
         <div className="relative z-30 flex items-center justify-center h-full text-white text-center px-4">
-          <h1 className="text-4xl md:text-6xl font-bold max-w-4xl leading-tight">
+          <h1 className="text-3xl md:text-6xl font-bold max-w-4xl leading-tight">
             {banners[currentSlide]?.text}
           </h1>
         </div>
@@ -188,7 +188,7 @@ export default function Home() {
               <div className="grid md:grid-cols-3 gap-8">
 
                 {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
-                  <h2 style={{ color: postCategory?.color }} className={`text-3xl font-semibold mb-6 capitalize cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
+                  <h2 style={{ color: postCategory?.color }} className={`text-3xl font-bold mb-6 capitalize cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
 
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
@@ -253,7 +253,7 @@ export default function Home() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-4xl font-bold text-[#1C9658]">Minuto FPA</h2>
+                <h2 className="text-3xl font-bold text-[#1C9658]">Minuto FPA</h2>
                 <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
               </div>
             </div>
@@ -273,7 +273,7 @@ export default function Home() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h2 className="text-4xl font-bold text-[#1C9658]">Vídeos</h2>
+                      <h2 className="text-3xl font-bold text-[#1C9658]">Vídeos</h2>
                       <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                     </div>
                   </div>
