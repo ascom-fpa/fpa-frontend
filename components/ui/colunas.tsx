@@ -28,7 +28,7 @@ const columnists = [
 export default function ColunistasSection() {
     return (
         <section className="py-12 px-4 bg-[#f9f9f9]">
-            <div className="max-w-[1800px] mx-auto">
+            <div className="max-w-[1500px] mx-auto">
                 <h2 className="text-3xl font-bold text-[#15803D]">Colunas</h2>
                 <p className="text-gray-600 mt-1 mb-6">Conheça quem faz nosso Portal acontecer.</p>
 

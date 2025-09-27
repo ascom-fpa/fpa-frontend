@@ -5,12 +5,12 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 export default function FatoEmFocoSkeleton() {
     return (
         <section id='fato-em-foco' className="py-12 px-4 bg-white">
-            <div className="max-w-[1800px] mx-auto">
+            <div className="max-w-[1500px] mx-auto">
                 <div className="space-y-4">
                     {/* Título */}
                     <div className="flex justify-between items-center">
                         <div>
-                            <h2 className="text-5xl font-bold text-[#1C9658]">Fato em Foco</h2>
+                            <h2 className="text-4xl font-bold text-[#1C9658]">Minuto FPA</h2>
                             <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
                         </div>
                     </div>

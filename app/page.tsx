@@ -184,7 +184,7 @@ export default function Home() {
       {
         postsCategoryFeatured?.categories?.length > 0
           ? <section className="py-12 px-4 ">
-            <div className="max-w-[1800px] mx-auto">
+            <div className="max-w-[1500px] mx-auto">
               <div className="grid md:grid-cols-3 gap-8">
 
                 {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
@@ -248,12 +248,12 @@ export default function Home() {
       {relevants.length === 0 ? (
         <FatoEmFocoSkeleton />
       ) : <section id='fato-em-foco' className="py-12 px-4 bg-white">
-        <div className="max-w-[1800px] mx-auto">
-          {/* Fato em Foco */}
+        <div className="max-w-[1500px] mx-auto">
+          {/* Minuto FPA */}
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-5xl font-bold text-[#1C9658]">Fato em Foco</h2>
+                <h2 className="text-4xl font-bold text-[#1C9658]">Minuto FPA</h2>
                 <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
               </div>
             </div>
@@ -262,7 +262,7 @@ export default function Home() {
         </div>
       </section>
       }
-      <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1800px] mx-auto ">
+      <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1500px] mx-auto ">
         <div className="flex gap-20 lg:flex-nowrap flex-wrap lg:flex-row flex-col-reverse">
           <div className="w-full lg:w-9/12">
             <ColunistasSection />
@@ -273,7 +273,7 @@ export default function Home() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h2 className="text-5xl font-bold text-[#1C9658]">Vídeos</h2>
+                      <h2 className="text-4xl font-bold text-[#1C9658]">Vídeos</h2>
                       <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                     </div>
                   </div>

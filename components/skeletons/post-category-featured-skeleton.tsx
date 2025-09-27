@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react"
 export default function PostsCategorySectionSkeleton() {
   return (
     <section className="py-12 px-4">
-      <div className="max-w-[1800px] mx-auto">
+      <div className="max-w-[1500px] mx-auto">
         <div className="grid md:grid-cols-3 gap-8">
           {[...Array(3)].map((_, i) => (
             <div key={i} className="space-y-6 animate-pulse">
