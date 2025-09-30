@@ -17,7 +17,7 @@ export default function PostsFeature({ postsFeature }: any) {
             ? Array.from({ length: 3 }).map((_, index) => (
               <PostsFeatureSkeleton key={index} highlighted={index === 0} />
             ))
-            : postsFeature.slice(0,3).map((article: any, index: number) => {
+            : postsFeature.slice(0, 3).map((article: any, index: number) => {
               const isActive = index === activeIndex
 
               return (
@@ -26,11 +26,13 @@ export default function PostsFeature({ postsFeature }: any) {
                   href={`/noticia/${article.id}`}
                   prefetch
                   className={`
-                      transition-all duration-500 ease-in-out 
-                      flex-shrink-0 
-                         ${isActive ? 'flex-[2_1_0%] max-w-[460px]' : 'flex-[1_1_0%]'}
-                    `}
-                  onMouseEnter={() => setActiveIndex(index)}
+  flex-shrink-0 
+  transition-all duration-500 ease-in-out
+  ${isActive ? 'flex-[2_1_0%] max-w-[500px]' : 'flex-[1_1_0%] max-w-[400px]'}
+`}
+                  onMouseEnter={() => {
+                    setActiveIndex(index)
+                  }}
                 >
                   <article
                     className={`rounded-lg overflow-hidden relative p-4 h-[300px] cursor-pointer flex 

@@ -14,7 +14,7 @@ export default function WebstoriesCarousel({ webstories }: IProps) {
     const [selectedStory, setSelectedStory] = useState<WebStory | null>(null)
 
     return (
-        <section id="webstories" className="py-12">
+        <section id="webstories" className="my-12 bg-white rounded-2xl shadow-md p-4">
             <div className="space-y-4">
                 <div className="flex justify-between items-center">
                     <div>
@@ -39,7 +39,7 @@ export default function WebstoriesCarousel({ webstories }: IProps) {
                                     className="object-cover w-full h-full"
                                 />
                             </div>
-                            <p className="text-xs text-center mt-2 w-[100px] truncate">{story.title}</p>
+                            {/* <p className="text-xs text-center mt-2 w-[100px] truncate">{story.title}</p> */}
                         </div>
                     ))}
                 </ContentSlider>

@@ -445,4 +445,5 @@
 .video-wrapper iframe {
   width: 80%;       /* optional */
   border-radius: 1rem; /* keep rounded corners if needed */
+  height: 400px;
 }

@@ -184,8 +184,8 @@ export default function Home() {
       {/* Highlighted Categories Section */}
       {
         postsCategoryFeatured?.categories?.length > 0
-          ? <section className="py-20 px-4 ">
-            <div className="max-w-[1300px] mx-auto">
+          ? <section className="my-12">
+            <div className="max-w-[1300px] mx-auto bg-white rounded-2xl shadow-md p-4">
               <div className="grid md:grid-cols-3 gap-12">
 
                 {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
@@ -248,8 +248,8 @@ export default function Home() {
 
       {relevants.length === 0 ? (
         <FatoEmFocoSkeleton />
-      ) : <section id='fato-em-foco' className="py-12 px-4 bg-white">
-        <div className="max-w-[1300px] mx-auto">
+      ) : <section id='fato-em-foco' className="py-12 px-4">
+        <div className="max-w-[1300px] mx-auto bg-white 2xl:p-8 p-4 rounded-2xl shadow-md">
           {/* Minuto FPA */}
           <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -287,7 +287,7 @@ export default function Home() {
             <ColunistasSection />
             {videos.length === 0
               ? <VideosSkeleton />
-              : <div className="py-12 " id='videos'>
+              : <div className="my-12 bg-white rounded-2xl shadow-md p-4" id='videos'>
                 {/* Videos */}
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
@@ -317,7 +317,7 @@ export default function Home() {
                 <div className="absolute z-20 border-[14px] top-0 left-0 w-full bg-transparent border-white h-[460px]"></div>
                 <iframe
                   src={`https://docs.google.com/gview?url=${encodeURIComponent(magazineUrl)}&embedded=true`}
-                  className='h-[460px] w-full'
+                  className='h-[400px] w-full'
                   frameBorder={0}
                 />
               </div>
@@ -326,7 +326,8 @@ export default function Home() {
             <div className="relative flex justify-center">
               {pautaImage ? <img className='overflow-hidden rounded-2xl lg:w-auto w-full' src={pautaImage} width={435} height={518} /> : <div className="overflow-hidden rounded-2xl lg:w-auto w-full h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
               <Button className='absolute bottom-20 lg:text-2xl p-2 w-5/6 h-fit whitespace-pre-wrap break-words'>
-                <Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link>
+                {/* <Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link> */}
+                <Link href="https://fpagropecuaria.org.br/credenciamento-fpa/" target='_blank'>Clique aqui para se cadastrar</Link>
               </Button>
             </div>
           </div>

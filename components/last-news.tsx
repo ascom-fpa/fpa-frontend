@@ -60,7 +60,7 @@ export default function LastNews({ category, internalPage }: IProps) {
             <div className={`${internalPage ? `max-w-[1000px]` : `max-w-[1300px]`} mx-auto`}>
                 <div className="flex gap-8 flex-wrap">
                     {/* Recent News - 75% width */}
-                    <div className="flex-1 lg:w-3/4 w-full">
+                    <div className="flex-1 lg:w-3/4 w-full bg-white p-4 rounded-2xl shadow-md" ref={containerRef}>
                         <h2 className="text-3xl font-bold text-[#1C9658] mb-8">Mais Recentes</h2>
 
                         {/* Featured Article */}
@@ -70,7 +70,7 @@ export default function LastNews({ category, internalPage }: IProps) {
                                     <RecentPostCardSkeleton key={index} highlighted={index === 0} />
                                 ))
                                 : newsNoFeatured.slice(0, 5).map((post, index) =>
-                                    <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                                    <Link key={index + post.id} href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
                                         <article className="flex gap-8" key={post.id}>
                                             <img
                                                 src={post.thumbnailUrl || "/placeholder.svg"}
@@ -92,7 +92,7 @@ export default function LastNews({ category, internalPage }: IProps) {
                     {!internalPage && <aside className="lg:w-1/4  space-y-8">
                         {instagramPosts.length == 0
                             ? <TwitterInstagramSkeleton />
-                            : <div className="w-fullflex flex-col">
+                            : <div className="w-full flex flex-col">
                                 <InstagramGrid posts={instagramPosts} />
                                 <Script strategy="afterInteractive">
                                     {`

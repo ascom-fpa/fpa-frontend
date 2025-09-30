@@ -22,7 +22,10 @@ export default function Header() {
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY >= 200); // change threshold if needed
+            let higher = window.scrollY >= 200
+            setTimeout(() => {
+                setIsScrolled(higher); 
+            }, 500);
         };
 
         window.addEventListener("scroll", handleScroll);
