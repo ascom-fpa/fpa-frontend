@@ -70,7 +70,7 @@ export default function LastNews({ category, internalPage }: IProps) {
                                     <RecentPostCardSkeleton key={index} highlighted={index === 0} />
                                 ))
                                 : newsNoFeatured.slice(0, 5).map((post, index) =>
-                                    <Link key={index + post.id} href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                                    <Link key={index + post.id} href={`/noticia/${post.id}`}>
                                         <article className="flex gap-8" key={post.id}>
                                             <img
                                                 src={post.thumbnailUrl || "/placeholder.svg"}
