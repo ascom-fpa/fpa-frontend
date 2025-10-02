@@ -76,7 +76,7 @@ export default function LastNews({ category, internalPage }: IProps) {
                                 ? Array.from({ length: 3 }).map((_, index) => (
                                     <RecentPostCardSkeleton key={index} highlighted={index === 0} />
                                 ))
-                                : newsNoFeatured.slice(0, 5).map((post, index) =>
+                                : newsNoFeatured.slice(0, 6).map((post, index,arr) =>
                                     <Link key={index + post.id} href={`/noticia/${post.id}`}>
                                         <article className="flex lg:flex-row flex-col gap-8" key={post.id}>
                                             <img
@@ -89,7 +89,7 @@ export default function LastNews({ category, internalPage }: IProps) {
                                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{post.postTitle}</h3>
                                             </div>
                                         </article>
-                                        {index != 4 && <hr className="mt-10" />}
+                                        {(index != arr.length -1) && <hr className="mt-10" />}
                                     </Link>
                                 )}
                         </div>
