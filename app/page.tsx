@@ -288,7 +288,7 @@ export default function Home() {
                       <h2 className="text-3xl font-bold text-[#1C9658]">Vídeos</h2>
                     </div>
                   </div>
-                  <ContentSlider perView={1.4}>
+                  <ContentSlider perView={1.4} youtube>
                     {
                       videos.map(video => <div className='rounded-2xl video-wrapper' dangerouslySetInnerHTML={{ __html: video.embed }}></div>)
                     }

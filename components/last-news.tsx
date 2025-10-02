@@ -82,7 +82,7 @@ export default function LastNews({ category, internalPage }: IProps) {
                                             <img
                                                 src={post.thumbnailUrl || "/placeholder.svg"}
                                                 alt={post.postTitle}
-                                                className="lg:min-w-[460px] max-h-[200px] object-cover rounded-lg"
+                                                className="lg:min-w-[460px] h-[280px] object-cover object-top rounded-lg"
                                             />
                                             <div className="flex flex-col gap-4">
                                                 <span className='uppercase text-sm'>{post.postCategory.name}</span>

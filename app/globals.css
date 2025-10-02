@@ -442,6 +442,12 @@
   --tt-color-highlight-pink-contrast: rgba(220, 76, 145, 0.22);
 }
 
+@media screen and (max-width: 640px) {
+  .video-wrapper iframe {
+    width: 100%;
+  }
+  
+}
 .video-wrapper iframe {
   border-radius: 1rem; /* keep rounded corners if needed */
 }
