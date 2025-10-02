@@ -67,7 +67,7 @@ export default function LastNews({ category, internalPage }: IProps) {
             <div className={`${internalPage ? `max-w-[1000px]` : `max-w-[1300px]`} mx-auto`}>
                 <div className="flex gap-8 flex-wrap">
                     {/* Recent News - 75% width */}
-                    <div className="flex-1 lg:w-3/4 w-full bg-white p-4 rounded-2xl shadow-md" ref={containerRef}>
+                    <div className="flex-1 lg:w-3/4 w-full bg-white h-fit p-4 rounded-2xl shadow-md" ref={containerRef}>
                         <h2 className="text-3xl font-bold text-[#1C9658] mb-8">Mais Recentes</h2>
 
                         {/* Featured Article */}
