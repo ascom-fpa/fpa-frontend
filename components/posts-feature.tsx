@@ -37,7 +37,6 @@ export default function PostsFeature({ postsFeature }: any) {
                 >
                   <article
                     className={`rounded-lg overflow-hidden relative px-4 pb-2 h-[300px] cursor-pointer flex 
-                        ${isActive ? 'lg:items-end' : 'lg:items-center'} 
                         hover:scale-105 hover:pb-4 hover:px-8 transition-all duration-300 ease-in-out items-end`}
                   >
                     <Image
@@ -61,7 +60,7 @@ export default function PostsFeature({ postsFeature }: any) {
                       </span>
                       <h3
                         className={`lg:font-bold text-2xl ${isActive ? 'lg:text-white' : 'lg:text-[#3D3D3D]'
-                          } leading-tight font-medium lg:max-w-[300px] text-white`}
+                          } leading-tight font-medium  text-white`}
                       >
                         {article.postTitle}
                       </h3>
