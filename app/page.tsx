@@ -216,7 +216,7 @@ export default function Home() {
                               className="w-[180px] h-[120px] object-cover rounded-2xl flex-shrink-0 "
                             />
                             <div className="flex-1 max-w-[282px]">
-                              <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
+                              {/* <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p> */}
                               <h4 className="text-sm  text-gray-900 leading-tight">{post.postTitle}</h4>
                             </div>
                           </article>
@@ -260,7 +260,7 @@ export default function Home() {
                   }
                 }} className={`cursor-pointer`} key={video.id}>
                   <div className="relative rounded-xl mx-auto overflow-hidden bg-black">
-                    <video id={`video-${video.id}`} className="w-full h-full object-cover" src={video.videoUrl || ""} controls />
+                    <video poster={video?.coverImageUrl} id={`video-${video.id}`} className="w-full h-full object-cover" src={video.videoUrl || ""} controls />
                     <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
                       {new Date(video.updatedAt).toLocaleDateString('pt-BR')}
                     </div>
@@ -301,7 +301,7 @@ export default function Home() {
           </div>
           <div>
             {/* Newsletter Signup */}
-            <Newsletter />
+            {/* <Newsletter /> */}
 
             {magazineUrl
               ? <div className='relative'>

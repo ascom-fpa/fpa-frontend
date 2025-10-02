@@ -107,7 +107,7 @@ export default function WebstoryViewer({ open, onClose, webstory }: Props) {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3, duration: 0.5 }}
-                      className="absolute bottom-6 left-4 right-4 text-white text-[1vw] font-medium bg-black/50 px-4 py-2 rounded-lg"
+                      className="absolute bottom-6 left-4 right-4 text-white lg:text-[1vw] text-xl font-medium bg-black/50 px-4 py-2 rounded-lg"
                     >
                       {webstory.slides[index].text}
                     </motion.div>

@@ -101,7 +101,7 @@ export default function LastNews({ category, internalPage }: IProps) {
                             ? <TwitterInstagramSkeleton />
                             : <div className="w-full flex flex-col">
                                 <InstagramGrid posts={instagramPosts} />
-                                <Script strategy="afterInteractive">
+                                {/* <Script strategy="afterInteractive">
                                     {`
                                     twttr.widgets.createTimeline(
                                         {
@@ -111,7 +111,7 @@ export default function LastNews({ category, internalPage }: IProps) {
                                         document.getElementById("twitter-timeline")
                                         );
                                     `}
-                                </Script>
+                                </Script> */}
                                 <div className="relative flex-col gap-4 flex justify-center mt-4">
                                     {pautaImage ? <img className=' rounded-2xl lg:w-auto w-full' src={pautaImage} /> : <div className="overflow-hidden rounded-2xl lg:w-auto w-full h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
                                     <Link className="bg-primary text-white transition-all hover:scale-105 text-center text-xl p-2 rounded-xl" href="https://fpagropecuaria.org.br/credenciamento-fpa/" target='_blank'>Clique aqui para se cadastrar</Link>

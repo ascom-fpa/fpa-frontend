@@ -29,7 +29,7 @@ export default function WebstoriesCarousel({ webstories }: IProps) {
                             className="flex-shrink-0 "
                         >
                             <div
-                                className="w-[200px] h-[340px] rounded-xl overflow-hidden border-2 border-[#1C9658] cursor-pointer"
+                                className="lg:w-[200px] lg:h-[340px] w-full h-full object-contain rounded-xl overflow-hidden border-2 border-[#1C9658] cursor-pointer"
                                 onClick={() => setSelectedStory(story)}
                             >
                                 <Image
