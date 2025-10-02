@@ -17,18 +17,18 @@ export default function InstagramGrid({ posts }: any) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {/* <iframe
+                        <iframe
                             src={post.permalink + "embed"}
                             className="w-full aspect-[4/5] border-0 rounded-lg"
                             allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                        ></iframe> */}
-                        <blockquote
+                        ></iframe>
+                        {/* <blockquote
                             className="instagram-media"
                             data-instgrm-permalink={post.permalink}
                             data-instgrm-version="14"
                         >
                         </blockquote>
-                        <script async src="//www.instagram.com/embed.js"></script>
+                        <script async src="//www.instagram.com/embed.js"></script> */}
                     </a>
                 ))}
             </div>
