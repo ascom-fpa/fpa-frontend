@@ -186,7 +186,7 @@ export default function Home() {
 
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
-                  <Link className='' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postsCategoryFeatured?.postsByCategory[postCategory?.id][0]?.id}`}>
+                  <Link className='' href={`/noticia/${postsCategoryFeatured?.postsByCategory[postCategory?.id][0]?.id}`}>
                     <article className="bg-white rounded-2xl overflow-hidden shadow-md flex self-center cursor-pointer transition-all hover:scale-105 w-fit">
                       <div className="relative lg:max-w-[460px]">
                         <img
@@ -208,7 +208,7 @@ export default function Home() {
                     {
                       postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post => <>
                         <hr className='mt-6' />
-                        <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                        <Link href={`/noticia/${post.id}`}>
                           <article className={`flex gap-4 items-start cursor-pointer transition-all hover:scale-105`}>
                             <img
                               src={post.thumbnailUrl}

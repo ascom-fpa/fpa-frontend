@@ -50,7 +50,10 @@ export default function Page({ params }: PageProps) {
                             )}
 
                             <article>
-                                {currentPost?.postContent && <ViewPost postContent={currentPost.postContent} />}
+                                {typeof currentPost?.postContent == 'object'
+                                    ? <ViewPost postContent={currentPost.postContent} />
+                                    : <div dangerouslySetInnerHTML={{ __html: currentPost?.postContent || '' }}></div>
+                                }
                             </article>
 
                             {
