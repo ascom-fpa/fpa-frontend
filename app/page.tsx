@@ -44,7 +44,6 @@ export default function Home() {
     ref.current?.appendChild(script);
   }, []);
 
-  const [pautaImage, setPautaImage] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const sliderRef = useRef<HTMLDivElement>(null)
@@ -72,14 +71,8 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetchPauta()
     fetchMagazineUrl()
   }, []);
-
-  async function fetchPauta() {
-    getPauta()
-      .then(res => setPautaImage(res.imageUrl!))
-  }
 
   async function fetchTweets() {
     try {
@@ -189,21 +182,21 @@ export default function Home() {
               <div className="grid md:grid-cols-3 gap-12">
 
                 {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
-                  <h2 style={{ color: postCategory?.color }} className={`text-3xl font-bold mb-6 capitalize cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
+                  <h2 style={{ color: postCategory?.color }} className={`text-3xl font-bold mb-6 cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
 
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
                   <Link className='' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postsCategoryFeatured?.postsByCategory[postCategory?.id][0]?.id}`}>
                     <article className="bg-white rounded-2xl overflow-hidden shadow-md flex self-center cursor-pointer transition-all hover:scale-105 w-fit">
-                      <div className="relative max-w-[460px]">
+                      <div className="relative lg:max-w-[460px]">
                         <img
                           src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
                           alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                          className="h-[320px] max-w-[400px] object-cover"
+                          className="h-[320px] lg:max-w-[400px] object-cover"
                         />
                         <div className="absolute inset-0 bg-black opacity-50 flex items-end">
                         </div>
-                        <h3 className="absolute bottom-0 text-white font-semibold text-xl p-8 leading-tight">
+                        <h3 className="absolute bottom-0 text-white font-semibold text-xl px-4 pb-2 leading-tight">
                           {postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.postTitle}
                         </h3>
                       </div>
@@ -220,7 +213,7 @@ export default function Home() {
                             <img
                               src={post.thumbnailUrl}
                               alt="Audiência pública"
-                              className="w-[180px] h-[120px] object-cover rounded-2xl flex-shrink-0 md:block hidden"
+                              className="w-[180px] h-[120px] object-cover rounded-2xl flex-shrink-0 "
                             />
                             <div className="flex-1 max-w-[282px]">
                               <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
@@ -293,15 +286,13 @@ export default function Home() {
                   <div className="flex justify-between items-center">
                     <div>
                       <h2 className="text-3xl font-bold text-[#1C9658]">Vídeos</h2>
-                      <p className="text-gray-600">As matérias mais lidas em nosos portal</p>
                     </div>
                   </div>
-                  <ContentSlider perView={1}>
+                  <ContentSlider perView={1.4}>
                     {
                       videos.map(video => <div className='rounded-2xl video-wrapper' dangerouslySetInnerHTML={{ __html: video.embed }}></div>)
                     }
                   </ContentSlider>
-                  {/* <VideoSlider id="videos" perView={4} videos={videos} /> */}
                 </div>
               </div>}
             {webstories.length == 0
@@ -314,28 +305,23 @@ export default function Home() {
 
             {magazineUrl
               ? <div className='relative'>
-                <div className="absolute z-20 border-[14px] top-0 left-0 w-full bg-transparent border-white h-[460px]"></div>
-                <iframe
-                  src={`https://docs.google.com/gview?url=${encodeURIComponent(magazineUrl)}&embedded=true`}
-                  className='h-[400px] w-full'
-                  frameBorder={0}
-                />
+                <Link href="/revista" className='cursor-pointer hover:scale-105' target='_blank'>
+                  <div className="absolute z-20 border-[14px] top-0 left-0 w-full bg-transparent border-white h-[460px]"></div>
+                  <iframe
+                    src={`https://docs.google.com/gview?url=${encodeURIComponent(magazineUrl)}&embedded=true`}
+                    className='h-[400px] w-full'
+                    frameBorder={0}
+                  />
+                </Link>
               </div>
               : <div className="w-full h-[460px] bg-gray-200 animate-pulse rounded-md" />
             }
-            <div className="relative flex justify-center">
-              {pautaImage ? <img className='overflow-hidden rounded-2xl lg:w-auto w-full' src={pautaImage} width={435} height={518} /> : <div className="overflow-hidden rounded-2xl lg:w-auto w-full h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
-              <Button className='absolute bottom-20 lg:text-2xl p-2 w-5/6 h-fit whitespace-pre-wrap break-words'>
-                {/* <Link href="https://share.hsforms.com/1HpOPSDwVScyoniT6RSACHAs0gbx" target='_blank'>Clique aqui para se cadastrar</Link> */}
-                <Link href="https://fpagropecuaria.org.br/credenciamento-fpa/" target='_blank'>Clique aqui para se cadastrar</Link>
-              </Button>
-            </div>
           </div>
         </div>
 
-      </section>
+      </section >
       <Footer />
       <ToastContainer position="top-right" autoClose={false} />
-    </div>
+    </div >
   )
 }

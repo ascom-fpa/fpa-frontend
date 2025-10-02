@@ -33,7 +33,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: Video, label: "Web Stories", href: "/admin/webstories", count: totalCounts?.totalWebStories },
     { icon: FolderOpen, label: "Categorias", href: "/admin/categories", count: totalCounts?.totalCategories },
     { icon: Tag, label: "Tags", href: "/admin/tags", count: totalCounts?.totalTags },
-    { icon: FocusIcon, label: "Fato em foco", href: "/admin/relevants", count: totalCounts?.totalRelevants },
+    { icon: FocusIcon, label: "Minuto FPA", href: "/admin/relevants", count: totalCounts?.totalRelevants },
     { icon: Book, label: "Revista FPA", href: "/admin/magazine", count: 1 },
     { icon: UserCircle2, label: "Usuários", href: "/admin/users", count: totalCounts?.totalUsers },
     { icon: Mail, label: "Newsletter", href: "/admin/newsletter" },

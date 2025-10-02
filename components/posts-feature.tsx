@@ -12,7 +12,7 @@ export default function PostsFeature({ postsFeature }: any) {
   return (
     <section className="py-8 px-4">
       <div className="max-w-[1300px] mx-auto">
-        <div className="flex gap-6 overflow-x-auto md:overflow-visible">
+        <div className="flex lg:flex-row flex-col gap-6">
           {isLoading
             ? Array.from({ length: 3 }).map((_, index) => (
               <PostsFeatureSkeleton key={index} highlighted={index === 0} />
@@ -26,52 +26,45 @@ export default function PostsFeature({ postsFeature }: any) {
                   href={`/noticia/${article.id}`}
                   prefetch
                   className={`
-  flex-shrink-0 
-  transition-all duration-500 ease-in-out
-  ${isActive ? 'flex-[2_1_0%] max-w-[500px]' : 'flex-[1_1_0%] max-w-[400px]'}
-`}
+                    flex-shrink-0 
+                    transition-all duration-500 ease-in-out
+                    w-full overflow-hidden rounded-lg
+                    ${isActive ? 'flex-[2_1_0%] lg:max-w-[500px]' : 'flex-[1_1_0%] lg:max-w-[400px]'}
+                  `}
                   onMouseEnter={() => {
                     setActiveIndex(index)
                   }}
                 >
                   <article
-                    className={`rounded-lg overflow-hidden relative p-4 h-[300px] cursor-pointer flex 
-                        ${isActive ? 'items-end' : 'items-center'} 
-                        hover:scale-105 transition-all duration-300 ease-in-out`}
+                    className={`rounded-lg overflow-hidden relative px-4 pb-2 h-[300px] cursor-pointer flex 
+                        ${isActive ? 'lg:items-end' : 'lg:items-center'} 
+                        hover:scale-105 hover:pb-4 hover:px-8 transition-all duration-300 ease-in-out items-end`}
                   >
                     <Image
                       src={article.thumbnailUrl}
                       alt={article.postTitle}
                       fill
-                      className="object-cover transition-opacity duration-500 z-0"
-                      style={{ opacity: isActive ? 1 : 0 }}
+                      className={`object-cover transition-opacity duration-500 z-0 ${isActive ? 'lg:opacity-100' : 'lg:opacity-0'}`}
                       priority={index === 0}
                     />
 
                     <div
-                      className={`absolute w-full h-full top-0 left-0 bg-black ${isActive ? 'opacity-30' : 'opacity-0'
-                        } z-10 transition-opacity duration-500`}
+                      className={`absolute w-full h-full top-0 left-0 bg-black ${isActive ? 'lg:opacity-50' : 'lg:opacity-0'
+                        } z-10 transition-opacity duration-500 opacity-50`}
                     />
 
                     <div className="relative z-20 flex flex-col gap-4">
                       <span
-                        style={{ color: isActive ? '#fff' : article.postCategory.color }}
-                        className="text-sm font-light uppercase"
+                        className={`text-sm font-light uppercase text-white ${isActive ? 'lg:text-white' : `lg:text-[${article.postCategory.color}]`}`}
                       >
                         {article.postCategory.name}
                       </span>
                       <h3
-                        className={`font-bold text-2xl ${isActive ? 'text-white' : 'text-[#3D3D3D]'
-                          } leading-tight  max-w-[400px]`}
+                        className={`lg:font-bold text-2xl ${isActive ? 'lg:text-white' : 'lg:text-[#3D3D3D]'
+                          } leading-tight font-medium lg:max-w-[300px] text-white`}
                       >
                         {article.postTitle}
                       </h3>
-                      <p
-                        className={`${isActive ? 'text-white' : 'text-[#787878]'
-                          } text-sm leading-relaxed  max-w-[300px]`}
-                      >
-                        {article.summary?.slice(0, 100)}...
-                      </p>
                     </div>
                   </article>
                 </Link>

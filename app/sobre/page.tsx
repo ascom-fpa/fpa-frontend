@@ -25,7 +25,7 @@ export default function Page() {
             <Header />
 
             <div className='max-w-[1300px] mx-auto px-4 my-10'>
-                <h1 className="text-6xl font-bold mb-4">Sobre o portal</h1>
+                <h1 className="text-4xl font-bold mb-4">Sobre o portal</h1>
 
                 <article>
                     {Boolean(Object.values(content).length) && <ViewPost postContent={content} />}

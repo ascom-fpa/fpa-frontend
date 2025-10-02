@@ -29,6 +29,7 @@ export default function LastNews({ category, internalPage }: IProps) {
     const containerRef = useRef<HTMLDivElement>(null)
     const [isFullscreen, setIsFullscreen] = useState(false)
     const [instagramPosts, setInstagramPosts] = useState([]);
+    const [pautaImage, setPautaImage] = useState('');
 
     const toggleFullscreen = () => {
         setIsFullscreen(!isFullscreen)
@@ -36,7 +37,13 @@ export default function LastNews({ category, internalPage }: IProps) {
 
     useEffect(() => {
         fetchInstagramPosts()
+        fetchPauta()
     }, []);
+
+    async function fetchPauta() {
+        getPauta()
+            .then(res => setPautaImage(res.imageUrl!))
+    }
 
     async function fetchInstagramPosts() {
         try {
@@ -71,11 +78,11 @@ export default function LastNews({ category, internalPage }: IProps) {
                                 ))
                                 : newsNoFeatured.slice(0, 5).map((post, index) =>
                                     <Link key={index + post.id} href={`/noticia/${post.id}`}>
-                                        <article className="flex gap-8" key={post.id}>
+                                        <article className="flex lg:flex-row flex-col gap-8" key={post.id}>
                                             <img
                                                 src={post.thumbnailUrl || "/placeholder.svg"}
                                                 alt={post.postTitle}
-                                                className="min-w-[460px] max-h-[200px] object-cover rounded-lg"
+                                                className="lg:min-w-[460px] max-h-[200px] object-cover rounded-lg"
                                             />
                                             <div className="flex flex-col gap-4">
                                                 <span className='uppercase text-sm'>{post.postCategory.name}</span>
@@ -105,6 +112,10 @@ export default function LastNews({ category, internalPage }: IProps) {
                                         );
                                     `}
                                 </Script>
+                                <div className="relative flex-col gap-4 flex justify-center mt-4">
+                                    {pautaImage ? <img className=' rounded-2xl lg:w-auto w-full' src={pautaImage} /> : <div className="overflow-hidden rounded-2xl lg:w-auto w-full h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
+                                    <Link className="bg-primary text-white transition-all hover:scale-105 text-center text-xl p-2 rounded-xl" href="https://fpagropecuaria.org.br/credenciamento-fpa/" target='_blank'>Clique aqui para se cadastrar</Link>
+                                </div>
                                 {/* <div ref={ref}>
                                     <a className="twitter-timeline"
                                     href="https://twitter.com/fpagropecuaria"

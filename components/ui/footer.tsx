@@ -19,8 +19,8 @@ export default function Footer() {
             </div>
 
             {/* Linha inferior de navegação */}
-            <div className="container px-4 py-4 flex flex-col md:flex-row items-center justify-center text-sm text-black mt-2">
-                <div className="flex space-x-8 font-semibold justify-between gap-10">
+            <div className="container px-4 py-4 flex flex-col lg:flex-row items-center justify-center text-sm text-black mt-2">
+                <div className="flex space-x-8 font-semibold lg:justify-between justify-center lg:text-start text-center gap-10 lg:flex-row flex-col items-center">
                     <a href='/' className="text-sm font-light hover:font-medium transition-all">Frente Parlamentar da Agropecuária - Todos os Direitos Reservados</a>
                     <a href="/sobre" className="font-light hover:font-medium transition-all">Sobre o Portal</a>
                     <a href="/politica-privacidade-e-termo-de-uso" className="font-light hover:font-medium transition-all">Política de Privacidade & Termo de Uso</a>

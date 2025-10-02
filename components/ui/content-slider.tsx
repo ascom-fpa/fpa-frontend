@@ -14,7 +14,7 @@ export function ContentSlider({ children, perView = 3 }: Props) {
   const [sliderRef, slider] = useKeenSlider<HTMLDivElement>({
     slides: {
       perView,
-      spacing: 8,
+      spacing: 16,
     },
     breakpoints: {
       '(max-width: 1024px)': {
@@ -34,7 +34,7 @@ export function ContentSlider({ children, perView = 3 }: Props) {
   }, [children])
 
   return (
-    <div className="relative">
+    <div className="relative ">
       <div ref={sliderRef} className="keen-slider">
         {children.map((child, index) => (
           <div className="keen-slider__slide" key={index}>

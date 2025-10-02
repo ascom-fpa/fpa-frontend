@@ -9,7 +9,7 @@ export default function InstagramGrid({ posts }: any) {
                 <h3 className=" font-medium text-xl text-center">Instagram FPA</h3>
                 <Instagram className="w-5 h-5" />
             </Link>
-            <div className="flex flex-wrap gap-4 justify-center items-center">
+            <div className="flex lg:flex-wrap lg:flex-row flex-col gap-4 justify-center items-center">
                 {posts?.map((post: any) => (
                     <a
                         key={post.id}
@@ -19,11 +19,11 @@ export default function InstagramGrid({ posts }: any) {
                         className="transition-all hover:scale-105"
                     >
                         {post.media_type == "VIDEO" ?
-                            <video className="w-[140px] h-fit object-contain" src={post.media_url}></video>
+                            <video className="lg:w-[140px] h-fit object-contain" src={post.media_url}></video>
                             : <img
                                 src={post.media_url}
                                 alt={post.caption?.slice(0, 50) || "Instagram post"}
-                                className="w-[140px] object-contain"
+                                className="lg:w-[140px] object-contain"
                             />
                         }
                     </a>
