@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { useContentStore } from "@/lib/content-store";
 import { useEffect, useRef, useState } from "react";
 import { getPauta } from "@/services/pauta";
-import { Maximize2, Minimize2, Share2 } from "lucide-react";
+import { Loader2, } from "lucide-react";
 import { showToast } from "@/utils/show-toast";
 import { RecentPostCardSkeleton, RecentPostRowSkeleton } from "./skeletons/recent-posts-skeleton";
 import { getInstagramPosts } from "@/services/instagram";
@@ -31,6 +31,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
     const [isFullscreen, setIsFullscreen] = useState(false)
     const [instagramPosts, setInstagramPosts] = useState([]);
     const [pautaImage, setPautaImage] = useState('');
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const toggleFullscreen = () => {
         setIsFullscreen(!isFullscreen)
@@ -56,7 +57,14 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
     }
 
     function loadMorePosts() {
-        fetchPosts({ page: postsPagination.page + 1, limit: 5, categoryId: category })
+        setIsLoadingMore(true)
+        try {
+            fetchPosts({ page: postsPagination.page + 1, limit: 5, categoryId: category })
+        } finally {
+            setTimeout(() => {
+                setIsLoadingMore(false)
+            }, 1000);
+        }
     }
 
     async function urlToFile(url: string, filename: string, mimeType: string): Promise<File> {
@@ -66,7 +74,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
     }
 
     return (
-        <section className="py-8 px-4">
+        <section className={`py-8 px-4 ${internalPage ? "mt-24" : ""}`}>
             <div className={`${internalPage ? `max-w-[1000px]` : `max-w-[1300px]`} mx-auto`}>
                 <div className="flex gap-8 flex-wrap">
                     {/* Recent News - 75% width */}
@@ -96,12 +104,20 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                                     </Link>
                                 )}
                         </div>
-                        <button
-                            onClick={loadMorePosts}
-                            className="cursor-pointer bg-primary text-white transition-all hover:scale-105 text-center p-2 rounded-lg mt-4 px-4">
-                            Carregar mais
-                        </button>
-
+                        {!isHome &&
+                            <button
+                                onClick={loadMorePosts}
+                                className="cursor-pointer bg-primary text-white transition-all hover:scale-105 text-center p-2 rounded-lg mt-4 px-4">
+                                {isLoadingMore ? (
+                                    <div className="flex items-center gap-2 justify-center">
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        Carregando...
+                                    </div>
+                                ) : (
+                                    "Carregar mais"
+                                )}
+                            </button>
+                        }
 
                     </div>
                     {/* Sidebar - 25% width */}

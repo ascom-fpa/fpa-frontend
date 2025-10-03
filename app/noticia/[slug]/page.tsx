@@ -5,6 +5,7 @@ import PostPageSkeleton from '@/components/skeletons/post-page-skeleton';
 import Footer from '@/components/ui/footer';
 import Header from '@/components/ui/header';
 import { useContentStore } from '@/lib/content-store';
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 interface PageProps {
@@ -28,7 +29,11 @@ export default function Page({ params }: PageProps) {
     return (
         <main>
             <Header />
-            <div style={{ background: currentPost?.postCategory.color }} className="p-5 text-white text-3xl text-center mt-5 mb-10">{currentPost?.postCategory.name}</div>
+            <div style={{ background: currentPost?.postCategory.color }} className="p-5 text-white text-3xl text-center mt-5 mb-10">
+                <Link href={`/categoria/${currentPost?.postCategory.id}`}>
+                    {currentPost?.postCategory.name}
+                </Link>
+            </div>
 
             {
                 !currentPost
@@ -69,7 +74,7 @@ export default function Page({ params }: PageProps) {
                             }
 
                         </div>
-                        <LastNews internalPage category={currentPost.postCategoryId} />
+                        <LastNews isHome={false} internalPage category={currentPost.postCategoryId} />
                     </div>
 
             }

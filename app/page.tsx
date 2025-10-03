@@ -184,7 +184,7 @@ export default function Home() {
               <div className="grid md:grid-cols-3 gap-12">
 
                 {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
-                  <h2 style={{ color: postCategory?.color }} className={`text-2xl font-semibold mb-6 cursor-pointer transition-all lg:hover:scale-105`}>{postCategory?.name}</h2>
+                  <h2 style={{ color: postCategory?.color }} className={`text-2xl font-semibold mb-6 `}>{postCategory?.name}</h2>
 
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}

@@ -25,9 +25,10 @@ export default function Page({ params }: PageProps) {
 
     useEffect(() => {
         getCategory()
-    }, [pathname]);
+    }, [pathname, params]);
 
     async function getCategory() {
+        console.log(pathname, await params)
         const { slug } = await params
         fetchCategory(slug)
         fetchPosts({ categoryId: slug })
