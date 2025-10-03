@@ -4,11 +4,13 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Trash2, UserPlus } from "lucide-react"
+import { CheckCheck, RefreshCcw, Trash2, UserPlus } from "lucide-react"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { useContentStore } from "@/lib/content-store"
 import axios from "axios"
 import api from "@/services/axios"
+import { showToast } from "@/utils/show-toast"
+import { ToastContainer } from "react-toastify"
 
 enum UserRoleEnum {
     ADMIN = 'ADMIN',
@@ -24,7 +26,7 @@ export default function UsersPage() {
 
     const fetchUsers = async () => {
         try {
-            const { data } = await api.get(`/users`)
+            const { data } = await api.get(`/users/invited?limit=100`)
             setUsers(data.data.users)
         } catch (err) {
             console.error("Erro ao buscar usuários", err)
@@ -41,18 +43,21 @@ export default function UsersPage() {
             await api.post(`/users/invite`, { email, role })
             setEmail("")
             setRole(null)
+            showToast({ children: "Convite enviado com sucesso!" })
             fetchUsers()
         } catch (err) {
+            showToast({ children: "Erro ao enviar convite.", type: "error" })
             console.error("Erro ao convidar usuário", err)
         }
     }
 
-    const handleDelete = async (id: string) => {
+    const handleResendInvite = async (userId: string) => {
         try {
-            await api.delete(`/users/${id}`)
-            fetchUsers()
+            await api.post(`/users/resend-invite/${userId}`)
+            showToast({ children: `Convite reenviado ` })
         } catch (err) {
-            console.error("Erro ao excluir usuário", err)
+            showToast({ children: "Erro ao reenviar convite.", type: "error" })
+            console.error("Erro ao reenviar convite", err)
         }
     }
 
@@ -85,18 +90,19 @@ export default function UsersPage() {
                 </CardFooter>
             </Card>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {users?.map((user) => (
-                    <UserCard key={user.id} user={user} onDelete={() => handleDelete(user.id)} />
+                    <UserCard key={user.id} user={user} onResend={() => handleResendInvite(user.id)} />
                 ))}
             </div>
+            <ToastContainer />
         </div>
     )
 }
 
-function UserCard({ user, onDelete }: { user: any, onDelete: () => void }) {
+function UserCard({ user, onResend }: { user: any, onResend: () => void }) {
     return (
-        <Card className="p-0">
+        <Card className="p-0 overflow-hidden">
             <CardContent className="relative flex flex-col gap-4 p-4">
                 <div>
                     <p className="font-semibold text-sm">{user.email}</p>
@@ -104,23 +110,14 @@ function UserCard({ user, onDelete }: { user: any, onDelete: () => void }) {
                 </div>
             </CardContent>
             <CardFooter className="flex justify-end bg-[rgba(245,245,245)] py-2">
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="destructive">
-                            <Trash2 className="w-4 h-4" />
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Deseja realmente excluir este usuário?</AlertDialogTitle>
-                        </AlertDialogHeader>
-                        <p className="text-sm text-muted-foreground">{user.email}</p>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction onClick={onDelete}>Confirmar</AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                {user.status == "pending"
+                    ? <Button size="sm" variant="link" onClick={onResend}>
+                        <RefreshCcw className="w-4 h-4 mr-1" /> Reenviar convite
+                    </Button>
+                    : <Button disabled size="sm" variant="link" onClick={onResend}>
+                        <CheckCheck className="w-4 h-4 mr-1" /> Usuário ativo
+                    </Button>
+                }
             </CardFooter>
         </Card>
     )
