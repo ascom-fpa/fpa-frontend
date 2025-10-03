@@ -7,6 +7,7 @@ import Link from "next/link";
 import { getLive, UpdateLiveData } from "@/services/live";
 import { useEffect, useState } from "react";
 import { useContentStore } from "@/lib/content-store";
+import SearchToggle from "../search";
 
 export default function Header() {
     const { categories, fetchCategories } = useContentStore()
@@ -24,7 +25,7 @@ export default function Header() {
         const handleScroll = () => {
             let higher = window.scrollY >= 200
             setTimeout(() => {
-                setIsScrolled(higher); 
+                setIsScrolled(higher);
             }, 500);
         };
 
@@ -83,6 +84,9 @@ export default function Header() {
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#webstories" className="block hover:scale-105 transition">Webstories</Link>
                     <Link href="/sobre" className="block hover:scale-105 transition">Sobre</Link>
                     <Link href="/contato" className="block hover:scale-105 transition">Contato</Link>
+                    <div className="md:hidden block">
+                        <SearchToggle />
+                    </div>
                 </nav>
             </aside>
 
@@ -111,14 +115,19 @@ export default function Header() {
                             <link rel="preload" as="image" href="/fpa-pequena.png" />
                             <link rel="preload" as="image" href="/fpa-grande.png" />
                         </Link>
-                        {live.isEnabled ?
-                            <Link href={live.link} className="flex items-center space-x-2">
-                                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                                <span className="font-medium">AO VIVO</span>
-                            </Link>
-                            :
-                            <span className="font-medium"></span>
-                        }
+                        <div className="flex gap-6">
+                            <div className="md:block hidden">
+                                <SearchToggle />
+                            </div>
+                            {live.isEnabled ?
+                                <Link href={live.link} className="flex items-center space-x-2">
+                                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                                    <span className="font-medium">AO VIVO</span>
+                                </Link>
+                                :
+                                <span className="font-medium"></span>
+                            }
+                        </div>
                     </div>
                 </div>
             </header>
