@@ -2,7 +2,7 @@ import { Twitter, Facebook, Instagram } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="text-white pt-6 w-full">
+        <footer className="text-white pt-6 w-full flex flex-col items-center">
             {/* Linha superior com redes sociais */}
             <div className="bg-[#3D3D3D]  w-full flex items-center justify-center border-b border-white/10 py-8">
                 <div className="flex items-center space-x-6">

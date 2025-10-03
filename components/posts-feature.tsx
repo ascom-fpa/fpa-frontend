@@ -36,8 +36,8 @@ export default function PostsFeature({ postsFeature }: any) {
                   }}
                 >
                   <article
-                    className={`rounded-lg overflow-hidden relative px-4 pb-2 h-[300px] cursor-pointer flex 
-                        hover:scale-105 hover:pb-4 hover:px-8 transition-all duration-300 ease-in-out items-end`}
+                    className={`rounded-lg overflow-hidden relative lg:px-4 px-8 pb-2 h-[300px] cursor-pointer flex 
+                        lg:hover:scale-105 lg:hover:pb-4 lg:hover:px-8 transition-all duration-300 ease-in-out items-end`}
                   >
                     <Image
                       src={article.thumbnailUrl}

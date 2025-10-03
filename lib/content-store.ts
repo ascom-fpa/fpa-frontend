@@ -14,6 +14,7 @@ interface ContentState {
 
   // magazine
   magazineUrl: string
+  magazinePreviewUrl: string
   fetchMagazineUrl: () => Promise<void>
   createMagazine: (data: any) => Promise<void>
 
@@ -217,11 +218,12 @@ export const useContentStore = create<ContentState>((set, get) => ({
   summaryLoading: false,
   summary: null,
   summaryError: null,
+  magazinePreviewUrl: "",
 
   fetchMagazineUrl: async () => {
     try {
       const data = await getMagazine()
-      set({ magazineUrl: data.pdfUrl })
+      set({ magazineUrl: data.pdfUrl,magazinePreviewUrl: data.previewUrl })
     } catch (error) {
       console.error('Failed to fetch magazine URL:', error)
     }

@@ -29,7 +29,7 @@ export default function ColunistasSection() {
     return (
         <section className="bg-white rounded-2xl shadow-md p-4">
             <div className="max-w-[1300px] mx-auto">
-                <h2 className="text-3xl font-bold text-[#15803D]">Artigos</h2>
+                <h2 className="text-3xl font-bold text-[#1C9658]">Artigos</h2>
                 <p className="text-gray-600 mt-1 mb-6">Conheça o que pensam os parlamentares da FPA.</p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">

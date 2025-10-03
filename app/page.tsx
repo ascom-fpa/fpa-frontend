@@ -5,7 +5,7 @@ import 'swiper/css/navigation'
 import type React from "react"
 
 import { useEffect, useRef, useState } from "react"
-import { ArrowRight, ChevronLeft, ChevronRight, Menu, MessageSquare, Search, Share2 } from "lucide-react"
+import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink, Menu, MessageSquare, Search, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useContentStore } from "@/lib/content-store"
 import Footer from '@/components/ui/footer'
@@ -53,7 +53,7 @@ export default function Home() {
     fetchWebStories, fetchRelevants, relevants, fetchPostsFeatured,
     postsFeature, fetchVideos, videos, fetchMostViewed,
     fetchPostsCategoryFeatured, postsCategoryFeatured,
-    fetchPosts, fetchMagazineUrl, magazineUrl
+    fetchPosts, fetchMagazineUrl, magazineUrl, magazinePreviewUrl
   } = useContentStore()
 
   const [tweets, setTweets] = useState();
@@ -147,7 +147,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black opacity-50 z-20" />
 
         {/* Texto acima das imagens */}
-        <div className="relative z-30 flex items-center justify-center h-full text-white text-center px-4">
+        <div className="relative z-30 flex items-center justify-center h-full text-white text-center lg:px-4 px-[60px]">
           <h1 className="text-3xl md:text-6xl font-bold max-w-4xl leading-tight">
             {banners[currentSlide]?.text}
           </h1>
@@ -178,16 +178,16 @@ export default function Home() {
       {
         postsCategoryFeatured?.categories?.length > 0
           ? <section className="my-12">
-            <div className="max-w-[1300px] mx-auto bg-white rounded-2xl shadow-md p-4">
+            <div className="max-w-[1300px] lg:mx-auto bg-white rounded-2xl shadow-md p-4 mx-4">
               <div className="grid md:grid-cols-3 gap-12">
 
                 {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
-                  <h2 style={{ color: postCategory?.color }} className={`text-3xl font-bold mb-6 cursor-pointer transition-all hover:scale-105`}>{postCategory?.name}</h2>
+                  <h2 style={{ color: postCategory?.color }} className={`text-2xl font-semibold mb-6 cursor-pointer transition-all lg:hover:scale-105`}>{postCategory?.name}</h2>
 
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
                   <Link className='' href={`/noticia/${postsCategoryFeatured?.postsByCategory[postCategory?.id][0]?.id}`}>
-                    <article className="bg-white rounded-2xl overflow-hidden shadow-md flex self-center cursor-pointer transition-all hover:scale-105 w-fit">
+                    <article className="bg-white rounded-2xl overflow-hidden shadow-md flex self-center cursor-pointer transition-all lg:hover:scale-105 w-fit">
                       <div className="relative lg:max-w-[460px]">
                         <img
                           src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
@@ -209,7 +209,7 @@ export default function Home() {
                       postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post => <>
                         <hr className='mt-6' />
                         <Link href={`/noticia/${post.id}`}>
-                          <article className={`flex gap-4 items-start cursor-pointer transition-all hover:scale-105`}>
+                          <article className={`flex gap-4 items-start cursor-pointer transition-all lg:hover:scale-105`}>
                             <img
                               src={post.thumbnailUrl}
                               alt="Audiência pública"
@@ -226,7 +226,7 @@ export default function Home() {
                     }
                   </div>
 
-                  <Link style={{ color: postCategory.color }} className='flex gap-2' href={`${process.env.NEXT_PUBLIC_FRONT_URL}/categoria/${postCategory.id}`}>
+                  <Link style={{ color: postCategory.color }} className='flex gap-2' href={`/categoria/${postCategory.id}`}>
                     <span>Ver mais em {postCategory.name}</span>
                     <ArrowRight className='w-4' />
                   </Link>
@@ -241,7 +241,7 @@ export default function Home() {
 
       {relevants.length === 0 ? (
         <FatoEmFocoSkeleton />
-      ) : <section id='fato-em-foco' className="py-12 px-4">
+      ) : <section id='fato-em-foco' className="lg:py-12 pb-10 px-4">
         <div className="max-w-[1300px] mx-auto bg-white 2xl:p-8 p-4 rounded-2xl shadow-md">
           {/* Minuto FPA */}
           <div className="space-y-4">
@@ -253,12 +253,7 @@ export default function Home() {
             </div>
             <ContentSlider perView={4}>
               {relevants.map((video) => (
-                <div onClick={() => {
-                  const videoElement = document.getElementById(`video-${video.id}`);
-                  if (videoElement?.requestFullscreen) {
-                    videoElement.requestFullscreen();
-                  }
-                }} className={`cursor-pointer`} key={video.id}>
+                <div className={`cursor-pointer`} key={video.id}>
                   <div className="relative rounded-xl mx-auto overflow-hidden bg-black">
                     <video poster={video?.coverImageUrl} id={`video-${video.id}`} className="w-full h-full object-cover" src={video.videoUrl || ""} controls />
                     <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
@@ -303,17 +298,8 @@ export default function Home() {
             {/* Newsletter Signup */}
             {/* <Newsletter /> */}
 
-            {magazineUrl
-              ? <div className='relative'>
-                <Link href="/revista" className='cursor-pointer hover:scale-105' target='_blank'>
-                  <div className="absolute z-20 border-[14px] top-0 left-0 w-full bg-transparent border-white h-[460px]"></div>
-                  <iframe
-                    src={`https://docs.google.com/gview?url=${encodeURIComponent(magazineUrl)}&embedded=true`}
-                    className='h-[400px] w-full'
-                    frameBorder={0}
-                  />
-                </Link>
-              </div>
+            {magazinePreviewUrl
+              ? <MagazinePreview magazineUrl={magazinePreviewUrl} />
               : <div className="w-full h-[460px] bg-gray-200 animate-pulse rounded-md" />
             }
           </div>
@@ -324,4 +310,32 @@ export default function Home() {
       <ToastContainer position="top-right" autoClose={false} />
     </div >
   )
+}
+
+
+function MagazinePreview({ magazineUrl }: { magazineUrl: string }) {
+  return (
+    <div className="relative group w-full max-w-3xl mx-auto">
+      {/* Container com sombra e borda arredondada */}
+      <div className="relative overflow-hidden rounded-2xl shadow-lg border border-gray-200">
+        {/* PDF preview */}
+        <img src={magazineUrl} className='w-full' alt="" />
+
+        {/* Overlay ao hover */}
+        <Link
+          href="/revista" target="_blank" className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+
+          <div className="px-4 py-2 bg-white text-gray-800 font-medium rounded-full shadow flex items-center gap-2 hover:bg-gray-100 transition">
+            Abrir Revista
+            <ExternalLink className="w-4 h-4" />
+          </div>
+        </Link>
+        <div className="my-3 text-center">
+          <p className="text-lg font-semibold text-[#1C9658]">Revista FPA</p>
+        </div>
+      </div>
+
+      {/* Legenda / título */}
+    </div >
+  );
 }

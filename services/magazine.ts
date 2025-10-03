@@ -3,6 +3,7 @@ import api from "./axios"
 export interface Magazine {
   id: string
   pdfUrl?: string
+  previewUrl?: string
 }
 
 export interface CreateMagazineData {

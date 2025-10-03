@@ -18,9 +18,10 @@ import Script from "next/script";
 interface IProps {
     category?: string
     internalPage?: boolean
+    isHome?: boolean
 }
 
-export default function LastNews({ category, internalPage }: IProps) {
+export default function LastNews({ category, internalPage, isHome = true }: IProps) {
     const { posts } = useContentStore()
     const isLoading = !posts || posts.length === 0
 
@@ -76,20 +77,20 @@ export default function LastNews({ category, internalPage }: IProps) {
                                 ? Array.from({ length: 3 }).map((_, index) => (
                                     <RecentPostCardSkeleton key={index} highlighted={index === 0} />
                                 ))
-                                : newsNoFeatured.slice(0, 6).map((post, index,arr) =>
+                                : newsNoFeatured.slice(isHome ? 0 : 4, isHome ? 6 : 10).map((post, index, arr) =>
                                     <Link key={index + post.id} href={`/noticia/${post.id}`}>
                                         <article className="flex lg:flex-row flex-col gap-8" key={post.id}>
                                             <img
                                                 src={post.thumbnailUrl || "/placeholder.svg"}
                                                 alt={post.postTitle}
-                                                className="lg:min-w-[460px] h-[280px] object-cover object-top rounded-lg"
+                                                className="lg:w-[460px] rounded-lg"
                                             />
                                             <div className="flex flex-col gap-4">
                                                 <span className='uppercase text-sm'>{post.postCategory.name}</span>
-                                                <h3 className="text-2xl font-bold text-gray-900 mb-2">{post.postTitle}</h3>
+                                                <h3 className="text-2xl font-semibold text-gray-900 mb-2">{post.postTitle}</h3>
                                             </div>
                                         </article>
-                                        {(index != arr.length -1) && <hr className="mt-10" />}
+                                        {(index != arr.length - 1) && <hr className="mt-10" />}
                                     </Link>
                                 )}
                         </div>
@@ -114,7 +115,7 @@ export default function LastNews({ category, internalPage }: IProps) {
                                 </Script> */}
                                 <div className="relative flex-col gap-4 flex justify-center mt-4">
                                     {pautaImage ? <img className=' rounded-2xl lg:w-auto w-full' src={pautaImage} /> : <div className="overflow-hidden rounded-2xl lg:w-auto w-full h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
-                                    <Link className="bg-primary text-white transition-all hover:scale-105 text-center text-xl p-2 rounded-xl" href="https://fpagropecuaria.org.br/credenciamento-fpa/" target='_blank'>Clique aqui para se cadastrar</Link>
+                                    <Link className="bg-primary text-white transition-all hover:scale-105 text-center text-xl p-2 rounded-xl" href="/credenciamento" target='_blank'>Clique aqui para se cadastrar</Link>
                                 </div>
                                 {/* <div ref={ref}>
                                     <a className="twitter-timeline"

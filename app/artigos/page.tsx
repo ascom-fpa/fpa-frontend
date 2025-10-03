@@ -8,36 +8,22 @@ import { useContentStore } from "@/lib/content-store";
 import { showToast } from "@/utils/show-toast";
 import { Share2 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-interface PageProps {
-    params: {
-        slug: string;
-    };
-}
-
-export default function Page({ params }: PageProps) {
-    const pathname = usePathname()
-
+export default function Page() {
     const { fetchPosts, posts, fetchCategory, currentCategory } = useContentStore()
     const newsNoFeatured = posts.filter(post => !post.isFeatured)
 
     useEffect(() => {
-        getCategory()
-    }, [pathname]);
+        fetchPosts({ categoryId: "articles" })
+    }, []);
 
-    async function getCategory() {
-        const { slug } = await params
-        fetchCategory(slug)
-        fetchPosts({ categoryId: slug })
-    }
 
     return (
         < div className="min-h-screen bg-[#F9F9F9]" >
             <Header />
 
-            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">{currentCategory?.name || 'Categoria'}</h1>
+            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">Artigos</h1>
 
             <div className="max-w-[1300px] lg:mx-auto">
                 {
@@ -101,7 +87,7 @@ export default function Page({ params }: PageProps) {
                         </div>
                 }
 
-                <LastNews isHome={false} category={currentCategory?.id} />
+                <LastNews isHome={false} />
             </div>
             <Footer />
         </div >

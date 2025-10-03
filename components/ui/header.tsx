@@ -59,14 +59,14 @@ export default function Header() {
                     </Button>
                 </div>
 
-                <nav className="p-4 space-y-4">
+                <nav className="p-4 space-y-4 mt-4">
                     {/* Categorias com submenu */}
                     <div className="space-y-2">
                         <button
                             onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
                             className="cursor-pointer flex items-center justify-between w-full hover:scale-105 transition"
                         >
-                            <span>Categorias</span>
+                            <span className="font-semibold">Categorias</span>
                             {isCategoriesOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                         </button>
                         <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isCategoriesOpen ? 'max-h-96' : 'max-h-0'}`}>
@@ -76,6 +76,7 @@ export default function Header() {
                             </ul>
                         </div>
                     </div>
+                    <Link onClick={() => setIsSidebarOpen(false)} href="/artigos" className="block hover:scale-105 transition">Artigos</Link>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#mais-lidas" className="block hover:scale-105 transition">Mais lidas</Link>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#fato-em-foco" className="block hover:scale-105 transition">Minuto FPA</Link>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#videos" className="block hover:scale-105 transition">Vídeos</Link>
@@ -86,7 +87,7 @@ export default function Header() {
             </aside>
 
             {/* Header */}
-            <header className="bg-[#1C9658] text-white sticky top-0 left-0 z-40">
+            <header className="bg-[#1C9658] text-white sticky top-0 left-0 z-[999999999]">
                 {/* Top bar */}
                 {/* <RespondeAgroDirect /> */}
 
