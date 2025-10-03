@@ -44,7 +44,7 @@ export default function Page({ params }: PageProps) {
                         : <div className="flex gap-10 lg:flex-nowrap flex-wrap px-5">
                             <div className="w-full lg:w-8/12">
                                 {posts[0] &&
-                                    <Link className="text-3xl font-semibold text-gray-900 mb-2 leading-tight " href={`/noticia/${posts[0].id}`}>
+                                    <Link className="text-3xl font-semibold text-gray-900 mb-2 leading-tight " href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${posts[0].id}`}>
                                         <article className="relative flex items-center justify-center group overflow-hidden lg:rounded-2xl ">
                                             <div className="absolute top-0 left-0 w-full h-full bg-black rounded-2xl opacity-30 z-10"></div>
                                             <img className="w-full lg:h-auto h-[400px] lg:object-contain object-cover lg:rounded-2xl lg:group-hover:scale-120 transition-all" src={posts[0].thumbnailUrl} />
