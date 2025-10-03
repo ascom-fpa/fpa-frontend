@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { FileText, ImageIcon, Video, Tag, FolderOpen, BarChart3, Settings, LogOut, Menu, Search, Plus, UserCircle2, FocusIcon, ChevronsLeft, ChevronsRight, VideoIcon, Book, Mail, BookDashed, Videotape, BookText, Contact, Handshake, User2Icon } from "lucide-react"
+import { FileText, ImageIcon, Video, Tag, FolderOpen, BarChart3, Settings, LogOut, Menu, Search, Plus, UserCircle2, FocusIcon, ChevronsLeft, ChevronsRight, VideoIcon, Book, Mail, BookDashed, Videotape, BookText, Contact, Handshake, User2Icon, MailOpen } from "lucide-react"
 import { useContentStore } from "@/lib/content-store"
 
 interface DashboardLayoutProps {
@@ -39,6 +39,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: User2Icon, label: "Parlamentares", href: "/admin/authors", },
     { icon: Mail, label: "Newsletter", href: "/admin/newsletter" },
     { icon: BookDashed, label: "Aviso de Pauta", href: "/admin/pauta" },
+    { icon: MailOpen, label: "Convidar usuários", href: "/admin/users/invite" },
     { icon: Videotape, label: "Ao vivo", href: "/admin/live" },
     { icon: BookText, label: "Sobre", href: "/admin/sobre" },
     { icon: Contact, label: "Contato", href: "/admin/contato" },
