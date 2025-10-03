@@ -1,52 +1,37 @@
-const columnists = [
-    {
-        id: 1,
-        name: 'Adriana da Silva',
-        image: '/coluna1.png',
-        description: 'Aqui vai ficar uma das matérias de destaque do colunista de maneira simples',
-    },
-    {
-        id: 2,
-        name: 'João Pereira',
-        image: '/coluna2.png',
-        description: 'Aqui vai ficar uma das matérias de destaque do colunista de maneira simples',
-    },
-    {
-        id: 3,
-        name: 'Adriana da Silva',
-        image: '/coluna3.png',
-        description: 'Aqui vai ficar uma das matérias de destaque do colunista de maneira simples',
-    },
-    {
-        id: 4,
-        name: 'João Pereira',
-        image: '/coluna4.png',
-        description: 'Aqui vai ficar uma das matérias de destaque do colunista de maneira simples',
-    },
-]
+import { useContentStore } from "@/lib/content-store"
+import { useEffect } from "react";
+import { ContentSlider } from "./content-slider";
+import Link from "next/link";
 
 export default function ColunistasSection() {
+
+    const { fetchAuthors, authors } = useContentStore()
+
+    useEffect(() => {
+        fetchAuthors()
+    }, []);
+
     return (
         <section className="bg-white rounded-2xl shadow-md p-4">
             <div className="max-w-[1300px] mx-auto">
                 <h2 className="text-3xl font-bold text-[#1C9658]">Artigos</h2>
                 <p className="text-gray-600 mt-1 mb-6">Conheça o que pensam os parlamentares da FPA.</p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-                    {columnists.map((colunista) => (
-                        <div key={colunista.id} className="flex flex-col items-start space-y-2">
+                <ContentSlider perView={4}>
+                    {authors.map((author) => (
+                        <Link href={`/artigos/${author.id}`} key={author.id} className="flex flex-col items-start space-y-2">
                             <div className="flex gap-2 items-center">
                                 <img
-                                    src={colunista.image}
-                                    alt={colunista.name}
-                                    className="w-16 h-16 rounded-lg object-cover"
+                                    src={author.photoUrl}
+                                    alt={author.name}
+                                    className="w-24 h-24 rounded-lg object-cover"
                                 />
-                                <h3 className="font-semibold text-gray-800">{colunista.name}</h3>
+                                <h3 className="font-semibold text-gray-800">{author.name}</h3>
                             </div>
-                            <p className="text-sm text-gray-500">{colunista.description}</p>
-                        </div>
+                        </Link>
                     ))}
-                </div>
+                </ContentSlider>
+
             </div>
         </section>
     )

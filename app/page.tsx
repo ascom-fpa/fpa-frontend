@@ -269,7 +269,7 @@ export default function Home() {
         </div>
       </section>
       }
-      <section id='mais-lidas' className="px-4 bg-gray-50 max-w-[1300px] mx-auto ">
+      <section id="artigos" className="px-4 bg-gray-50 max-w-[1300px] mx-auto ">
         <div className="flex gap-10 lg:flex-nowrap flex-wrap lg:flex-row flex-col-reverse">
           <div className="w-full lg:w-9/12">
             <ColunistasSection />

@@ -10,7 +10,7 @@ export default function PostsFeature({ postsFeature }: any) {
   const isLoading = !postsFeature || postsFeature.length === 0
 
   return (
-    <section className="py-8 px-4">
+    <section id='mais-lidas' className="py-8 px-4">
       <div className="max-w-[1300px] mx-auto">
         <div className="flex lg:flex-row flex-col gap-6">
           {isLoading

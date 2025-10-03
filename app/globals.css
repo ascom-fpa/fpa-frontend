@@ -451,3 +451,7 @@
 .video-wrapper iframe {
   border-radius: 1rem; /* keep rounded corners if needed */
 }
+
+html {
+  scroll-behavior: smooth;
+}

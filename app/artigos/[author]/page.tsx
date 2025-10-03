@@ -8,41 +8,53 @@ import { useContentStore } from "@/lib/content-store";
 import { showToast } from "@/utils/show-toast";
 import { Share2 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-export default function Page() {
-    const { fetchPosts, posts, fetchCategory, currentCategory } = useContentStore()
-    const newsNoFeatured = posts.filter(post => !post.isFeatured)
+interface PageProps {
+    params: {
+        author: string;
+    };
+}
+
+export default function Page({ params }: PageProps) {
+    const pathname = usePathname()
+    const { fetchPosts, posts, currentCategory, authors, fetchAuthors } = useContentStore()
 
     useEffect(() => {
-        fetchPosts({ categoryId: "articles" })
-    }, []);
+        getPosts()
+    }, [pathname]);
 
+    async function getPosts() {
+        const { author } = params
+        fetchPosts({ categoryId: "articles", authorId: author })
+        fetchAuthors()
+    }
 
     return (
         < div className="min-h-screen bg-[#F9F9F9]" >
             <Header />
 
-            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">Artigos</h1>
+            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">Artigos {authors.find(el => el.id == params.author)?.name}</h1>
 
             <div className="max-w-[1300px] lg:mx-auto">
                 {
-                    !newsNoFeatured.length
+                    !posts.length
                         ? <FeaturedNewsSectionSkeleton />
-                        : <div className="flex gap-10 lg:flex-nowrap flex-wrap">
+                        : <div className="flex gap-10 lg:flex-nowrap flex-wrap px-5">
                             <div className="w-full lg:w-8/12">
-                                {newsNoFeatured[0] &&
-                                    <Link className="text-3xl font-semibold text-gray-900 mb-2 leading-tight " href={`/noticia/${newsNoFeatured[0].id}`}>
+                                {posts[0] &&
+                                    <Link className="text-3xl font-semibold text-gray-900 mb-2 leading-tight " href={`/noticia/${posts[0].id}`}>
                                         <article className="relative flex items-center justify-center group overflow-hidden lg:rounded-2xl ">
                                             <div className="absolute top-0 left-0 w-full h-full bg-black rounded-2xl opacity-30 z-10"></div>
-                                            <img className="w-full lg:h-auto h-[400px] lg:object-contain object-cover lg:rounded-2xl lg:group-hover:scale-120 transition-all" src={newsNoFeatured[0].thumbnailUrl} />
-                                            <h2 className="absolute m-10 text-white text-center font-semibold text-3xl z-20">{newsNoFeatured[0].postTitle}</h2>
+                                            <img className="w-full lg:h-auto h-[400px] lg:object-contain object-cover lg:rounded-2xl lg:group-hover:scale-120 transition-all" src={posts[0].thumbnailUrl} />
+                                            <h2 className="absolute m-10 text-white text-center font-semibold text-3xl z-20">{posts[0].postTitle}</h2>
                                         </article>
                                     </Link>
                                 }
                             </div>
                             <div className="w-full lg:w-4/12 flex flex-col gap-10 lg:mx-auto  mx-4">
-                                {newsNoFeatured.slice(1, 4).map((post) => (
+                                {posts.slice(1, 4).map((post) => (
                                     <article key={post.id} className="flex items-start gap-4 pb-6 border-b border-gray-200">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-10 mb-2">

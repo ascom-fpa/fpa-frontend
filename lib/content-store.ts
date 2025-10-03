@@ -1,6 +1,7 @@
 import { create } from "zustand"
 import * as postsService from "@/services/posts"
 import * as bannersService from "@/services/banners"
+import * as authorsService from "@/services/authors"
 import * as videosService from "@/services/videos"
 import * as webstoriesService from "@/services/webstories"
 import * as categoriesService from "@/services/categories"
@@ -37,6 +38,11 @@ interface ContentState {
   banners: bannersService.Banner[]
   bannersLoading: boolean
   bannersError: string | null
+
+  // Banners state
+  authors: authorsService.Author[]
+  authorsLoading: boolean
+  authorsError: string | null
 
   // Videos state
   videos: videosService.Video[]
@@ -105,6 +111,11 @@ interface ContentState {
   pushCurrentPostFiles: (file: File) => void
   incrementView: (id: string) => Promise<void>
   fetchMostViewed: () => Promise<void>
+
+  // Authors actions
+  fetchAuthors: () => Promise<void>
+  createAuthor: (data: FormData) => Promise<void>
+  deleteAuthor: (id: string) => Promise<void>
 
   // Banners actions
   fetchBanners: () => Promise<void>
@@ -189,6 +200,10 @@ export const useContentStore = create<ContentState>((set, get) => ({
   bannersLoading: false,
   bannersError: null,
 
+  authors: [],
+  authorsLoading: false,
+  authorsError: null,
+
   videos: [],
   videosLoading: false,
   videosError: null,
@@ -223,7 +238,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
   fetchMagazineUrl: async () => {
     try {
       const data = await getMagazine()
-      set({ magazineUrl: data.pdfUrl,magazinePreviewUrl: data.previewUrl })
+      set({ magazineUrl: data.pdfUrl, magazinePreviewUrl: data.previewUrl })
     } catch (error) {
       console.error('Failed to fetch magazine URL:', error)
     }
@@ -460,6 +475,55 @@ export const useContentStore = create<ContentState>((set, get) => ({
   pushCurrentPostFiles: (file: File) => {
     set(state => ({ currentPostFiles: [...state.currentPostFiles, file] }))
   },
+
+  // Authors actions
+  fetchAuthors: async () => {
+    set({ authorsLoading: true, authorsError: null })
+    try {
+      const authors = await authorsService.getAuthors()
+      set({ authors, authorsLoading: false })
+    } catch (error: any) {
+      set({
+        authorsLoading: false,
+        authorsError: error.response?.data?.message || "Failed to fetch authors",
+      })
+    }
+  },
+
+  deleteAuthor: async (id: string) => {
+    set({ authorsLoading: true, authorsError: null })
+    try {
+      await authorsService.deleteAuthor(id)
+      set((state) => ({
+        authors: state.authors.filter((author) => author.id !== id),
+        authorsLoading: false,
+      }))
+    } catch (error: any) {
+      set({
+        authorsLoading: false,
+        authorsError: error.response?.data?.message || "Failed to delete author",
+      })
+      throw error
+    }
+  },
+
+  createAuthor: async (data) => {
+    set({ authorsLoading: true, authorsError: null })
+    try {
+      const newAuthor = await authorsService.createAuthor(data)
+      set((state) => ({
+        authors: [...state.authors, newAuthor],
+        authorsLoading: false,
+      }))
+    } catch (error: any) {
+      set({
+        authorsLoading: false,
+        authorsError: error.response?.data?.message || "Failed to create author",
+      })
+      throw error
+    }
+  },
+
 
   // Banners actions
   fetchBanners: async () => {

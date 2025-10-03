@@ -38,7 +38,7 @@ export default function Page({ params }: PageProps) {
                             <h1 className="text-3xl font-semibold mb-4">{currentPost?.postTitle}</h1>
 
                             <div className="text-sm text-gray-500 mb-6">
-                                Publicado em {new Date(currentPost?.createdAt || new Date()).toLocaleDateString('pt-BR')} por {`${currentPost?.postAuthor?.firstName} ${currentPost?.postAuthor?.lastName}`}
+                                Publicado em {new Date(currentPost?.createdAt || new Date()).toLocaleDateString('pt-BR')}
                             </div>
 
                             {(

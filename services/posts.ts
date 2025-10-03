@@ -58,6 +58,7 @@ export interface IPostParam {
   limit?: number
   status?: string
   categoryId?: string
+  authorId?: string
   search?: string
 }
 
