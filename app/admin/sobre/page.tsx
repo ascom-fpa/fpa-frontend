@@ -96,7 +96,7 @@ export default function Page() {
                     <TipTapEditor editor={editor} />
                 </CardContent>
                 <CardFooter className="flex justify-end fixed z-20">
-                    <Button onClick={handleUpload} disabled={!content}>
+                    <Button onClick={handleUpload} >
                         <UploadCloud className="mr-2 h-4 w-4" /> Atualizar página
                     </Button>
                 </CardFooter>
