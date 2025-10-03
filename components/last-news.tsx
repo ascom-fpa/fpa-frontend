@@ -22,10 +22,10 @@ interface IProps {
 }
 
 export default function LastNews({ category, internalPage, isHome = true }: IProps) {
-    const { posts } = useContentStore()
+    const { posts, fetchPosts, postsPagination } = useContentStore()
     const isLoading = !posts || posts.length === 0
 
-    const newsNoFeatured = posts.filter(post => !post.isFeatured)
+    const newsNoFeatured = isHome ? posts.filter(post => !post.isFeatured) : posts
 
     const containerRef = useRef<HTMLDivElement>(null)
     const [isFullscreen, setIsFullscreen] = useState(false)
@@ -55,7 +55,9 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
         }
     }
 
-
+    function loadMorePosts() {
+        fetchPosts({ page: postsPagination.page + 1, limit: 5, categoryId: category })
+    }
 
     async function urlToFile(url: string, filename: string, mimeType: string): Promise<File> {
         const response = await fetch(url)
@@ -77,7 +79,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                                 ? Array.from({ length: 3 }).map((_, index) => (
                                     <RecentPostCardSkeleton key={index} highlighted={index === 0} />
                                 ))
-                                : newsNoFeatured.slice(isHome ? 0 : 4, isHome ? 6 : 10).map((post, index, arr) =>
+                                : newsNoFeatured.slice(isHome ? 0 : 4, isHome ? 6 : -1).map((post, index, arr) =>
                                     <Link key={index + post.id} href={`/noticia/${post.id}`}>
                                         <article className="flex lg:flex-row flex-col gap-8" key={post.id}>
                                             <img
@@ -94,39 +96,24 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                                     </Link>
                                 )}
                         </div>
-                    </div>
+                        <button
+                            onClick={loadMorePosts}
+                            className="cursor-pointer bg-primary text-white transition-all hover:scale-105 text-center p-2 rounded-lg mt-4 px-4">
+                            Carregar mais
+                        </button>
 
+
+                    </div>
                     {/* Sidebar - 25% width */}
                     {!internalPage && <aside className="lg:w-1/4  space-y-8">
                         {instagramPosts.length == 0
                             ? <TwitterInstagramSkeleton />
                             : <div className="w-full flex flex-col">
                                 <InstagramGrid posts={instagramPosts} />
-                                {/* <Script strategy="afterInteractive">
-                                    {`
-                                    twttr.widgets.createTimeline(
-                                        {
-                                            sourceType: "profile",
-                                        screenName: "TwitterDev"
-                                        },
-                                        document.getElementById("twitter-timeline")
-                                        );
-                                    `}
-                                </Script> */}
                                 <div className="relative flex-col gap-4 flex justify-center mt-4">
                                     {pautaImage ? <img className=' rounded-2xl lg:w-auto w-full' src={pautaImage} /> : <div className="overflow-hidden rounded-2xl lg:w-auto w-full h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
                                     <Link className="bg-primary text-white transition-all hover:scale-105 text-center text-xl p-2 rounded-xl" href="/credenciamento" target='_blank'>Clique aqui para se cadastrar</Link>
                                 </div>
-                                {/* <div ref={ref}>
-                                    <a className="twitter-timeline"
-                                    href="https://twitter.com/fpagropecuaria"
-                                    data-width="300"
-                                    data-height="300"
-                                    >
-                                    Tweets by @fpagropecuaria
-                                    </a>
-                                </div> */
-                                }
                             </div>}
                     </aside>}
                 </div>

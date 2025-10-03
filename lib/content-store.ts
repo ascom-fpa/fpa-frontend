@@ -312,8 +312,9 @@ export const useContentStore = create<ContentState>((set, get) => ({
     try {
       const response = await postsService.getPosts(params)
       set({
-        posts: response,
+        posts: [...get().posts, ...response],
         postsLoading: false,
+        postsPagination: params ? { ...get().postsPagination, page: params.page || 1, limit: params.limit || 10 } : get().postsPagination,
       })
     } catch (error: any) {
       set({
