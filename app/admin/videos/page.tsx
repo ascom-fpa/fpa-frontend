@@ -5,11 +5,30 @@ import { createVideo, deleteVideo } from "@/services/videos"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { UploadCloud, Trash2, MoveVertical } from "lucide-react"
+import { UploadCloud, Trash2 } from "lucide-react"
 import { useContentStore } from "@/lib/content-store"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core"
-import { SortableContext, useSortable, rectSortingStrategy } from "@dnd-kit/sortable"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
+    DndContext,
+    closestCenter,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from "@dnd-kit/core"
+import {
+    SortableContext,
+    useSortable,
+    rectSortingStrategy,
+} from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 
 export default function VideoPage() {
@@ -50,12 +69,13 @@ export default function VideoPage() {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                     <div className="flex gap-2 items-center">
-                        <label className="flex items-center space-x-2 text-sm ps-2">Vídeo em destaque?</label>
+                        <label className="flex items-center space-x-2 text-sm ps-2">
+                            Vídeo em destaque?
+                        </label>
                         <Input
                             className="cursor-pointer"
-                            style={{ width: '20px', height: '20px' }}
+                            style={{ width: "20px", height: "20px" }}
                             type="checkbox"
-                            placeholder="Slug (URL amigável)"
                             checked={isFeatured}
                             onChange={(e) => setIsFeatured(e.target.checked)}
                         />
@@ -74,13 +94,16 @@ export default function VideoPage() {
             </Card>
 
             <DndContext sensors={sensors} collisionDetection={closestCenter}>
-                <SortableContext items={orderedVideos.map(b => b.id)} strategy={rectSortingStrategy}>
+                <SortableContext
+                    items={orderedVideos.map((b) => b.id)}
+                    strategy={rectSortingStrategy}
+                >
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                         {orderedVideos.map((video: any) => (
                             <SortableCard
                                 key={video.id}
                                 video={video}
-                                onDelete={() => deleteVideo(video.id).then(fetchVideos)}
+                                refresh={fetchVideos}
                             />
                         ))}
                     </div>
@@ -90,24 +113,38 @@ export default function VideoPage() {
     )
 }
 
-function SortableCard({ video, onDelete }: { video: any, onDelete: () => void }) {
+function SortableCard({
+    video,
+    refresh,
+}: {
+    video: any
+    refresh: () => void
+}) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: video.id })
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
+    const style = { transform: CSS.Transform.toString(transform), transition }
+
+    const handleConfirmDelete = async () => {
+        await deleteVideo(video.id)
+        refresh()
     }
 
     return (
         <div ref={setNodeRef} style={style}>
             <Card className="p-0 overflow-hidden">
-                <CardContent {...attributes} {...listeners} className="relative cursor-grab active:cursor-grabbing flex flex-col gap-4">
+                <CardContent
+                    {...attributes}
+                    {...listeners}
+                    className="relative cursor-grab active:cursor-grabbing flex flex-col gap-4"
+                >
                     <p className="font-semibold text-sm">{video.description}</p>
                     {video.embed && (
-                        <div className="scale-95 flex justify-center" dangerouslySetInnerHTML={{ __html: video.embed }}>
-
-                        </div>
+                        <div
+                            className="scale-95 flex justify-center"
+                            dangerouslySetInnerHTML={{ __html: video.embed }}
+                        />
                     )}
                 </CardContent>
+
                 <CardFooter className="flex justify-between bg-[rgba(245,245,245)] py-2">
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -116,14 +153,16 @@ function SortableCard({ video, onDelete }: { video: any, onDelete: () => void })
                                 onTouchStart={(e) => e.stopPropagation()}
                                 size="sm"
                                 variant="destructive"
-                                onClick={onDelete}
                             >
                                 <Trash2 className="w-4 h-4" />
                             </Button>
                         </AlertDialogTrigger>
+
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>Deseja realmente excluir esse vídeo?</AlertDialogTitle>
+                                <AlertDialogTitle>
+                                    Deseja realmente excluir esse vídeo?
+                                </AlertDialogTitle>
                             </AlertDialogHeader>
                             <div className="mb-4">
                                 {video.description && (
@@ -134,7 +173,9 @@ function SortableCard({ video, onDelete }: { video: any, onDelete: () => void })
                             </div>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                <AlertDialogAction onClick={onDelete}>Confirmar</AlertDialogAction>
+                                <AlertDialogAction onClick={handleConfirmDelete}>
+                                    Confirmar
+                                </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
