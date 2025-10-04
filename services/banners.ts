@@ -51,9 +51,8 @@ export const createBanner = async (payload: FormData): Promise<Banner> => {
 }
 
 // Update banner
-export const updateBanner = async (data: UpdateBannerData): Promise<Banner> => {
-  const { id, ...updateData } = data
-  const response = await api.put(`/banners/${id}`, updateData)
+export const updateBanner = async (id: string, formData: FormData) => {
+  const response = await api.patchForm(`/banners/${id}`, formData)
   return response.data.data
 }
 

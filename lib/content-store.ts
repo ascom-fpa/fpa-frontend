@@ -120,7 +120,7 @@ interface ContentState {
   // Banners actions
   fetchBanners: () => Promise<void>
   createBanner: (data: FormData) => Promise<void>
-  updateBanner: (data: bannersService.UpdateBannerData) => Promise<void>
+  updateBanner: (id: string, data: FormData) => Promise<void>
   deleteBanner: (id: string) => Promise<void>
   reorderBanners: (id: string, newIndex: number) => Promise<void>
   uploadBannerImage: (file: File) => Promise<string>
@@ -557,12 +557,12 @@ export const useContentStore = create<ContentState>((set, get) => ({
     }
   },
 
-  updateBanner: async (data) => {
+  updateBanner: async (id, data) => {
     set({ bannersLoading: true, bannersError: null })
     try {
-      const updatedBanner = await bannersService.updateBanner(data)
+      const updatedBanner = await bannersService.updateBanner(id, data)
       set((state) => ({
-        banners: state.banners.map((banner) => (banner.id === data.id ? updatedBanner : banner)),
+        banners: state.banners.map((banner) => (banner.id === id ? updatedBanner : banner)),
         bannersLoading: false,
       }))
     } catch (error: any) {
