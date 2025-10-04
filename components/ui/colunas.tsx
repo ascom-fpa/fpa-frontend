@@ -17,7 +17,7 @@ export default function ColunistasSection() {
                 <h2 className="text-3xl font-bold text-[#1C9658]">Artigos</h2>
                 <p className="text-gray-600 mt-1 ">Conheça o que pensam os parlamentares da FPA.</p>
 
-                <ContentSlider perView={4}>
+                <ContentSlider arrowTop="-top-24" perView={4}>
                     {authors.filter(el => el.name).map((author) => (
                         <Link href={`/artigos/${author.id}`} key={author.id} className="flex flex-col items-start space-y-2">
                             <div className="flex gap-2 items-center">

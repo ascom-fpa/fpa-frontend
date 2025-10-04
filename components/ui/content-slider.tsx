@@ -9,9 +9,10 @@ interface Props {
   children: React.ReactNode[]
   perView?: number
   youtube?: boolean
+  arrowTop?: string
 }
 
-export function ContentSlider({ children, perView = 3, youtube = false }: Props) {
+export function ContentSlider({ children, perView = 3, youtube = false, arrowTop = '-top-16' }: Props) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [sliderRef, slider] = useKeenSlider<HTMLDivElement>({
     slides: {
@@ -53,13 +54,13 @@ export function ContentSlider({ children, perView = 3, youtube = false }: Props)
 
       <button
         onClick={goPrev}
-        className="cursor-pointer transition-all hover:scale-110 absolute right-10 -top-16 text-[#787878] z-10"
+        className={`cursor-pointer transition-all hover:scale-110 absolute right-10 ${arrowTop} text-[#787878] z-10`}
       >
         <ArrowLeft className="h-8 w-8" />
       </button>
       <button
         onClick={goNext}
-        className="cursor-pointer transition-all hover:scale-110 absolute right-0 -top-16 text-[#787878] z-10"
+        className={`cursor-pointer transition-all hover:scale-110 absolute right-0 ${arrowTop} text-[#787878] z-10`}
       >
         <ArrowRight className="h-8 w-8" />
       </button>

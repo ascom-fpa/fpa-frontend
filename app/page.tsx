@@ -254,7 +254,7 @@ export default function Home() {
                   <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
                 </div>
               </div>
-              <ContentSlider perView={4}>
+              <ContentSlider arrowTop='-top-20' perView={4}>
                 {relevants.map((video) => (
                   <div className={`cursor-pointer`} key={video.id}>
                     <div className="relative rounded-xl mx-auto overflow-hidden bg-black">

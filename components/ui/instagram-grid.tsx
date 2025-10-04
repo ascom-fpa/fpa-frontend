@@ -19,7 +19,7 @@ export default function InstagramGrid({ posts }: any) {
                     >
                         <iframe
                             src={post.permalink + "embed"}
-                            className="w-full aspect-[4/5] lg:h-[600px] h-[760px] border-0 rounded-lg"
+                            className="w-full aspect-[9/17]  border-0 rounded-lg"
                             allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                         ></iframe>
                         {/* <blockquote
