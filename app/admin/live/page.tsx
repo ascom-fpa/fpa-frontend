@@ -3,31 +3,45 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { UploadCloud } from "lucide-react"
+import { Loader2, UploadCloud } from "lucide-react"
 import { LabelInputFile } from "@/components/ui/label-input-file"
 import { getLive, updateLive } from "@/services/live"
 import { Input } from "@/components/ui/input"
+import Link from "next/link"
+import { showToast } from "@/utils/show-toast"
+import { ToastContainer } from "react-toastify"
 
 export default function LivePage() {
     const [link, setLink] = useState('');
     const [isEnabled, setIsEnabled] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         fetchLiveUrl()
     }, [])
 
-    async function fetchLiveUrl() {
+    async function fetchLiveUrl(updated?: boolean) {
         getLive()
-            .then(res => setLink(res.link))
+            .then(res => {
+                setLink(res.link)
+                updated && showToast({ type: 'success', children: 'Ao vivo atualizado com sucesso' })
+            })
     }
 
     const handleUpload = async () => {
-        if (!link) return
+        setIsLoading(true)
+        if (!link) return setIsLoading(false)
 
-        await updateLive({ isEnabled, link })
-        setLink('')
-        setIsEnabled(false)
-        fetchLiveUrl()
+        try {
+            await updateLive({ isEnabled, link })
+            setLink('')
+            setIsEnabled(false)
+            fetchLiveUrl(true)
+        } catch (error) {
+            console.error("Erro ao atualizar página:", error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -54,19 +68,28 @@ export default function LivePage() {
                 </CardContent>
                 <CardFooter className="flex justify-end">
                     <Button onClick={handleUpload} disabled={!link}>
-                        <UploadCloud className="mr-2 h-4 w-4" /> Atualizar ao vivo
+                        {isLoading ?
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Atualizando...
+                            </>
+                            :
+                            <>
+                                <UploadCloud className="mr-2 h-4 w-4" /> Atualizar ao vivo
+                            </>
+                        }
                     </Button>
                 </CardFooter>
             </Card>
 
             <Card className="p-0">
                 <CardContent className="relative flex flex-col gap-4 ">
-                    <div className="w-full overflow-auto flex gap-4">
+                    <div className="w-full overflow-auto flex gap-4 p-4">
                         <span className="font-semibold">Link atual:</span>
-                        <span>{link}</span>
+                        <Link href={link} target="_blank" >{link}</Link>
                     </div>
                 </CardContent>
             </Card>
+            <ToastContainer />
         </div>
     )
 }

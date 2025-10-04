@@ -29,3 +29,9 @@ export const createAuthor = async (payload: FormData): Promise<Author> => {
 export const deleteAuthor = async (id: string): Promise<void> => {
   await api.delete(`/author/${id}`)
 }
+
+// Update Author
+export const updateAuthor = async (id: string, formData: FormData) => {
+  const { data } = await api.patchForm(`/author/${id}`, formData)
+  return data.data;
+}

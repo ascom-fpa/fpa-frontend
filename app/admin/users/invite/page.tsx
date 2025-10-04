@@ -63,7 +63,7 @@ export default function UsersPage() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-2xl font-semibold">Gerenciamento de Usuários</h1>
+            <h1 className="text-2xl font-semibold">Usuários convidados</h1>
 
             <Card>
                 <CardContent className="p-4 flex flex-col gap-4">

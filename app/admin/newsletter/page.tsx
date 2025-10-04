@@ -4,15 +4,10 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { UploadCloud, Trash2 } from "lucide-react"
-import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel,
-    AlertDialogContent, AlertDialogFooter,
-    AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+import { UploadCloud, Loader2 } from "lucide-react"
 import { SendNewsletterData, sendNewsletterEmail } from "@/services/newsletter"
 import { showToast } from "@/utils/show-toast"
-import { useContentStore } from "@/lib/content-store"
+import { ToastContainer } from "react-toastify"
 
 const formInitialState: SendNewsletterData = {
     id: "",
@@ -21,18 +16,17 @@ const formInitialState: SendNewsletterData = {
 
 export default function Page() {
     const [form, setForm] = useState<SendNewsletterData>(formInitialState)
-
-    const { setLoading } = useContentStore()
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleUpload = async () => {
-        setLoading(true)
+        setIsLoading(true)
         sendNewsletterEmail(form)
             .then(_ => {
                 showToast({ type: 'success', children: 'Newsletter enviada!' })
                 setForm(formInitialState)
             })
-            .catch(e => showToast({ type: 'error', children: e.response.data.message }))
-            .finally(() => setLoading(false))
+            .catch(e => showToast({ type: 'error', children: "Erro ao enviar newsletter" }))
+            .finally(() => setIsLoading(false))
     }
 
     return (
@@ -55,7 +49,15 @@ export default function Page() {
                 </CardContent>
                 <CardFooter className="flex justify-end">
                     <Button onClick={handleUpload} disabled={!form.id || !form.subject}>
-                        <UploadCloud className="mr-2 h-4 w-4" /> Enviar Tag
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...
+                            </>
+                        ) :
+                            <>
+                                <UploadCloud className="mr-2 h-4 w-4" /> Enviar Tag
+                            </>
+                        }
                     </Button>
                 </CardFooter>
             </Card>
@@ -69,45 +71,8 @@ export default function Page() {
                     />
                 ))}
             </div> */}
+            <ToastContainer />
 
-        </div>
-    )
-}
-
-function SortableCard({ tag, onDelete }: { tag: any, onDelete: () => void }) {
-    return (
-        <div >
-            <Card className="p-0">
-                <CardContent className="relative flex flex-col gap-4 p-4">
-                    <p className="font-semibold text-sm">{tag.name}</p>
-                    <p style={{ color: tag.color }} className="font-semibold text-sm">{tag.slug}</p>
-                    <p className="text-xs text-muted-foreground">{tag.description}</p>
-                    {tag.iconUrl && (
-                        <img src={tag.iconUrl} alt="ícone" className="w-20 h-20 object-contain" />
-                    )}
-                </CardContent>
-                <CardFooter className="flex justify-between bg-[rgba(245,245,245)] py-2">
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button size="sm" variant="destructive">
-                                <Trash2 className="w-4 h-4" />
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Deseja realmente excluir?</AlertDialogTitle>
-                            </AlertDialogHeader>
-                            <div className="mb-4 text-sm text-muted-foreground">
-                                {tag.name}
-                            </div>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                <AlertDialogAction onClick={onDelete}>Confirmar</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                </CardFooter>
-            </Card>
         </div>
     )
 }

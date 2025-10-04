@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { UploadCloud } from "lucide-react"
+import { Loader2, UploadCloud } from "lucide-react"
 import { getPage, updatePage } from "@/services/page"
 import { TipTapEditor } from "../posts/tiptap-editor"
 import { useEditor, } from "@tiptap/react"
@@ -20,9 +20,11 @@ import { Superscript } from "@tiptap/extension-superscript"
 import { Selection } from "@tiptap/extensions"
 import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension"
 import { showToast } from "@/utils/show-toast"
+import { ToastContainer } from "react-toastify"
 
 export default function Page() {
     const [content, setContent] = useState(null);
+    const [isLoading, setIsLoading] = useState(false)
 
     const editor = useEditor({
         immediatelyRender: false,
@@ -69,22 +71,29 @@ export default function Page() {
         }
     }, [editor, content])
 
-    async function fetchPage() {
+    async function fetchPage(updated?: boolean) {
         getPage("about-page")
             .then(res => {
                 setContent(res.content)
-                showToast({type: 'success', children: 'Página atualizada com sucesso'})
+                updated && showToast({ type: 'success', children: 'Página atualizada com sucesso' })
             })
     }
 
     const handleUpload = async () => {
+        setIsLoading(true)
         const postContent = editor?.getJSON() || {}
 
-        if (!postContent) return
+        if (!postContent) return setIsLoading(false)
 
-        await updatePage({ content: postContent }, "about-page")
-        setContent(null)
-        fetchPage()
+        try {
+            await updatePage({ content: postContent }, "about-page")
+            setContent(null)
+            fetchPage(true)
+        } catch (error) {
+            console.error("Erro ao atualizar página:", error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -97,10 +106,19 @@ export default function Page() {
                 </CardContent>
                 <CardFooter className="flex justify-end fixed z-20">
                     <Button onClick={handleUpload} >
-                        <UploadCloud className="mr-2 h-4 w-4" /> Atualizar página
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Atualizando...
+                            </>
+                        ) : (
+                            <>
+                                <UploadCloud className="mr-2 h-4 w-4" /> Atualizar página
+                            </>
+                        )}
                     </Button>
                 </CardFooter>
             </Card>
+            <ToastContainer />
         </div>
     )
 }

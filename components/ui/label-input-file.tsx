@@ -66,7 +66,7 @@ export function LabelInputFile({ id, label, accept, onChange }: LabelInputFilePr
           )}
           <button
             onClick={() => handleChange(null)}
-            className="absolute top-1 right-1 p-1 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-80"
+            className="cursor-pointer absolute top-1 right-1 p-1 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-80"
           >
             <X className="w-4 h-4" />
           </button>
