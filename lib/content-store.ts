@@ -105,7 +105,7 @@ interface ContentState {
   fetchPostsCategoryFeatured: () => Promise<void>
   fetchPost: (id: string) => Promise<void>
   createPost: (data: postsService.CreatePostData) => Promise<void>
-  updatePost: (data: postsService.UpdatePostData) => Promise<void>
+  updatePost: (id:string, data: postsService.CreatePostData) => Promise<void>
   deletePost: (id: string) => Promise<void>
   uploadPostImage: (file: File) => Promise<string>
   pushCurrentPostFiles: (file: File) => void
@@ -399,13 +399,30 @@ export const useContentStore = create<ContentState>((set, get) => ({
     }
   },
 
-  updatePost: async (data) => {
+  updatePost: async (id: string, data) => {
     set({ postsLoading: true, postsError: null })
     try {
-      const updatedPost = await postsService.updatePost(data)
+      const form = new FormData()
+      data.postTitle && form.append("postTitle", data.postTitle)
+      data.postCategoryId && form.append("postCategoryId", data.postCategoryId)
+      data.postStatus && form.append("postStatus", data.postStatus)
+      form.append("isFeatured", data.isFeatured ? "true" : "false")
+      form.append("slug", data.slug || "")
+      form.append("summary", data.summary || "")
+      form.append("postContent", JSON.stringify(data.postContent))
+
+      data.files?.forEach((file: File) => {
+        form.append("files", file)
+      })
+
+      if (data.thumbnailFile) {
+        form.append("thumbnailFile", data.thumbnailFile)
+      }
+
+      const updatedPost = await postsService.updatePost(id, form)
+
       set((state) => ({
-        posts: state.posts.map((post) => (post.id === data.id ? updatedPost : post)),
-        currentPost: state.currentPost?.id === data.id ? updatedPost : state.currentPost,
+        posts: state.posts.map((p) => (p.id === id ? updatedPost : p)),
         postsLoading: false,
       }))
     } catch (error: any) {

@@ -1,22 +1,28 @@
 "use client"
 
-import { nanoid } from "nanoid" // certifique-se de instalar: npm i nanoid
-
+import { nanoid } from "nanoid"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { UploadCloud, Trash2, AlertTriangle, Copy } from "lucide-react"
+import { UploadCloud, Trash2, Edit3 } from "lucide-react"
 import { useContentStore } from "@/lib/content-store"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { LabelInputFile } from "@/components/ui/label-input-file"
 import { PostStatusEnum } from "@/enums/post"
 import { CreatePostData } from "@/services/posts"
 import { MultiSelect } from "@/components/ui/multi-select"
 import { TipTapEditor } from "./tiptap-editor"
 import { useEditor } from "@tiptap/react"
-
-// --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
 import { Image } from "@tiptap/extension-image"
 import { TaskItem, TaskList } from "@tiptap/extension-list"
@@ -29,309 +35,262 @@ import { Selection } from "@tiptap/extensions"
 import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension"
 import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension"
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
-import content from "@/components/tiptap-templates/data/content.json"
+import { showToast } from "@/utils/show-toast"
 import ViewPost from "./view-post"
 
 const formInitialState: CreatePostData = {
-    postTitle: "",
-    postCategoryId: "",
-    postContent: {},
-    postStatus: PostStatusEnum.DRAFT,
-    summary: "",
-    relatedTags: [],
-    slug: "",
-    thumbnailFile: null,
-    files: [],
-    isFeatured: false,
+  postTitle: "",
+  postCategoryId: "",
+  postContent: {},
+  postStatus: PostStatusEnum.DRAFT,
+  summary: "",
+  relatedTags: [],
+  slug: "",
+  thumbnailFile: null,
+  files: [],
+  isFeatured: false,
 }
 
 export default function PostsAdminPage() {
-    const [form, setForm] = useState<CreatePostData>(formInitialState)
-    const {
-        posts, fetchPosts, createPost, deletePost,
-        fetchTags, tags, fetchCategories, categories,
-        pushCurrentPostFiles, currentPostFiles, setLoading
-    } = useContentStore()
-    const [orderedPosts, setOrderedPosts] = useState<any[]>([])
+  const [form, setForm] = useState<CreatePostData>(formInitialState)
+  const [editingPost, setEditingPost] = useState<any | null>(null)
+  const {
+    posts,
+    fetchPosts,
+    createPost,
+    updatePost,
+    deletePost,
+    fetchTags,
+    tags,
+    fetchCategories,
+    categories,
+    pushCurrentPostFiles,
+    currentPostFiles,
+    setLoading,
+  } = useContentStore()
 
-    const editor = useEditor({
-        immediatelyRender: false,
-        shouldRerenderOnTransaction: false,
-        editorProps: {
-            attributes: {
-                autocomplete: "off",
-                autocorrect: "off",
-                autocapitalize: "off",
-                "aria-label": "Main content area, start typing to enter text.",
-                class: "simple-editor",
-            },
-        },
-        extensions: [
-            StarterKit.configure({
-                horizontalRule: false,
-                link: {
-                    openOnClick: false,
-                    enableClickSelection: true,
-                },
-            }),
-            HorizontalRule,
-            TextAlign.configure({ types: ["heading", "paragraph"] }),
-            TaskList,
-            TaskItem.configure({ nested: true }),
-            Highlight.configure({ multicolor: true }),
-            Image,
-            Typography,
-            Superscript,
-            Subscript,
-            Selection,
-            ImageUploadNode.configure({
-                accept: "image/*",
-                maxSize: MAX_FILE_SIZE,
-                limit: 3,
-                upload: (file, progress, signal) =>
-                    handleImageUpload(file, progress, signal, pushCurrentPostFiles),
-                onError: (error) => console.error("Upload failed:", error),
-            }),
-        ],
-        content,
+  const [orderedPosts, setOrderedPosts] = useState<any[]>([])
+
+  const editor = useEditor({
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
+    editorProps: {
+      attributes: {
+        class: "simple-editor",
+      },
+    },
+    extensions: [
+      StarterKit.configure({ horizontalRule: false }),
+      HorizontalRule,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      TaskList,
+      TaskItem.configure({ nested: true }),
+      Highlight.configure({ multicolor: true }),
+      Image,
+      Typography,
+      Superscript,
+      Subscript,
+      Selection,
+      ImageUploadNode.configure({
+        accept: "image/*",
+        maxSize: MAX_FILE_SIZE,
+        limit: 3,
+        upload: (file, progress, signal) =>
+          handleImageUpload(file, progress, signal, pushCurrentPostFiles),
+      }),
+    ],
+  })
+
+  useEffect(() => {
+    fetchPosts({ limit: 100 })
+    fetchTags()
+    fetchCategories()
+  }, [])
+
+  useEffect(() => {
+    setOrderedPosts(posts)
+  }, [posts])
+
+  // 🟢 Create or update post
+  const handleSave = async () => {
+    setLoading(true)
+    const payload = {
+      ...form,
+      postContent: editor?.getJSON() || {},
+      files: currentPostFiles,
+    }
+
+    try {
+      if (editingPost) {
+        await updatePost(editingPost.id, payload)
+        showToast({ type: "success", children: "Matéria atualizada com sucesso!" })
+      } else {
+        await createPost(payload)
+        showToast({ type: "success", children: "Matéria criada com sucesso!" })
+      }
+      setForm(formInitialState)
+      setEditingPost(null)
+      fetchPosts()
+    } catch (err) {
+      console.error(err)
+      showToast({ type: "error", children: "Erro ao salvar matéria" })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // 🟡 Load data for editing
+  const handleEdit = (post: any) => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+    setEditingPost(post)
+    setForm({
+      ...formInitialState,
+      postTitle: post.postTitle,
+      postCategoryId: post.postCategoryId,
+      postContent: post.postContent,
+      postStatus: post.postStatus,
+      summary: post.summary,
+      relatedTags: post.relatedTags?.map((t: any) => t.id) || [],
+      slug: post.slug,
+      thumbnailFile: null,
+      isFeatured: post.isFeatured,
     })
+    editor?.commands.setContent(post.postContent || {})
+  }
 
-    useEffect(() => {
-        fetchPosts()
-        fetchTags()
-        fetchCategories()
-    }, [])
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold">
+        {editingPost ? "Editar Matéria" : "Gerenciamento de Matérias"}
+      </h1>
 
-    useEffect(() => {
-        setOrderedPosts(posts)
-    }, [posts])
+      <Card>
+        <CardContent className="p-4 flex flex-col gap-4">
+          <Input
+            placeholder="Título"
+            value={form.postTitle}
+            onChange={(e) => setForm({ ...form, postTitle: e.target.value })}
+          />
 
-    const handleUpload = async () => {
-        setLoading(true)
-        if (!form.postTitle || !form.postCategoryId || !form.postStatus || !form.slug || !form.thumbnailFile || !form.summary) return
-        form.files = currentPostFiles
+          <Input
+            placeholder="Resumo da matéria"
+            value={form.summary}
+            onChange={(e) => setForm({ ...form, summary: e.target.value })}
+          />
 
-        form.postContent = editor?.getJSON() || {}
-        await createPost(form)
-        setForm(formInitialState)
-        fetchPosts()
-        setLoading(false)
-    }
+          <Input
+            placeholder="Slug (URL amigável)"
+            value={form.slug}
+            onChange={(e) => setForm({ ...form, slug: e.target.value })}
+          />
 
-    async function handleDuplicate(duplicatedPost: CreatePostData) {
-        setLoading(true)
-        await createPost(duplicatedPost)
-        await fetchPosts()
-        setLoading(false)
-    }
+          <div className="flex gap-2 items-center">
+            <label>Matéria em destaque?</label>
+            <Input
+              className="cursor-pointer"
+              style={{ width: "20px", height: "20px" }}
+              type="checkbox"
+              checked={form.isFeatured}
+              onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
+            />
+          </div>
 
-    return (
-        <div className="space-y-6">
-            <h1 className="text-2xl font-semibold">Gerenciamento de Matérias</h1>
+          <select
+            value={form.postStatus}
+            onChange={(e) => setForm({ ...form, postStatus: e.target.value as PostStatusEnum })}
+            className="cursor-pointer border rounded-md px-3 py-2 text-sm text-gray-700"
+          >
+            <option value="">Selecionar status</option>
+            <option value="draft">Rascunho</option>
+            <option value="revision">Revisão</option>
+            <option value="posted">Publicado</option>
+            <option value="removed">Removido</option>
+          </select>
 
-            <Card>
-                <CardContent className="p-4 flex flex-col gap-4">
-                    <Input
-                        placeholder="Título"
-                        value={form.postTitle}
-                        onChange={(e) => setForm({ ...form, postTitle: e.target.value })}
-                    />
+          <select
+            value={form.postCategoryId}
+            onChange={(e) => setForm({ ...form, postCategoryId: e.target.value })}
+            className="cursor-pointer border rounded-md px-3 py-2 text-sm text-gray-700"
+          >
+            <option value="">Selecionar categoria</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
 
-                    <Input
-                        placeholder="Resumo da matéria"
-                        value={form.summary}
-                        onChange={(e) => setForm({ ...form, summary: e.target.value })}
-                    />
+          <MultiSelect
+            selected={form.relatedTags || []}
+            onChange={(tags) => setForm({ ...form, relatedTags: tags })}
+            options={tags.map((t) => ({ label: t.name, value: t.id }))}
+          />
 
-                    <Input
-                        placeholder="Slug (URL amigável)"
-                        value={form.slug}
-                        onChange={(e) => setForm({ ...form, slug: e.target.value })}
-                    />
+          <TipTapEditor editor={editor} />
 
-                    <div className="flex gap-2 items-center">
-                        <label className="flex items-center space-x-2">Matéria em destaque?</label>
-                        <Input
-                            className="cursor-pointer"
-                            style={{ width: '20px', height: '20px' }}
-                            type="checkbox"
-                            placeholder="Slug (URL amigável)"
-                            checked={form.isFeatured}
-                            onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
-                        />
-                    </div>
+          <LabelInputFile
+            id="thumbnail-upload"
+            label="Selecionar thumbnail"
+            accept="image/*"
+            onChange={(file) => setForm({ ...form, thumbnailFile: file })}
+          />
 
-                    <select
-                        value={form.postStatus}
-                        onChange={(e) => setForm({ ...form, postStatus: e.target.value as PostStatusEnum })}
-                        className="cursor-pointer border rounded-md px-3 py-2 text-sm text-gray-700"
-                    >
-                        <option value="">Selecionar status da matéria</option>
-                        <option value="draft">Rascunho</option>
-                        <option value="revision">Revisão</option>
-                        <option value="posted">Publicado</option>
-                        <option value="removed">Removido</option>
-                    </select>
+          {editingPost && editingPost.thumbnailUrl && (
+            <img
+              src={editingPost.thumbnailUrl}
+              alt="thumbnail"
+              className="w-40 h-40 object-cover rounded"
+            />
+          )}
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          {editingPost && (
+            <Button variant="secondary" onClick={() => setEditingPost(null)}>
+              Cancelar Edição
+            </Button>
+          )}
+          <Button onClick={handleSave}>
+            <UploadCloud className="mr-2 h-4 w-4" />
+            {editingPost ? "Salvar Alterações" : "Enviar Matéria"}
+          </Button>
+        </CardFooter>
+      </Card>
 
-                    <select
-                        value={form.postCategoryId}
-                        onChange={(e) => setForm({ ...form, postCategoryId: e.target.value })}
-                        className="cursor-pointer border rounded-md px-3 py-2 text-sm text-gray-700"
-                    >
-                        <option value="">Selecionar categoria</option>
-                        {categories.map(category => <option value={category.id}>{category.name}</option>)}
-                    </select>
-
-
-                    {/* Para seleção de tags relacionadas */}
-                    <MultiSelect
-                        selected={form.relatedTags || []}
-                        onChange={(tags) => setForm({ ...form, relatedTags: tags })}
-                        options={tags.map(tag => ({ label: tag.name, value: tag.id }))}
-                    />
-
-                    {/* Editor de conteúdo pode ser implementado com Tiptap ou outro */}
-                    <TipTapEditor editor={editor} />
-
-                    <LabelInputFile
-                        id="thumbnail-upload"
-                        label="Selecionar thumbnail"
-                        accept="image/*"
-                        onChange={(file) => setForm({ ...form, thumbnailFile: file })}
-                    />
-                </CardContent>
-                <CardFooter className="flex justify-end">
-                    <Button onClick={handleUpload} disabled={!form.postTitle || !form.postCategoryId || !form.postStatus || !form.slug}>
-                        <UploadCloud className="mr-2 h-4 w-4" /> Enviar matéria
-                    </Button>
-                </CardFooter>
-            </Card>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {orderedPosts?.map((post) => (
-                    <PostCard key={post.id} post={post} onDelete={() => deletePost(post.id)} handleDuplicate={handleDuplicate} />
-                ))}
-            </div>
-        </div>
-    )
+      {/* Listagem */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {orderedPosts?.map((post) => (
+          <PostCard
+            key={post.id}
+            post={post}
+            onDelete={() => deletePost(post.id)}
+            onEdit={() => handleEdit(post)}
+          />
+        ))}
+      </div>
+    </div>
+  )
 }
 
-function PostCard({ post, onDelete, handleDuplicate }: { post: any; onDelete: () => void, handleDuplicate: any }) {
-    return (
-        <Card className="p-0">
-            <CardContent className="flex flex-col gap-4">
-                <p className="font-semibold text-sm">{post.postTitle}</p>
-                {post.thumbnailUrl && (
-                    <img
-                        src={post.thumbnailUrl}
-                        alt="post-thumbnail"
-                        className="w-full h-40 object-cover rounded"
-                    />
-                )}
-                {post.summary && <p className="text-sm text-muted-foreground">{post.summary}</p>}
-            </CardContent>
-            <CardFooter className="flex justify-between bg-[rgba(245,245,245)] py-2">
-                {/* BOTÃO VER POST */}
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="outline">
-                            Ver post
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent className="h-[90vh] w-[90vw] overflow-y-auto">
-                        <AlertDialogHeader>
-                            <AlertDialogTitle className="text-2xl">{post.postTitle}</AlertDialogTitle>
-                        </AlertDialogHeader>
-
-                        {post.thumbnailUrl && (
-                            <img
-                                src={post.thumbnailUrl}
-                                alt="post-thumbnail"
-                                className="w-full max-h-96 object-cover rounded my-4"
-                            />
-                        )}
-
-                        {post.summary && (
-                            <p className="text-muted-foreground mb-4">{post.summary}</p>
-                        )}
-
-                        {/* Aqui você pode substituir por seu componente de leitura Tiptap */}
-                        <ViewPost postContent={post.postContent} />
-
-                        <AlertDialogFooter className="mt-6 fixed right-10">
-                            <AlertDialogCancel>Fechar</AlertDialogCancel>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="destructive" onClick={onDelete}>
-                            <Trash2 className="w-4 h-4" />
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Deseja realmente excluir?</AlertDialogTitle>
-                        </AlertDialogHeader>
-                        <div className="mb-4">
-                            {post.thumbnailUrl && (
-                                <img
-                                    src={post.thumbnailUrl}
-                                    alt="post-preview"
-                                    className="w-full h-80 object-contain rounded"
-                                />
-                            )}
-                            {post.postTitle && (
-                                <p className="mt-2 text-sm text-center text-muted-foreground">
-                                    {post.postTitle}
-                                </p>
-                            )}
-                        </div>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction onClick={onDelete}>Confirmar</AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="secondary">
-                            <Copy className="w-4 h-4 mr-1" />
-                            Duplicar
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle className="flex items-center gap-2">
-                                <AlertTriangle className="text-yellow-600 w-5 h-5" />
-                                Confirmar duplicação
-                            </AlertDialogTitle>
-                        </AlertDialogHeader>
-                        <p className="text-muted-foreground text-sm mt-2">
-                            Deseja duplicar este post com um novo título e slug aleatórios?
-                        </p>
-                        <AlertDialogFooter className="mt-4">
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction
-                                onClick={async () => {
-                                    const randomSuffix = nanoid(12)
-                                    const duplicatedPost = {
-                                        ...post,
-                                        id: undefined,
-                                        postTitle: `${post.postTitle} - Cópia ${randomSuffix}`,
-                                        slug: `${post.slug}-${randomSuffix}`,
-                                        postContent: post.postContent ?? {}, // ou [] ou null, dependendo do que seu schema aceita
-                                    }
-
-                                    handleDuplicate(duplicatedPost)
-                                }}
-                            >
-                                Confirmar
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-            </CardFooter>
-        </Card>
-    )
+function PostCard({ post, onDelete, onEdit }: { post: any; onDelete: () => void; onEdit: () => void }) {
+  return (
+    <Card className="p-0">
+      <CardContent className="flex flex-col gap-4 flex-1 pt-4">
+        <p className="font-semibold text-sm">{post.postTitle}</p>
+        {post.thumbnailUrl && (
+          <img src={post.thumbnailUrl} alt="thumbnail" className="w-full h-40 object-cover rounded" />
+        )}
+        {post.summary && <p className="text-sm text-muted-foreground">{post.summary}</p>}
+      </CardContent>
+      <CardFooter className="flex justify-between bg-[rgba(245,245,245)] py-2">
+        <Button size="sm" variant="outline" onClick={onEdit}>
+          <Edit3 className="w-4 h-4 mr-2" />
+          Editar
+        </Button>
+        <Button size="sm" variant="destructive" onClick={onDelete}>
+          <Trash2 className="w-4 h-4" />
+          Excluir
+        </Button>
+      </CardFooter>
+    </Card>
+  )
 }

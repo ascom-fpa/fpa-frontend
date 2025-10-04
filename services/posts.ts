@@ -42,10 +42,6 @@ export interface CreatePostData {
   isFeatured?: boolean
 }
 
-export interface UpdatePostData extends Partial<CreatePostData> {
-  id: string
-}
-
 export interface PostsResponse {
   posts: Post[]
   total: number
@@ -78,14 +74,13 @@ export const getPost = async (id: string): Promise<Post> => {
 // Create new post
 export const createPost = async (form: FormData): Promise<Post> => {
   const response = await api.postForm("/posts", form)
-  return response.data
+  return response.data.data
 }
 
 // Update existing post
-export const updatePost = async (data: UpdatePostData): Promise<Post> => {
-  const { id, ...updateData } = data
-  const response = await api.put(`/posts/${id}`, updateData)
-  return response.data
+export const updatePost = async (id:string, form: FormData): Promise<Post> => {
+  const response = await api.patchForm(`/posts/${id}`, form)
+  return response.data.data
 }
 
 // Delete post
