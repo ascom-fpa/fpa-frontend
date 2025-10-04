@@ -718,7 +718,22 @@ export const useContentStore = create<ContentState>((set, get) => ({
   updateWebStory: async (data) => {
     set({ webstoriesLoading: true, webstoriesError: null })
     try {
-      const updatedWebStory = await webstoriesService.updateWebStory(data)
+
+      const formData = new FormData()
+
+      data.title && formData.append("title", data.title);
+      if (data.description) {
+        formData.append("description", data.description);
+      }
+
+      data.slides && data.slides.forEach((slide, index) => {
+        slide.file && formData.append("slides", slide.file); // ✅ arquivo de imagem
+        if (slide.text) {
+          formData.append(`slideTexts[${index}]`, slide.text); // ✅ texto individual do slide
+        }
+      });
+
+      const updatedWebStory = await webstoriesService.updateWebStory(data.id, formData)
       set((state) => ({
         webstories: state.webstories.map((story) => (story.id === data.id ? updatedWebStory : story)),
         webstoriesLoading: false,

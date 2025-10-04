@@ -21,7 +21,7 @@ export interface CreateWebStoryData {
   title: string
   description?: string
   slides: WebstorySlideData[]
-  isFeatured?:boolean
+  isFeatured?: boolean
 }
 
 export interface UpdateWebStoryData extends Partial<CreateWebStoryData> {
@@ -57,9 +57,8 @@ export const createWebStory = async (data: FormData): Promise<WebStory> => {
 }
 
 // Update web story
-export const updateWebStory = async (data: UpdateWebStoryData): Promise<WebStory> => {
-  const { id, ...updateData } = data
-  const response = await api.put(`/webstories/${id}`, updateData)
+export const updateWebStory = async (id: string, data: FormData): Promise<WebStory> => {
+  const response = await api.patchForm(`/webstories/${id}`, data)
   return response.data
 }
 
