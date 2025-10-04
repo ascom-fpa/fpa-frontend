@@ -76,7 +76,7 @@ export const createCategory = async (data: FormData): Promise<Category> => {
 // Update category
 export const updateCategory = async (data: UpdateCategoryData): Promise<Category> => {
   const { id, ...updateData } = data
-  const response = await api.put(`/categories/${id}`, updateData)
+  const response = await api.patch(`/categories/${id}`, updateData)
   return response.data
 }
 

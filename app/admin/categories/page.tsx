@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { UploadCloud, Trash2 } from "lucide-react"
+import { UploadCloud, Trash2, Edit3, Loader2 } from "lucide-react"
 import { useContentStore } from "@/lib/content-store"
 import {
     AlertDialog, AlertDialogAction, AlertDialogCancel,
@@ -19,7 +19,9 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { LabelInputFile } from "@/components/ui/label-input-file"
-import { Category, CreateCategoryData } from "@/services/categories"
+import { Category, CreateCategoryData, UpdateCategoryData } from "@/services/categories"
+import { showToast } from "@/utils/show-toast"
+import { ToastContainer } from "react-toastify"
 
 const formInitialState: CreateCategoryData = {
     name: "",
@@ -32,11 +34,13 @@ const formInitialState: CreateCategoryData = {
 
 export default function CategoryPage() {
     const [form, setForm] = useState<CreateCategoryData>(formInitialState)
+    const [isLoading, setIsLoading] = useState(false)
 
     const {
         fetchCategories,
         categories,
         createCategory,
+        updateCategory,
         deleteCategory,
         reorderCategories,
     } = useContentStore()
@@ -53,22 +57,26 @@ export default function CategoryPage() {
     }, [categories])
 
     const handleUpload = async () => {
-        if (!form.name) return
+        setIsLoading(true)
 
-        // if (form.iconFile) formData.append("icon", form.iconFile)
-
-        await createCategory(form)
-        setForm(formInitialState)
-        fetchCategories()
+        if (!form.name) return setIsLoading
+        try {
+            await createCategory(form)
+            setForm(formInitialState)
+            fetchCategories()
+            showToast({ type: "success", children: "Categoria criada com sucesso" })
+        } catch (error) {
+            showToast({ type: "error", children: "Erro ao criar categoria" })
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const handleDragEnd = async (event: any) => {
         const { active, over } = event
         if (!over || active.id === over.id) return
-
         const oldIndex = orderedCategories.findIndex((c) => c.id === active.id)
         const newIndex = orderedCategories.findIndex((c) => c.id === over.id)
-
         const newOrder = arrayMove(orderedCategories, oldIndex, newIndex)
         setOrderedCategories(newOrder)
         await reorderCategories(active.id, newIndex)
@@ -94,7 +102,6 @@ export default function CategoryPage() {
                     <div className="flex gap-4 ms-2 items-center">
                         <label>Categoria será destaque na home?</label>
                         <Input
-                            placeholder="Destaque na home?"
                             checked={form.isFeatured}
                             onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
                             type="checkbox"
@@ -124,7 +131,15 @@ export default function CategoryPage() {
                 </CardContent>
                 <CardFooter className="flex justify-end">
                     <Button onClick={handleUpload} disabled={!form.name}>
-                        <UploadCloud className="mr-2 h-4 w-4" /> Enviar Categoria
+                        {isLoading ?
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Atualizando...
+                            </>
+                            :
+                            <>
+                                <UploadCloud className="mr-2 h-4 w-4" /> Criar Categoria
+                            </>
+                        }
                     </Button>
                 </CardFooter>
             </Card>
@@ -137,20 +152,66 @@ export default function CategoryPage() {
                                 key={category.id}
                                 category={category}
                                 onDelete={() => deleteCategory(category.id)}
+                                onUpdate={updateCategory}
+                                refresh={fetchCategories}
                             />
                         ))}
                     </div>
                 </SortableContext>
             </DndContext>
+
+            <ToastContainer />
         </div>
     )
 }
 
-function SortableCard({ category, onDelete }: { category: any, onDelete: () => void }) {
+function SortableCard({
+    category,
+    onDelete,
+    onUpdate,
+    refresh,
+}: {
+    category: any
+    onDelete: () =>  Promise<void>
+    onUpdate: (data: UpdateCategoryData) => Promise<void>
+    refresh: () => void
+}) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: category.id })
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
+    const style = { transform: CSS.Transform.toString(transform), transition }
+
+    const [form, setForm] = useState<UpdateCategoryData>({
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        slug: category.slug,
+        color: category.color,
+        isFeatured: category.isFeatured,
+    })
+    const [isSaving, setIsSaving] = useState(false)
+
+    const handleUpdate = async () => {
+        setIsSaving(true)
+        try {
+            await onUpdate(form)
+            refresh()
+            showToast({ type: "success", children: "Categoria atualizada com sucesso!" })
+        } catch (err) {
+            console.error(err)
+            showToast({ type: "error", children: "Erro ao atualizar categoria" })
+        } finally {
+            setIsSaving(false)
+        }
+    }
+
+    const handleDelete = async () => {
+        try {
+            await onDelete()
+            refresh()
+            showToast({ type: "success", children: "Categoria excluída com sucesso!" })
+        } catch (err) {
+            console.error(err)
+            showToast({ type: "error", children: "Erro ao excluir categoria" })
+        }
     }
 
     return (
@@ -169,25 +230,95 @@ function SortableCard({ category, onDelete }: { category: any, onDelete: () => v
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-between bg-[rgba(245,245,245)] py-2">
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button size="sm" variant="destructive">
-                                <Trash2 className="w-4 h-4" />
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Deseja realmente excluir?</AlertDialogTitle>
-                            </AlertDialogHeader>
-                            <div className="mb-4 text-sm text-muted-foreground">
-                                {category.name}
-                            </div>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                <AlertDialogAction onClick={onDelete}>Confirmar</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <div className="flex gap-2">
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button size="sm" variant="outline">
+                                    <Edit3 className="w-4 h-4" />
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="md:max-w-[50%] max-w-full">
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Editar categoria</AlertDialogTitle>
+                                </AlertDialogHeader>
+
+                                <div className="flex flex-col gap-3">
+                                    <Input
+                                        placeholder="Nome"
+                                        value={form.name}
+                                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                                    />
+                                    <Input
+                                        placeholder="Slug"
+                                        value={form.slug}
+                                        onChange={(e) => setForm({ ...form, slug: e.target.value })}
+                                    />
+                                    <Input
+                                        placeholder="Descrição"
+                                        value={form.description || ""}
+                                        onChange={(e) => setForm({ ...form, description: e.target.value })}
+                                    />
+                                    <div className="flex gap-4 ms-2 items-center">
+                                        <label>Destaque?</label>
+                                        <Input
+                                            type="checkbox"
+                                            checked={form.isFeatured}
+                                            onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
+                                            className="w-4 cursor-pointer"
+                                        />
+                                    </div>
+                                    <div className="flex ms-3 items-center gap-2">
+                                        <label className="text-gray-600 text-sm">Cor</label>
+                                        <Input
+                                            className="w-[60px] cursor-pointer"
+                                            type="color"
+                                            value={form.color}
+                                            onChange={(e) => setForm({ ...form, color: e.target.value })}
+                                        />
+                                    </div>
+                                    <LabelInputFile
+                                        id={`update-cover-${category.id}`}
+                                        label="Atualizar imagem"
+                                        accept="image/*"
+                                        onChange={(file) => setForm({ ...form, file })}
+                                    />
+                                </div>
+
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                    <AlertDialogAction asChild>
+                                        <Button onClick={handleUpdate} disabled={isSaving}>
+                                            {isSaving ? (
+                                                <>
+                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...
+                                                </>
+                                            ) : (
+                                                "Salvar alterações"
+                                            )}
+                                        </Button>
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button size="sm" variant="destructive">
+                                    <Trash2 className="w-4 h-4" />
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="md:max-w-[50%] max-w-full">
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Deseja realmente excluir?</AlertDialogTitle>
+                                </AlertDialogHeader>
+                                <p className="text-sm text-muted-foreground mb-4">{category.name}</p>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleDelete}>Confirmar</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </div>
                 </CardFooter>
             </Card>
         </div>
