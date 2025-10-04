@@ -308,7 +308,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
 
   // Posts actions
   fetchPosts: async (params) => {
-    set({ postsLoading: true, postsError: null })
+    set({ postsLoading: !params?.loadMore, postsError: null })
     try {
       const response = await postsService.getPosts(params)
       set({

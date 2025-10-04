@@ -129,7 +129,7 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section ref={sliderRef} className="relative h-[600px] overflow-hidden">
+      <section ref={sliderRef} className="relative h-[600px] overflow-hidden pb-8 ">
         {/* Todas as imagens empilhadas com opacidade controlada */}
         {banners.map((banner, index) => (
           <img
@@ -147,8 +147,8 @@ export default function Home() {
         <div className="absolute inset-0 bg-black opacity-50 z-20" />
 
         {/* Texto acima das imagens */}
-        <div className="relative z-30 flex items-center justify-center h-full text-white text-center lg:px-4 px-[60px]">
-          <h1 className="text-3xl md:text-6xl font-bold max-w-4xl leading-tight">
+        <div className="relative z-30 flex items-end justify-center h-full text-white text-center lg:px-4 px-[60px]">
+          <h1 className="text-3xl md:text-6xl font-bold max-w-6xl leading-tight">
             {banners[currentSlide]?.text}
           </h1>
         </div>

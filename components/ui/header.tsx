@@ -8,6 +8,7 @@ import { getLive, UpdateLiveData } from "@/services/live";
 import { useEffect, useState } from "react";
 import { useContentStore } from "@/lib/content-store";
 import SearchToggle from "../search";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function Header() {
     const { categories, fetchCategories } = useContentStore()
@@ -17,16 +18,21 @@ export default function Header() {
         link: ''
     });
 
+    const isMobile = useIsMobile();
+
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
-            let higher = window.scrollY >= 200
-            setTimeout(() => {
-                setIsScrolled(higher);
-            }, 500);
+            const y = window.scrollY;
+
+            setIsScrolled(prev => {
+                if (!prev && y > 220) return true;   // ativa
+                if (prev && y < 180) return false;   // desativa
+                return prev; // mantém o estado
+            });
         };
 
         window.addEventListener("scroll", handleScroll);
@@ -108,14 +114,18 @@ export default function Header() {
                         </Button>
                         <Link href="/" className="text-center">
                             <img
-                                src={isScrolled ? "/fpa-pequena.png" : "/fpa-grande.png"}
+                                src={(isScrolled || isMobile) ? "/fpa-pequena.png" : "/fpa-grande.png"}
                                 alt="logo FPA"
-                                className={`${isScrolled ? 'max-w-[140px]' : 'max-w-[60px]'}`}
+                                className={
+                                    `
+                                    ${(isScrolled || isMobile) ? 'max-w-[140px]' : 'max-w-[60px]'}
+                                    `
+                                }
                             />
                             <link rel="preload" as="image" href="/fpa-pequena.png" />
                             <link rel="preload" as="image" href="/fpa-grande.png" />
                         </Link>
-                        <div className="flex gap-6">
+                        <div className="flex gap-6 justify-start md:w-[160px] ">
                             <div className="md:block hidden">
                                 <SearchToggle />
                             </div>

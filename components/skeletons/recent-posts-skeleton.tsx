@@ -1,15 +1,13 @@
-interface Props {
-    highlighted?: boolean
-}
-
-export function RecentPostCardSkeleton({ highlighted }: Props) {
+export function RecentPostCardSkeleton() {
     return (
-        <div className={`animate-pulse mb-8 rounded-lg overflow-hidden ${highlighted ? 'bg-gray-100' : 'bg-white'}`}>
-            <div className="w-full h-64 bg-gray-300 rounded-lg mb-4" />
-            <div className="space-y-2 px-2">
-                <div className="w-3/4 h-5 bg-gray-400 rounded" />
-                <div className="w-full h-4 bg-gray-300 rounded" />
-                <div className="w-2/3 h-4 bg-gray-300 rounded" />
+        <div className={`animate-pulse rounded-lg flex gap-4 `}>
+            <div className="lg:min-w-[460px] h-64 bg-gray-200 rounded-lg mb-4" />
+            <div className="w-full flex flex-col gap-8">
+                <div className="w-[200px] h-4 bg-gray-200 rounded" />
+                <div className="flex flex-col gap-1">
+                    <div className="w-full h-8 bg-gray-200 rounded" />
+                    <div className="w-[80%] h-8 bg-gray-200 rounded" />
+                </div>
             </div>
         </div>
     )

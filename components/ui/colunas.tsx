@@ -15,10 +15,10 @@ export default function ColunistasSection() {
         <section className="bg-white rounded-2xl shadow-md p-4">
             <div className="max-w-[1300px] mx-auto">
                 <h2 className="text-3xl font-bold text-[#1C9658]">Artigos</h2>
-                <p className="text-gray-600 mt-1 mb-6">Conheça o que pensam os parlamentares da FPA.</p>
+                <p className="text-gray-600 mt-1 ">Conheça o que pensam os parlamentares da FPA.</p>
 
                 <ContentSlider perView={4}>
-                    {authors.map((author) => (
+                    {authors.filter(el => el.name).map((author) => (
                         <Link href={`/artigos/${author.id}`} key={author.id} className="flex flex-col items-start space-y-2">
                             <div className="flex gap-2 items-center">
                                 <img

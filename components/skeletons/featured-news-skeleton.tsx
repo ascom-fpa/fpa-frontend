@@ -1,6 +1,6 @@
 export default function FeaturedNewsSectionSkeleton() {
     return (
-        <div className="flex gap-10 lg:flex-nowrap flex-wrap animate-pulse">
+        <div className="flex gap-10 lg:flex-nowrap flex-wrap animate-pulse px-5">
             {/* Esquerda: destaque principal */}
             <div className="w-full lg:w-8/12">
                 <div className="relative flex items-center justify-center overflow-hidden rounded-2xl h-[520px] bg-gray-300">

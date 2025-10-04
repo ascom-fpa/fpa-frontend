@@ -60,6 +60,7 @@ export interface IPostParam {
   categoryId?: string
   authorId?: string
   search?: string
+  loadMore?: boolean
 }
 
 // Get all posts with pagination and filters

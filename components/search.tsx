@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export default function SearchToggle() {
     const [open, setOpen] = useState(false)
@@ -12,6 +13,8 @@ export default function SearchToggle() {
     const inputRef = useRef<HTMLInputElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
     const router = useRouter()
+
+    const isMobile = useIsMobile()
 
     useEffect(() => {
         if (open) inputRef.current?.focus()
@@ -33,7 +36,7 @@ export default function SearchToggle() {
         const value = q.trim()
         if (!value) return
         setOpen(false)
-        router.push(`/busca?q=${encodeURIComponent(value)}`)
+        router.push(`${process.env.NEXT_PUBLIC_FRONT_URL}/busca?q=${encodeURIComponent(value)}`)
     }
 
     return (
@@ -42,22 +45,22 @@ export default function SearchToggle() {
             <button
                 aria-label="Buscar"
                 onClick={() => setOpen(true)}
-                className={`${open ? "md:block hidden" : ""} cursor-pointer p-2 rounded-md hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60`}
+                className={`${(open || isMobile) ? "md:block hidden" : ""} cursor-pointer p-2 rounded-md hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60`}
             >
                 <Search className="h-6 w-6 text-white" />
             </button>
 
             <AnimatePresence>
-                {open && (
+                {(open || isMobile) && (
                     <motion.div
                         key="search-input"
                         initial={{ scaleX: 0, opacity: 0 }}
                         animate={{ scaleX: 1, opacity: 1 }}
                         exit={{ scaleX: 0, opacity: 0 }}
                         transition={{ duration: 0.25, ease: 'easeInOut' }}
-                        className="md:absolute right-0 origin-right flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-md w-[76vw] max-w-[520px]"
+                        className="md:absolute right-0 origin-right flex items-center gap-2 md:bg-white md:border-none border-white border-1 px-3 py-2 md:rounded-full rounded-lg shadow-md w-[76vw] max-w-[520px]"
                     >
-                        <Search className="h-5 w-5 text-gray-500" />
+                        <Search className="h-5 w-5 md:text-gray-500" />
                         <input
                             ref={inputRef}
                             value={q}
@@ -67,7 +70,7 @@ export default function SearchToggle() {
                                 if (e.key === 'Escape') setOpen(false)
                             }}
                             placeholder="Pesquisar assuntos, notícias, vídeos…"
-                            className="w-full bg-transparent outline-none text-gray-900 placeholder:text-gray-500"
+                            className="w-full bg-transparent outline-none md :text-gray-900 md:placeholder:text-gray-500"
                         />
                         {q && (
                             <button

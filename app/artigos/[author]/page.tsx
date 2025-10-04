@@ -19,7 +19,7 @@ interface PageProps {
 
 export default function Page({ params }: PageProps) {
     const pathname = usePathname()
-    const { fetchPosts, posts, currentCategory, authors, fetchAuthors } = useContentStore()
+    const { fetchPosts, postsLoading, posts, currentCategory, authors, fetchAuthors } = useContentStore()
 
     useEffect(() => {
         getPosts()
@@ -35,11 +35,11 @@ export default function Page({ params }: PageProps) {
         <div className="min-h-screen bg-[#F9F9F9]" >
             <Header />
 
-            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">Artigos {authors.find(el => el.id == params.author)?.name}</h1>
+            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">Artigos {authors.find(el => el.id == params?.author || "")?.name}</h1>
 
             <div className="max-w-[1300px] lg:mx-auto">
                 {
-                    !posts.length
+                    (!posts[0] || postsLoading)
                         ? <FeaturedNewsSectionSkeleton />
                         : <div className="flex gap-10 lg:flex-nowrap flex-wrap px-5">
                             <div className="w-full lg:w-8/12">
