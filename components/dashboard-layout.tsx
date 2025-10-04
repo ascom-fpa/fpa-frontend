@@ -152,7 +152,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button size="sm" className="gap-2 cursor-pointer" onClick={() => router.push("/admin/posts/new")}>
+            <Button size="sm" className="gap-2 cursor-pointer" onClick={() => router.push("/admin/posts")}>
               <Plus className="h-4 w-4" />
               Nova matéria
             </Button>
