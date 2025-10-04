@@ -794,32 +794,6 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ fileUploadProgress: data })
   },
 
-  // createRelevant: async (data) => {
-  //   set({ relevantsLoading: true, relevantsError: null, loading: true })
-
-  //   const formData = new FormData()
-  //   formData.append("title", data.title)
-  //   if (data.description) formData.append("description", data.description)
-  //   formData.append("videoFile", data.videoFile!)
-  //   if (data.coverFile) formData.append("coverFile", data.coverFile)
-
-  //   try {
-  //     const newRelevant = await relevantsService.createRelevant(formData)
-  //     set((state) => ({
-  //       relevants: [newRelevant, ...state.relevants],
-  //       relevantsLoading: false,
-  //     }))
-  //   } catch (error: any) {
-  //     set({
-  //       relevantsLoading: false,
-  //       relevantsError: error.response?.data?.message || "Failed to create web story",
-  //     })
-  //     throw error
-  //   } finally {
-  //     set({ loading: false })
-  //   }
-  // },
-
   createRelevant: async (data: any) => {
     set({ relevantsLoading: true, relevantsError: null, loading: true })
 

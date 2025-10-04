@@ -23,6 +23,10 @@ export interface CreateRelevantData {
 
 export interface UpdateRelevantData extends Partial<CreateRelevantData> {
   id: string
+  title?: string
+  description?: string
+  videoFile?: File
+  coverFile?: File
 }
 
 // Get all relevants with pagination
@@ -101,9 +105,58 @@ export const createRelevant = async (data: {
 }
 
 // Update relevant
-export const updateRelevant = async (data: UpdateRelevantData): Promise<Relevant> => {
-  const { id, ...updateData } = data
-  const response = await api.put(`/relevants/${id}`, updateData)
+export const updateRelevant = async (
+  data: UpdateRelevantData
+): Promise<Relevant> => {
+  let videoKey: string | undefined
+  let coverKey: string | undefined
+
+  // Upload new video if provided
+  if (data.videoFile) {
+    const videoRes = await api.get("/relevants/signed-url", {
+      params: {
+        filename: data.videoFile.name,
+        contentType: data.videoFile.type,
+      },
+    })
+
+    const { url: videoUrl, key } = videoRes.data.data
+    videoKey = key
+
+    await fetch(videoUrl, {
+      method: "PUT",
+      headers: { "Content-Type": data.videoFile.type },
+      body: data.videoFile,
+    })
+  }
+
+  // Upload new cover if provided
+  if (data.coverFile) {
+    const coverRes = await api.get("/relevants/signed-url", {
+      params: {
+        filename: data.coverFile.name,
+        contentType: data.coverFile.type,
+      },
+    })
+
+    const { url: coverUrl, key } = coverRes.data.data
+    coverKey = key
+
+    await fetch(coverUrl, {
+      method: "PUT",
+      headers: { "Content-Type": data.coverFile.type },
+      body: data.coverFile,
+    })
+  }
+
+  // Send update to backend
+  const response = await api.patch(`/relevants/${data.id}`, {
+    ...(data.title && { title: data.title }),
+    ...(data.description && { description: data.description }),
+    ...(videoKey && { videoKey }),
+    ...(coverKey && { coverKey }),
+  })
+
   return response.data
 }
 
