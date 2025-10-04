@@ -84,14 +84,14 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                     {/* Recent News - 75% width */}
                     <div className="flex-1 lg:w-3/4 w-full bg-white h-fit p-4 rounded-2xl shadow-md" ref={containerRef}>
                         {
-                            postsLoading
+                            (postsLoading || !newsNoFeatured.length)
                                 ? <div className="animate-pulse bg-gray-200 h-8 w-[200px] mb-8"></div>
                                 : <h2 className="text-3xl font-bold text-[#1C9658] mb-8">Mais Recentes</h2>
                         }
 
                         {/* Featured Article */}
                         <div className="flex flex-col gap-10">
-                            {postsLoading
+                            {(postsLoading || !newsNoFeatured.length)
                                 ? Array.from({ length: 3 }).map((_, index) => (
                                     <RecentPostCardSkeleton key={index} />
                                 ))

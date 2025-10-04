@@ -10,9 +10,9 @@ import Link from "next/link";
 import { useEffect } from "react";
 
 export default function Page({ searchParams }: { searchParams: { q: string } }) {
-    const query = searchParams.q || ""
+    const query = searchParams?.q || ""
 
-    const { fetchPosts, posts } = useContentStore()
+    const { fetchPosts, posts, postsLoading } = useContentStore()
 
     useEffect(() => {
         fetchPosts({ search: query })
