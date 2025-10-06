@@ -41,7 +41,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
     }, []);
 
     useEffect(() => {
-        if ((!postsLoading && posts.length === 1) || !newsNoFeatured.length) {
+        if ((!postsLoading && posts.length === 1) || !newsNoFeatured.length || newsNoFeatured.length < 4 ) {
             loadMorePosts(false)
         }
     }, [postsLoading]);

@@ -105,16 +105,18 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                 <div className="py-4 px-4">
                     <div className="flex justify-between items-center max-w-[1300px] mx-auto">
                         <Button
-                        id="menu-button"
                             variant="ghost"
                             size="sm"
                             className="text-white hover:bg-[#154B2B] w-[30px] h-[30px]"
                             onClick={() => setIsSidebarOpen(true)}
+                            id="menu-button"
+
                         >
-                            <Menu width={30} height={30} className="w-[30px] h-[30px]" />
+                            <Menu
+                                width={30} height={30} className="w-[30px] h-[30px]" />
                         </Button>
                         <div className="flex-1 flex">
-                            <Link href="/" className={`text-center flex ${category ? 'justify-start' :'w-full justify-center'}`}>
+                            <Link href="/" className={`text-center flex ${category ? 'justify-start' : 'w-full justify-center'}`}>
                                 <img
                                     src={"/agfpa_branca.png"}
                                     alt="logo FPA"

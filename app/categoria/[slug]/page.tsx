@@ -36,11 +36,11 @@ export default function Page({ params }: PageProps) {
 
     return (
         < div className="min-h-screen bg-[#F9F9F9]" >
-            <Header />
+            <Header category={currentCategory?.name || 'Categoria'} categoryColor={currentCategory?.color || 'black'} categoryId={currentCategory?.id} />
 
-            <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">{currentCategory?.name || 'Categoria'}</h1>
+            {/* <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">{currentCategory?.name || 'Categoria'}</h1> */}
 
-            <div className="max-w-[1300px] lg:mx-auto">
+            <div className="max-w-[1300px] lg:mx-auto my-10">
                 {
                     !newsNoFeatured.length
                         ? <FeaturedNewsSectionSkeleton />
@@ -56,7 +56,7 @@ export default function Page({ params }: PageProps) {
                                     </Link>
                                 }
                             </div>
-                            <div className="w-full lg:w-4/12 flex flex-col gap-10 lg:mx-auto  mx-4">
+                            <div className="w-full lg:w-4/12 flex flex-col gap-10 lg:mx-auto  mx-4 justify-between">
                                 {newsNoFeatured.slice(1, 4).map((post) => (
                                     <article key={post.id} className="flex items-start gap-4 pb-6 border-b border-gray-200">
                                         <div className="flex-1">
