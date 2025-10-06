@@ -1,8 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import HTMLFlipBook from "react-pageflip";
 import * as pdfjsLib from "pdfjs-dist";
+import dynamic from "next/dynamic";
+
+const HTMLFlipBook = dynamic(() => import("react-pageflip"), {
+  ssr: false,
+  loading: () => <p>Carregando páginas...</p>,
+});
 
 // ✅ Set PDF.js worker manually (no TS issues)
 pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
