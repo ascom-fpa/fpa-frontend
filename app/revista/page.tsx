@@ -1,9 +1,14 @@
 "use client"
-import PDFMagazine from "@/components/magazine";
 import Footer from "@/components/ui/footer";
 import Header from "@/components/ui/header";
 import { useContentStore } from "@/lib/content-store";
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
+
+const PDFMagazine = dynamic(() => import("@/components/magazine"), {
+  ssr: false,
+  loading: () => <p>Carregando revista...</p>,
+});
 
 export default function Page() {
     const { fetchMagazineUrl, magazineUrl, createMagazine } = useContentStore()
