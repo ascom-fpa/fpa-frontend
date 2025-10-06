@@ -190,8 +190,8 @@ export default function Home() {
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
                   <Link className='' href={`/noticia/${postsCategoryFeatured?.postsByCategory[postCategory?.id][0]?.id}`}>
-                    <article className="bg-white rounded-2xl overflow-hidden shadow-md flex self-center cursor-pointer transition-all lg:hover:scale-105 w-fit">
-                      <div className="relative lg:max-w-[460px]">
+                    <article className="bg-white rounded-2xl overflow-hidden shadow-md flex self-center cursor-pointer transition-all lg:hover:scale-105">
+                      <div className="relative lg:max-w-[460px] overflow-hidden">
                         <img
                           src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
                           alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"

@@ -86,7 +86,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                         {
                             (postsLoading)
                                 ? <div className="animate-pulse bg-gray-200 h-8 w-[200px] mb-8"></div>
-                                : <h2 className="text-3xl font-bold text-[#1C9658] mb-8">Mais Recentes</h2>
+                                : isHome ? <h2 className="text-3xl font-bold text-[#1C9658] mb-8">Mais Recentes</h2> : null
                         }
 
                         {/* Featured Article */}
@@ -101,7 +101,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                                             <img
                                                 src={post.thumbnailUrl || "/placeholder.svg"}
                                                 alt={post.postTitle}
-                                                className="lg:w-[460px] rounded-lg"
+                                                className="lg:min-w-[460px] rounded-lg object-cover h-[230px]"
                                             />
                                             <div className="flex flex-col gap-4">
                                                 <span className='uppercase text-sm'>{post.postCategory.name}</span>
@@ -129,7 +129,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
 
                     </div>
                     {/* Sidebar - 25% width */}
-                    {!internalPage && <aside className="lg:w-1/4  space-y-8">
+                    {(!internalPage && isHome) && <aside className="lg:w-1/4  space-y-8">
                         {instagramPosts.length == 0
                             ? <TwitterInstagramSkeleton />
                             : <div className="w-full flex flex-col">

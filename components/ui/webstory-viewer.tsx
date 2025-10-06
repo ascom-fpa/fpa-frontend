@@ -63,7 +63,7 @@ export default function WebstoryViewer({ open, onClose, webstory }: Props) {
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={onClose}>
+      <Dialog as="div" className="relative z-[9999999999999999]" onClose={onClose}>
         <div className="fixed inset-0 backdrop-blur-2xl" />
         <div className="fixed inset-0 bg-black/80" />
         <div className="fixed inset-0 flex items-center justify-center">

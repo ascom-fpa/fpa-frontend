@@ -28,18 +28,19 @@ export default function Page({ params }: PageProps) {
     }, [pathname, params]);
 
     async function getCategory() {
+        console.log(pathname, await params)
         const { slug } = await params
         fetchCategory(slug)
         fetchPosts({ categoryId: slug })
     }
 
     return (
-        < div className="min-h-screen bg-[#F9F9F9] flex flex-col" >
+        < div className="min-h-screen bg-[#F9F9F9]" >
             <Header />
 
             <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">{currentCategory?.name || 'Categoria'}</h1>
 
-            <div className="max-w-[1300px] lg:mx-auto flex-1 ">
+            <div className="max-w-[1300px] lg:mx-auto">
                 {
                     !newsNoFeatured.length
                         ? <FeaturedNewsSectionSkeleton />
@@ -101,7 +102,7 @@ export default function Page({ params }: PageProps) {
                         </div>
                 }
 
-                {/* <LastNews isHome={false} category={currentCategory?.id} /> */}
+                <LastNews isHome={false} category={currentCategory?.id} />
             </div>
             <Footer />
         </div >

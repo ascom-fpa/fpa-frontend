@@ -58,7 +58,7 @@ export default function Header({ category, categoryColor, categoryId }: { catego
             ></div>
 
             {/* Sidebar */}
-            <aside className={`fixed top-0 left-0 h-full lg:w-96 w-64 bg-[#1C9658] text-white z-50 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <aside className={`fixed top-0 left-0 h-full w-64 bg-[#1C9658] text-white z-50 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className="p-4 flex justify-between items-center border-b border-gray-200">
                     <h2 className="text-lg font-bold">Menu</h2>
                     <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)}>
@@ -66,7 +66,7 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                     </Button>
                 </div>
 
-                <nav className="p-4 space-y-4 mt-4 text-2xl">
+                <nav className="p-4 space-y-4 mt-4 ">
                     {/* Categorias com submenu */}
                     <div className="space-y-2">
                         <button
@@ -105,17 +105,18 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                 <div className="py-4 px-4">
                     <div className="flex justify-between items-center max-w-[1300px] mx-auto">
                         <Button
+                        id="menu-button"
                             variant="ghost"
                             size="sm"
-                            className="text-white hover:bg-[#154B2B]"
+                            className="text-white hover:bg-[#154B2B] w-[30px] h-[30px]"
                             onClick={() => setIsSidebarOpen(true)}
                         >
-                            <Menu className="h-6 w-6" />
+                            <Menu width={30} height={30} className="w-[30px] h-[30px]" />
                         </Button>
                         <div className="flex-1 flex">
                             <Link href="/" className={`text-center flex ${category ? 'justify-start' :'w-full justify-center'}`}>
                                 <img
-                                    src={"/fpa-pequena.png"}
+                                    src={"/agfpa_branca.png"}
                                     alt="logo FPA"
                                     className={
                                         `
@@ -123,8 +124,7 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                                     `
                                     }
                                 />
-                                <link rel="preload" as="image" href="/fpa-pequena.png" />
-                                <link rel="preload" as="image" href="/fpa-grande.png" />
+                                <link rel="preload" as="image" href="/agfpa_branca.png" />
                             </Link>
                             {category && <Link className="w-full text-center text-3xl text-white" href={`/categoria/${categoryId}`}>
                                 {category}

@@ -459,3 +459,8 @@ html {
 #facebook {
   overflow: hidden;
 }
+
+.menu-button svg {
+  width: 30px;
+  height: 30px;
+}
