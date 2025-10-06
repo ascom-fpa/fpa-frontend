@@ -10,7 +10,7 @@ import { useContentStore } from "@/lib/content-store";
 import SearchToggle from "../search";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export default function Header() {
+export default function Header({ category, categoryColor, categoryId }: { category?: string, categoryColor?: string, categoryId?: string }) {
     const { categories, fetchCategories } = useContentStore()
 
     const [live, setLive] = useState<UpdateLiveData>({
@@ -58,7 +58,7 @@ export default function Header() {
             ></div>
 
             {/* Sidebar */}
-            <aside className={`fixed top-0 left-0 h-full w-64 bg-[#1C9658] text-white z-50 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <aside className={`fixed top-0 left-0 h-full lg:w-96 w-64 bg-[#1C9658] text-white z-50 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className="p-4 flex justify-between items-center border-b border-gray-200">
                     <h2 className="text-lg font-bold">Menu</h2>
                     <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)}>
@@ -66,7 +66,7 @@ export default function Header() {
                     </Button>
                 </div>
 
-                <nav className="p-4 space-y-4 mt-4">
+                <nav className="p-4 space-y-4 mt-4 text-2xl">
                     {/* Categorias com submenu */}
                     <div className="space-y-2">
                         <button
@@ -97,7 +97,7 @@ export default function Header() {
             </aside>
 
             {/* Header */}
-            <header className="bg-[#1C9658] text-white sticky top-0 left-0 z-[999999999]">
+            <header style={{ backgroundColor: categoryColor || '' }} className="bg-[#1C9658] text-white sticky top-0 left-0 z-[999999999]">
                 {/* Top bar */}
                 {/* <RespondeAgroDirect /> */}
 
@@ -112,19 +112,24 @@ export default function Header() {
                         >
                             <Menu className="h-6 w-6" />
                         </Button>
-                        <Link href="/" className="text-center">
-                            <img
-                                src={(isScrolled || isMobile) ? "/fpa-pequena.png" : "/fpa-grande.png"}
-                                alt="logo FPA"
-                                className={
+                        <div className="flex-1 flex">
+                            <Link href="/" className={`text-center flex ${category ? 'justify-start' :'w-full justify-center'}`}>
+                                <img
+                                    src={"/fpa-pequena.png"}
+                                    alt="logo FPA"
+                                    className={
+                                        `
+                                    ${'max-w-[140px]'}
                                     `
-                                    ${(isScrolled || isMobile) ? 'max-w-[140px]' : 'max-w-[60px]'}
-                                    `
-                                }
-                            />
-                            <link rel="preload" as="image" href="/fpa-pequena.png" />
-                            <link rel="preload" as="image" href="/fpa-grande.png" />
-                        </Link>
+                                    }
+                                />
+                                <link rel="preload" as="image" href="/fpa-pequena.png" />
+                                <link rel="preload" as="image" href="/fpa-grande.png" />
+                            </Link>
+                            {category && <Link className="w-full text-center text-3xl text-white" href={`/categoria/${categoryId}`}>
+                                {category}
+                            </Link>}
+                        </div>
                         <div className="flex gap-6 justify-start md:w-[160px] ">
                             <div className="md:block hidden">
                                 <SearchToggle />

@@ -28,19 +28,18 @@ export default function Page({ params }: PageProps) {
     }, [pathname, params]);
 
     async function getCategory() {
-        console.log(pathname, await params)
         const { slug } = await params
         fetchCategory(slug)
         fetchPosts({ categoryId: slug })
     }
 
     return (
-        < div className="min-h-screen bg-[#F9F9F9]" >
+        < div className="min-h-screen bg-[#F9F9F9] flex flex-col" >
             <Header />
 
             <h1 style={{ background: currentCategory?.color || 'black' }} className="p-5 capitalize text-white text-3xl text-center my-6">{currentCategory?.name || 'Categoria'}</h1>
 
-            <div className="max-w-[1300px] lg:mx-auto">
+            <div className="max-w-[1300px] lg:mx-auto flex-1 ">
                 {
                     !newsNoFeatured.length
                         ? <FeaturedNewsSectionSkeleton />
@@ -48,7 +47,7 @@ export default function Page({ params }: PageProps) {
                             <div className="w-full lg:w-8/12">
                                 {newsNoFeatured[0] &&
                                     <Link className="text-3xl font-semibold text-gray-900 mb-2 leading-tight " href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${newsNoFeatured[0].id}`}>
-                                        <article className="relative flex items-center justify-center group overflow-hidden lg:rounded-2xl ">
+                                        <article className="relative flex items-end justify-center group overflow-hidden lg:rounded-2xl ">
                                             <div className="absolute top-0 left-0 w-full h-full bg-black rounded-2xl opacity-30 z-10"></div>
                                             <img className="w-full lg:h-auto h-[400px] lg:object-contain object-cover lg:rounded-2xl lg:group-hover:scale-120 transition-all" src={newsNoFeatured[0].thumbnailUrl} />
                                             <h2 className="absolute m-10 text-white text-center font-semibold text-3xl z-20">{newsNoFeatured[0].postTitle}</h2>
@@ -88,7 +87,7 @@ export default function Page({ params }: PageProps) {
                                                 </div>
 
                                             </div>
-                                            <Link className="text-3xl font-medium text-gray-900 mb-2 leading-tight" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                                            <Link className="text-2xl font-medium text-gray-900 mb-2 leading-tight" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
                                                 <h3 >{post.postTitle}</h3>
                                             </Link>
 
@@ -102,7 +101,7 @@ export default function Page({ params }: PageProps) {
                         </div>
                 }
 
-                <LastNews isHome={false} category={currentCategory?.id} />
+                {/* <LastNews isHome={false} category={currentCategory?.id} /> */}
             </div>
             <Footer />
         </div >

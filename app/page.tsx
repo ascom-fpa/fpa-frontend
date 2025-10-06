@@ -5,7 +5,7 @@ import 'swiper/css/navigation'
 import type React from "react"
 
 import { useEffect, useRef, useState } from "react"
-import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink, Menu, MessageSquare, Search, Share2 } from "lucide-react"
+import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink, Menu, MessageSquare, Play, Search, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useContentStore } from "@/lib/content-store"
 import Footer from '@/components/ui/footer'
@@ -33,6 +33,7 @@ import VideosSkeleton from '@/components/skeletons/videos-skeleton'
 import TwitterInstagramSkeleton from '@/components/skeletons/twitter-instagram-skeleton'
 import WebstoriesCarouselSkeleton from '@/components/skeletons/webstory-skeleton'
 import Newsletter from '@/components/newsletter'
+import MinutoFPA from '@/components/minuto-fpa'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -244,33 +245,7 @@ export default function Home() {
       {
         relevants.length === 0 ? (
           <FatoEmFocoSkeleton />
-        ) : <section id='fato-em-foco' className="lg:py-12 pb-10 px-4">
-          <div className="max-w-[1300px] mx-auto bg-white 2xl:p-8 p-4 rounded-2xl shadow-md">
-            {/* Minuto FPA */}
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h2 className="text-3xl font-bold text-[#1C9658]">Minuto FPA</h2>
-                  <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
-                </div>
-              </div>
-              <ContentSlider arrowTop='-top-20' perView={4}>
-                {relevants.map((video) => (
-                  <div className={`cursor-pointer`} key={video.id}>
-                    <div className="relative rounded-xl mx-auto overflow-hidden bg-black">
-                      <video poster={video?.coverImageUrl} id={`video-${video.id}`} className="w-full h-full object-cover" src={video.videoUrl || ""} controls />
-                      <div className="absolute top-2 left-2 bg-black bg-opacity-80 text-white text-xs px-2 py-0.5 rounded">
-                        {new Date(video.updatedAt).toLocaleDateString('pt-BR')}
-                      </div>
-                    </div>
-                    {/* <span className='text-black capitalize'>{video.description}</span> */}
-                  </div>
-                ))}
-                {/* <VideoSlider perView={7} videos={relevants} width={200} height={300} /> */}
-              </ContentSlider>
-            </div>
-          </div>
-        </section>
+        ) : <MinutoFPA relevants={relevants} />
       }
       <section id="artigos" className="px-4 bg-gray-50 max-w-[1300px] mx-auto ">
         <div className="flex gap-10 lg:flex-nowrap flex-wrap lg:flex-row flex-col-reverse">

@@ -6,8 +6,8 @@ export default function InstagramGrid({ posts }: any) {
     return (
         <div className="flex flex-col gap-4 bg-white p-2 rounded-2xl shadow-md">
             <Link target="_blank" href="https://www.instagram.com/fpagro/" className="flex text-[#1C9658] gap-2 items-center justify-center">
-                <h3 className=" text-3xl text-center">Instagram FPA</h3>
                 <Instagram className="w-6 h-6" />
+                <h3 className=" text-xl text-center">Instagram FPA</h3>
             </Link>
             <div className="flex lg:flex-wrap lg:flex-row flex-col gap-4 justify-center items-center overflow-hidden">
                 {posts?.map((post: any) => (

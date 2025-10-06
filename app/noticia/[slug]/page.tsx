@@ -28,19 +28,19 @@ export default function Page({ params }: PageProps) {
 
     return (
         <main>
-            <Header />
-            <div style={{ background: currentPost?.postCategory.color }} className="p-5 text-white text-3xl text-center mt-5 mb-10">
+            <Header category={currentPost?.postCategory.name} categoryColor={currentPost?.postCategory.color} categoryId={currentPost?.postCategory.id} />
+            {/* <div style={{ background: currentPost?.postCategory.color }} className="p-5 text-white text-3xl text-center mt-5 mb-10">
                 <Link href={`/categoria/${currentPost?.postCategory.id}`}>
                     {currentPost?.postCategory.name}
                 </Link>
-            </div>
+            </div> */}
 
             {
                 !currentPost
                     ? <PostPageSkeleton />
                     : <div>
                         <div className='max-w-[1000px] mx-auto px-4 my-10'>
-                            <h1 className="text-3xl font-semibold mb-4">{currentPost?.postTitle}</h1>
+                            <h1 className="text-5xl font-bold mb-4">{currentPost?.postTitle}</h1>
 
                             <div className="text-sm text-gray-500 mb-6">
                                 Publicado em {new Date(currentPost?.createdAt || new Date()).toLocaleDateString('pt-BR')}
@@ -60,7 +60,7 @@ export default function Page({ params }: PageProps) {
                             <article>
                                 {typeof currentPost?.postContent == 'object'
                                     ? <ViewPost postContent={currentPost.postContent} />
-                                    : <div dangerouslySetInnerHTML={{ __html: currentPost?.postContent || '' }}></div>
+                                    : <div className='text-lg' dangerouslySetInnerHTML={{ __html: currentPost?.postContent || '' }}></div>
                                 }
                             </article>
 

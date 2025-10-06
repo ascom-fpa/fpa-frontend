@@ -1,4 +1,5 @@
 "use client"
+import PDFMagazine from "@/components/magazine";
 import Footer from "@/components/ui/footer";
 import Header from "@/components/ui/header";
 import { useContentStore } from "@/lib/content-store";
@@ -18,7 +19,8 @@ export default function Page() {
                 <h1 className="text-4xl font-bold mb-4 text-primary">Revista FPA</h1>
 
                 <div className="w-full overflow-auto">
-                    {magazineUrl ? <iframe allowFullScreen src={magazineUrl} width="100%" height="860px" /> : 'Carregando...'}
+                    {/* {magazineUrl ? <iframe allowFullScreen src={magazineUrl} width="100%" height="860px" /> : 'Carregando...'} */}
+                    {magazineUrl && <PDFMagazine pdfUrl={magazineUrl} />}
                     <a
                         href={magazineUrl}
                         target="_blank"
