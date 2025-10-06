@@ -6,7 +6,7 @@ import Footer from "@/components/ui/footer";
 import Header from "@/components/ui/header";
 import { useContentStore } from "@/lib/content-store";
 import { showToast } from "@/utils/show-toast";
-import { Share2 } from "lucide-react";
+import { Divide, Share2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -57,8 +57,8 @@ export default function Page({ params }: PageProps) {
                                 }
                             </div>
                             <div className="w-full lg:w-4/12 flex flex-col gap-10 lg:mx-auto  mx-4 justify-between">
-                                {newsNoFeatured.slice(1, 4).map((post) => (
-                                    <article key={post.id} className="flex items-start gap-4 pb-6 border-b border-gray-200">
+                                {newsNoFeatured.slice(1, 4).map((post, index) => (
+                                    <article key={post.id} className="flex items-start gap-4 flex-col">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-10 mb-2">
                                                 <span style={{ color: post.postCategory.color }} className={`text-xs font-medium uppercase tracking-wide`}>
@@ -96,6 +96,11 @@ export default function Page({ params }: PageProps) {
                                                 <p className="text-sm font-light text-gray-600 leading-relaxed">{post.summary}</p>
                                             )}
                                         </div>
+                                        {
+                                            index < 2
+                                                ? <div className="h-2 w-full pb-10 border-b border-gray-200"></div>
+                                                : <div></div>
+                                        }
                                     </article>
                                 ))}
                             </div>
