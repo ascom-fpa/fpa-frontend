@@ -122,7 +122,8 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                                     alt="logo FPA"
                                     className={
                                         `
-                                    ${'lg:max-w-[140px] max-w-[40px] lg:object-fill object-contain'}
+                                    ${'lg:max-w-[140px] lg:object-fill object-contain'}
+                                    ${(isMobile && category) ?'max-w-[40px]' : 'max-w-[100px]' }
                                     `
                                     }
                                 />
