@@ -107,39 +107,39 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="text-white hover:bg-[#154B2B] w-[30px] h-[30px]"
+                            className="text-white hover:bg-[#154B2B] w-[30px] h-[30px] flex"
                             onClick={() => setIsSidebarOpen(true)}
                             id="menu-button"
 
                         >
-                            <Menu
-                                width={30} height={30} className="w-[30px] h-[30px]" />
+                            <Menu width={30} height={30} className="w-[30px] h-[30px]" />
+                            {/* {isMobile && <div className="-ms-1 me-1 border-1 border-white h-[20px] "></div>} */}
                         </Button>
                         <div className="flex-1 flex">
                             <Link href="/" className={`text-center flex ${category ? 'justify-start' : 'w-full justify-center'}`}>
                                 <img
-                                    src={"/agfpa_branca.png"}
+                                    src={isMobile ? "/afpa-cortada.png" : "/agfpa_branca.png"}
                                     alt="logo FPA"
                                     className={
                                         `
-                                    ${'max-w-[140px]'}
+                                    ${'lg:max-w-[140px] max-w-[40px] lg:object-fill object-contain'}
                                     `
                                     }
                                 />
                                 <link rel="preload" as="image" href="/agfpa_branca.png" />
                             </Link>
-                            {category && <Link className="w-full text-center text-3xl text-white" href={`/categoria/${categoryId}`}>
+                            {category && <Link className="w-full text-center lg:text-3xl  text-white" href={`/categoria/${categoryId}`}>
                                 {category}
                             </Link>}
                         </div>
-                        <div className="flex gap-6 justify-start md:w-[160px] ">
+                        <div className="flex gap-6 justify-start md:w-[180px] ">
                             <div className="md:block hidden">
                                 <SearchToggle />
                             </div>
-                            {live.isEnabled ?
-                                <Link href={live.link} className="flex items-center space-x-2">
-                                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                                    <span className="font-medium">AO VIVO</span>
+                            {(live.isEnabled) ?
+                                <Link href={live.link} className="bg-red-800 rounded-md flex items-center space-x-2 animate-pulse p-1 px-2">
+                                    <div className="w-2 h-2 bg-white rounded-full "></div>
+                                    <span className="font-medium lg:text-base text-[10px]">AO VIVO</span>
                                 </Link>
                                 :
                                 <span className="font-medium"></span>
