@@ -9,7 +9,7 @@ import { showToast } from "@/utils/show-toast";
 import { Share2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { use, useEffect, useState } from "react";
 
 interface PageProps {
     params: {
@@ -21,23 +21,27 @@ export default function Page({ params }: PageProps) {
     const pathname = usePathname()
     const { fetchPosts, postsLoading, posts, currentCategory, authors, fetchAuthors } = useContentStore()
 
+    const unwrappedParams = use(params as any);
+    const { author } = unwrappedParams as any;
+    const [currentAuthorId, setCurrentAuthorId] = useState(author);
+
     useEffect(() => {
         getPosts()
-    }, [pathname]);
+    }, [pathname, author]);
 
     async function getPosts() {
-        const { author } = params
         fetchPosts({ categoryId: "articles", authorId: author })
         fetchAuthors()
+        setCurrentAuthorId(author)
     }
 
     return (
         <div className="min-h-screen bg-[#F9F9F9]" >
-            <Header category={`Artigos ${authors.find(el => el.id == params?.author || "")?.name}`} categoryColor={currentCategory?.color || 'black'} categoryId={currentCategory?.id} />
+            <Header category={`Artigos ${authors.find(el => el.id == currentAuthorId || "")?.name}`} categoryColor={currentCategory?.color || 'black'} categoryId={currentCategory?.id} />
 
             <div className="max-w-[1300px] lg:mx-auto my-10">
                 {
-                    (!posts[0] || postsLoading)
+                    (!posts[0] || postsLoading || !(authors.some(el => el.id == currentAuthorId)))
                         ? <FeaturedNewsSectionSkeleton />
                         : <div className="flex gap-10 lg:flex-nowrap flex-wrap px-5">
                             <div className="w-full lg:w-8/12">
@@ -52,7 +56,7 @@ export default function Page({ params }: PageProps) {
                                 }
                             </div>
                             <div className="w-full lg:w-4/12 flex flex-col gap-10 lg:mx-auto mx-4 justify-between">
-                                {posts.slice(1, 4).map((post,index) => (
+                                {posts.slice(1, 4).map((post, index) => (
                                     <article key={post.id} className="flex items-start gap-4 flex-col">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-10 mb-2">

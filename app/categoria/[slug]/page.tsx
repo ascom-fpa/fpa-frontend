@@ -9,7 +9,7 @@ import { showToast } from "@/utils/show-toast";
 import { Divide, Share2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { use, useEffect, useState } from "react";
 
 interface PageProps {
     params: {
@@ -20,18 +20,21 @@ interface PageProps {
 export default function Page({ params }: PageProps) {
     const pathname = usePathname()
 
+    const unwrappedParams = use(params as any);
+    const { slug } = unwrappedParams as any;
+    const [currentCategoryId, setCurrentCategoryId] = useState(slug);
+
     const { fetchPosts, posts, fetchCategory, currentCategory } = useContentStore()
     const newsNoFeatured = posts.filter(post => !post.isFeatured)
 
     useEffect(() => {
         getCategory()
-    }, [pathname, params]);
+    }, [pathname, params, slug]);
 
     async function getCategory() {
-        console.log(pathname, await params)
-        const { slug } = await params
-        fetchCategory(slug)
-        fetchPosts({ categoryId: slug })
+        await fetchCategory(slug)
+        await fetchPosts({ categoryId: slug })
+        setCurrentCategoryId(slug)
     }
 
     return (
@@ -42,7 +45,7 @@ export default function Page({ params }: PageProps) {
 
             <div className="max-w-[1300px] lg:mx-auto my-10">
                 {
-                    !newsNoFeatured.length
+                    (!newsNoFeatured.length || (currentCategory?.id != currentCategoryId))
                         ? <FeaturedNewsSectionSkeleton />
                         : <div className="flex gap-10 lg:flex-nowrap flex-wrap">
                             <div className="w-full lg:w-8/12">

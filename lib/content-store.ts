@@ -33,6 +33,7 @@ interface ContentState {
   }
   currentPostFiles: File[]
   mostViewed: postsService.Post[]
+  hasMore: boolean
 
   // Banners state
   banners: bannersService.Banner[]
@@ -194,6 +195,7 @@ export const useContentStore = create<ContentState>((set, get) => ({
   postsPagination: { total: 0, page: 1, limit: 10 },
   currentPostFiles: [],
   mostViewed: [],
+  hasMore: false,
 
   banners: [],
   bannersLoading: false,
@@ -310,10 +312,12 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ postsLoading: !params?.loadMore, postsError: null })
     try {
       const response = await postsService.getPosts(params)
+      console.log(response)
       set({
         posts: params?.page ? [...get().posts, ...response] : response,
         postsLoading: false,
         postsPagination: params ? { ...get().postsPagination, page: params.page || 1, limit: params.limit || 10 } : get().postsPagination,
+        hasMore: (params?.loadMore && (response.length == 0 || ((params?.limit || 10) > response.length))) ? false : true
       })
     } catch (error: any) {
       set({

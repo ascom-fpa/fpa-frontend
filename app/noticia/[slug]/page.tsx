@@ -19,7 +19,7 @@ export default function Page({ params }: PageProps) {
     const unwrappedParams = use(params as any);
     const { slug } = unwrappedParams as any;
 
-    const [currentId, setCurrentId] = useState(slug);
+    const [currentPostId, setCurrentPostId] = useState(slug);
 
     useEffect(() => {
         getPost()
@@ -27,7 +27,7 @@ export default function Page({ params }: PageProps) {
 
     async function getPost() {
         await fetchPost(slug)
-        setCurrentId(slug)
+        setCurrentPostId(slug)
     }
 
     return (
@@ -35,7 +35,7 @@ export default function Page({ params }: PageProps) {
             <Header category={currentPost?.postCategory.name} categoryColor={currentPost?.postCategory.color} categoryId={currentPost?.postCategory.id} />
 
             {
-                (!currentPost || currentPost.id != currentId)
+                (!currentPost || currentPost.id != currentPostId)
                     ? <PostPageSkeleton />
                     : <div>
                         <div className='max-w-[1000px] mx-auto px-4 my-10'>

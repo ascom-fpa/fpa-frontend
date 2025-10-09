@@ -1,18 +1,14 @@
 'use client'
 
 import Link from "next/link";
-import Newsletter from "./newsletter";
-import { Button } from "./ui/button";
 import { useContentStore } from "@/lib/content-store";
 import { useEffect, useRef, useState } from "react";
 import { getPauta } from "@/services/pauta";
 import { Loader2, } from "lucide-react";
-import { showToast } from "@/utils/show-toast";
-import { RecentPostCardSkeleton, RecentPostRowSkeleton } from "./skeletons/recent-posts-skeleton";
+import { RecentPostCardSkeleton } from "./skeletons/recent-posts-skeleton";
 import { getInstagramPosts } from "@/services/instagram";
 import TwitterInstagramSkeleton from "./skeletons/twitter-instagram-skeleton";
 import InstagramGrid from "./ui/instagram-grid";
-import Script from "next/script";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 
@@ -23,14 +19,13 @@ interface IProps {
 }
 
 export default function LastNews({ category, internalPage, isHome = true }: IProps) {
-    const { posts, fetchPosts, postsPagination, postsLoading } = useContentStore()
+    const { posts, fetchPosts, postsPagination, postsLoading, hasMore } = useContentStore()
     const isLoading = !posts || posts.length === 0
 
     const newsNoFeatured = isHome ? posts.filter(post => !post.isFeatured) : posts
     const isMobile = useIsMobile()
 
     const containerRef = useRef<HTMLDivElement>(null)
-    const [isFullscreen, setIsFullscreen] = useState(false)
     const [instagramPosts, setInstagramPosts] = useState([]);
     const [pautaImage, setPautaImage] = useState('');
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -39,12 +34,6 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
         fetchInstagramPosts()
         fetchPauta()
     }, []);
-
-    useEffect(() => {
-        if ((!postsLoading && posts.length === 1) || !newsNoFeatured.length || newsNoFeatured.length < 4 ) {
-            loadMorePosts(false)
-        }
-    }, [postsLoading]);
 
     async function fetchPauta() {
         getPauta()
@@ -63,7 +52,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
     function loadMorePosts(loadMore: boolean) {
         setIsLoadingMore(true)
         try {
-            fetchPosts({ page: postsPagination.page + 1, limit: 5, categoryId: category, loadMore })
+            fetchPosts({ page: postsPagination.page == 1 ? 3 : postsPagination.page + 1, limit: 5, categoryId: category, loadMore })
         } finally {
             setTimeout(() => {
                 setIsLoadingMore(false)
@@ -95,7 +84,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                                 ? Array.from({ length: 3 }).map((_, index) => (
                                     <RecentPostCardSkeleton key={index} />
                                 ))
-                                : newsNoFeatured.slice(isHome ? 0 : 4, isHome ? 5 : -1).map((post, index, arr) =>
+                                : newsNoFeatured.slice(isHome ? 0 : 4, isHome ? 5 : newsNoFeatured.length).map((post, index, arr) =>
                                     <Link key={index + post.id} href={`/noticia/${post.id}`}>
                                         <article className="flex lg:flex-row flex-col gap-8" key={post.id}>
                                             <img
@@ -112,7 +101,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                                     </Link>
                                 )}
                         </div>
-                        {!isHome &&
+                        {(!isHome && hasMore) &&
                             <button
                                 onClick={() => loadMorePosts(true)}
                                 className="cursor-pointer bg-primary text-white transition-all hover:scale-105 text-center p-2 rounded-lg mt-4 px-4">
