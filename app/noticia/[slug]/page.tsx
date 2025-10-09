@@ -6,7 +6,7 @@ import Footer from '@/components/ui/footer';
 import Header from '@/components/ui/header';
 import { useContentStore } from '@/lib/content-store';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { use, useEffect, useState } from 'react';
 
 interface PageProps {
     params: {
@@ -16,27 +16,26 @@ interface PageProps {
 
 export default function Page({ params }: PageProps) {
     const { currentPost, fetchPost } = useContentStore()
+    const unwrappedParams = use(params as any);
+    const { slug } = unwrappedParams as any;
+
+    const [currentId, setCurrentId] = useState(slug);
 
     useEffect(() => {
         getPost()
-    }, []);
+    }, [slug]);
 
     async function getPost() {
-        const { slug } = await params
-        fetchPost(slug)
+        await fetchPost(slug)
+        setCurrentId(slug)
     }
 
     return (
         <main>
             <Header category={currentPost?.postCategory.name} categoryColor={currentPost?.postCategory.color} categoryId={currentPost?.postCategory.id} />
-            {/* <div style={{ background: currentPost?.postCategory.color }} className="p-5 text-white text-3xl text-center mt-5 mb-10">
-                <Link href={`/categoria/${currentPost?.postCategory.id}`}>
-                    {currentPost?.postCategory.name}
-                </Link>
-            </div> */}
 
             {
-                !currentPost
+                (!currentPost || currentPost.id != currentId)
                     ? <PostPageSkeleton />
                     : <div>
                         <div className='max-w-[1000px] mx-auto px-4 my-10'>

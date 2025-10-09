@@ -105,7 +105,7 @@ interface ContentState {
   fetchPostsCategoryFeatured: () => Promise<void>
   fetchPost: (id: string) => Promise<void>
   createPost: (data: postsService.CreatePostData) => Promise<void>
-  updatePost: (id:string, data: postsService.CreatePostData) => Promise<void>
+  updatePost: (id: string, data: postsService.CreatePostData) => Promise<void>
   deletePost: (id: string) => Promise<void>
   uploadPostImage: (file: File) => Promise<string>
   pushCurrentPostFiles: (file: File) => void
@@ -182,7 +182,6 @@ export const useContentStore = create<ContentState>((set, get) => ({
   loading: false,
 
   magazineUrl: '',
-
   posts: [],
   postsFeature: [],
   postsCategoryFeatured: {
