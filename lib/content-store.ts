@@ -312,7 +312,6 @@ export const useContentStore = create<ContentState>((set, get) => ({
     set({ postsLoading: !params?.loadMore, postsError: null })
     try {
       const response = await postsService.getPosts(params)
-      console.log(response)
       set({
         posts: params?.page ? [...get().posts, ...response] : response,
         postsLoading: false,

@@ -1,7 +1,6 @@
 'use client'
 
 import { ChevronDown, ChevronUp, Menu, X } from "lucide-react";
-import RespondeAgroDirect from "../agro";
 import { Button } from "./button";
 import Link from "next/link";
 import { getLive, UpdateLiveData } from "@/services/live";
@@ -123,7 +122,7 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                                     className={
                                         `
                                     ${'lg:max-w-[140px] lg:object-fill object-contain'}
-                                    ${(isMobile && category) ?'max-w-[40px]' : 'max-w-[100px]' }
+                                    ${(isMobile && category) ? 'max-w-[40px]' : 'max-w-[100px]'}
                                     `
                                     }
                                 />

@@ -15,7 +15,7 @@ interface PageProps {
 }
 
 export default function Page({ params }: PageProps) {
-    const { currentPost, fetchPost } = useContentStore()
+    const { currentPost, fetchPost, categories } = useContentStore()
     const unwrappedParams = use(params as any);
     const { slug } = unwrappedParams as any;
 
@@ -32,7 +32,11 @@ export default function Page({ params }: PageProps) {
 
     return (
         <main>
-            <Header category={currentPost?.postCategory.name} categoryColor={currentPost?.postCategory.color} categoryId={currentPost?.postCategory.id} />
+            <Header
+                category={currentPost?.id == currentPostId ? currentPost?.postCategory.name : ""}
+                categoryColor={currentPost?.id == currentPostId ? currentPost?.postCategory.color : ""}
+                categoryId={currentPost?.id == currentPostId ? currentPost?.postCategory.id : ""}
+            />
 
             {
                 (!currentPost || currentPost.id != currentPostId)
