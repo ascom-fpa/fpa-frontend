@@ -57,7 +57,7 @@ export default function PDFMagazine({ pdfUrl }: { pdfUrl: string }) {
               key={idx}
               className="page bg-white flex justify-center items-center"
             >
-              <img
+              <img loading="lazy"
                 src={src}
                 alt={`Page ${idx + 1}`}
                 className="w-full h-full object-contain"

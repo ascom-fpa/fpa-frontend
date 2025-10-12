@@ -154,7 +154,7 @@ function SortableCard({ author, refresh }: { author: any, refresh: () => void })
         <div ref={setNodeRef} style={style}>
             <Card className="p-0">
                 <CardContent {...attributes} {...listeners} className="relative cursor-grab active:cursor-grabbing flex flex-col gap-4">
-                    <img
+                    <img loading="lazy"
                         src={author.photoUrl}
                         alt="author"
                         className="w-full h-40 object-contain rounded-t-lg"
@@ -187,7 +187,7 @@ function SortableCard({ author, refresh }: { author: any, refresh: () => void })
                                     onChange={(f) => setFile(f)}
                                 />
                                 {file && (
-                                    <img
+                                    <img loading="lazy"
                                         src={URL.createObjectURL(file)}
                                         className="w-full h-40 object-contain rounded"
                                     />
@@ -223,7 +223,7 @@ function SortableCard({ author, refresh }: { author: any, refresh: () => void })
                                 <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
                             </AlertDialogHeader>
                             <div className="flex flex-col items-center gap-3">
-                                <img
+                                <img loading="lazy"
                                     src={author.photoUrl}
                                     alt="preview"
                                     className="w-40 h-40 object-contain rounded"

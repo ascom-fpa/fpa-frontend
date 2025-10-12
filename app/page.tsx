@@ -35,6 +35,7 @@ import WebstoriesCarouselSkeleton from '@/components/skeletons/webstory-skeleton
 import Newsletter from '@/components/newsletter'
 import MinutoFPA from '@/components/minuto-fpa'
 import { LazyYouTube } from '@/components/lazy-youtube'
+import Image from 'next/image'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -134,10 +135,14 @@ export default function Home() {
       <section ref={sliderRef} className="relative h-[600px] overflow-hidden pb-8 ">
         {/* Todas as imagens empilhadas com opacidade controlada */}
         {banners.map((banner, index) => (
-          <img
+          <Image
+            width={300}
+            height={300}
             key={banner.id}
             src={banner.imageUrl}
             alt={banner.text}
+            priority={index === 0}
+            unoptimized
             // ✅ Critical optimization for LCP
             fetchPriority={index === 0 ? "high" : "auto"}
             loading={index === 0 ? "eager" : "lazy"}
@@ -200,7 +205,7 @@ export default function Home() {
                   <Link className='' href={`/noticia/${postsCategoryFeatured?.postsByCategory[postCategory?.id][0]?.id}`}>
                     <article className="bg-white rounded-2xl overflow-hidden shadow-md flex self-center cursor-pointer transition-all lg:hover:scale-105">
                       <div className="relative lg:max-w-[460px] overflow-hidden">
-                        <img
+                        <img loading="lazy"
                           src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
                           alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
                           className="h-[320px] lg:max-w-[400px] object-cover"
@@ -222,7 +227,7 @@ export default function Home() {
                           <hr className='my-7' />
                           <Link href={`/noticia/${post.id}`}>
                             <article className={`flex gap-4 items-start cursor-pointer transition-all lg:hover:scale-105`}>
-                              <img
+                              <img loading="lazy"
                                 src={post.thumbnailUrl}
                                 alt="Audiência pública"
                                 className="w-[180px] h-[120px] object-cover rounded-2xl flex-shrink-0 "
@@ -306,7 +311,7 @@ function MagazinePreview({ magazineUrl }: { magazineUrl: string }) {
       {/* Container com sombra e borda arredondada */}
       <div className="relative overflow-hidden rounded-2xl shadow-lg border border-gray-200">
         {/* PDF preview */}
-        <img src={magazineUrl} className='w-full' alt="" />
+        <img loading="lazy" src={magazineUrl} className='w-full' alt="" />
 
         {/* Overlay ao hover */}
         <Link

@@ -214,7 +214,7 @@ function SortableCard({ relevant, onDelete, onUpdate, refresh }: { relevant: any
                                     onChange={(f) => setForm({ ...form, coverFile: f! })}
                                 />
                                 {typeof relevant.coverImageUrl == "string" && (
-                                    <img src={relevant.coverImageUrl} className="w-full h-40 object-contain rounded" />
+                                    <img loading="lazy" src={relevant.coverImageUrl} className="w-full h-40 object-contain rounded" />
                                 )}
                             </div>
                             <AlertDialogFooter>

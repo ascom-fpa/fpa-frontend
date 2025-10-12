@@ -140,7 +140,7 @@ export default function BannerPage() {
                     </AlertDialogHeader>
                     <div className="mb-4">
                         {bannerToDeleteData?.imageUrl && (
-                            <img src={bannerToDeleteData.imageUrl} alt="banner-preview" className="w-full h-64 object-cover rounded" />
+                            <img loading="lazy" src={bannerToDeleteData.imageUrl} alt="banner-preview" className="w-full h-64 object-cover rounded" />
                         )}
                         <p className="text-center mt-2">{bannerToDeleteData?.text}</p>
                     </div>
@@ -189,7 +189,7 @@ function SortableCard({ banner, onDelete, refresh }: { banner: any, onDelete: ()
         <div ref={setNodeRef} style={style}>
             <Card className="p-0">
                 <CardContent {...attributes} {...listeners} className="relative cursor-grab active:cursor-grabbing flex flex-col gap-4 p-4">
-                    <img src={banner.imageUrl} alt="banner" className="w-full h-40 object-cover rounded-t-lg" />
+                    <img loading="lazy" src={banner.imageUrl} alt="banner" className="w-full h-40 object-cover rounded-t-lg" />
                     <p className="font-semibold text-sm">{banner.text}</p>
                     {banner.link && (
                         <a href={banner.link} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 hover:underline w-fit">
@@ -219,7 +219,7 @@ function SortableCard({ banner, onDelete, refresh }: { banner: any, onDelete: ()
                                     onChange={(file) => setFile(file)}
                                 />
 
-                                {banner.imageUrl && <img src={banner.imageUrl} className="w-full h-40 object-cover rounded" />}
+                                {banner.imageUrl && <img loading="lazy" src={banner.imageUrl} className="w-full h-40 object-cover rounded" />}
                             </div>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
@@ -249,7 +249,7 @@ function SortableCard({ banner, onDelete, refresh }: { banner: any, onDelete: ()
                                 <AlertDialogTitle>Deseja realmente excluir esse banner?</AlertDialogTitle>
                             </AlertDialogHeader>
                             <div className="mb-4">
-                                <img src={banner.imageUrl} alt="banner-preview" className="w-full h-80 object-contain rounded" />
+                                <img loading="lazy" src={banner.imageUrl} alt="banner-preview" className="w-full h-80 object-contain rounded" />
                                 {banner.text && <p className="mt-2 text-sm text-center">{banner.text}</p>}
                             </div>
                             <AlertDialogFooter>

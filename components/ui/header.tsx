@@ -116,7 +116,7 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                         </Button>
                         <div className="flex-1 flex">
                             <Link href="/" className={`text-center flex ${category ? 'justify-start' : 'w-full justify-center'}`}>
-                                <img
+                                <img loading="lazy"
                                     src={(isMobile && category) ? "/afpa-cortada.png" : "/agfpa_branca.png"}
                                     alt="logo FPA"
                                     className={

@@ -41,7 +41,7 @@ export default function Page() {
         <div className="flex md:flex-row gap-10 mt-12 flex-col">
 
           <div className="lg:w-1/2 w-full">
-            {pautaImage ? <img className=' rounded-xl  w-full' src={pautaImage} /> : <div className="overflow-hidden rounded-2xl lg:w-auto w-full h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
+            {pautaImage ? <img loading="lazy" className=' rounded-xl  w-full' src={pautaImage} /> : <div className="overflow-hidden rounded-2xl lg:w-auto w-full h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
           </div>
 
           <div className="flex flex-col gap-6 lg:w-1/2 w-full">

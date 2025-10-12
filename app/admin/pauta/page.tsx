@@ -91,7 +91,7 @@ export default function PautaPage() {
                     <CardContent className="p-6 flex flex-col items-center gap-4">
                         <h2 className="text-lg font-semibold">📄 Pauta Atual</h2>
                         {currentUrl ? (
-                            <img
+                            <img loading="lazy"
                                 src={currentUrl}
                                 alt="Pauta atual"
                                 className="rounded-lg shadow-md w-full max-w-md border"
@@ -106,7 +106,7 @@ export default function PautaPage() {
                     <Card>
                         <CardContent className="p-6 flex flex-col items-center gap-4">
                             <h2 className="text-lg font-semibold">🆕 Nova Pauta (pré-visualização)</h2>
-                            <img
+                            <img loading="lazy"
                                 src={previewUrl}
                                 alt="Pré-visualização nova pauta"
                                 className="rounded-lg shadow-md w-full max-w-md border"

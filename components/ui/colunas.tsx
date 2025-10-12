@@ -22,7 +22,7 @@ export default function ColunistasSection() {
                         <Link href={`/artigos/${author.id}`} key={author.id} className="flex flex-col items-start space-y-2">
                             <div className="flex gap-2 items-center">
                                 <div className="rounded-full bg-white overflow-hidden">
-                                    <img
+                                    <img loading="lazy"
                                         src={author.photoUrl}
                                         alt={author.name}
                                         className="w-24 h-24 rounded-lg object-cover"

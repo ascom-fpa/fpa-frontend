@@ -236,7 +236,7 @@ export default function PostsAdminPage() {
           />
 
           {editingPost && editingPost.thumbnailUrl && (
-            <img
+            <img loading="lazy"
               src={editingPost.thumbnailUrl}
               alt="thumbnail"
               className="w-40 h-40 object-cover rounded"
@@ -277,7 +277,7 @@ function PostCard({ post, onDelete, onEdit }: { post: any; onDelete: () => void;
       <CardContent className="flex flex-col gap-4 flex-1 pt-4">
         <p className="font-semibold text-sm">{post.postTitle}</p>
         {post.thumbnailUrl && (
-          <img src={post.thumbnailUrl} alt="thumbnail" className="w-full h-40 object-cover rounded" />
+          <img loading="lazy" src={post.thumbnailUrl} alt="thumbnail" className="w-full h-40 object-cover rounded" />
         )}
         {post.summary && <p className="text-sm text-muted-foreground">{post.summary}</p>}
       </CardContent>

@@ -87,7 +87,7 @@ export function LabelInputFile({ id, label, accept, onChange }: LabelInputFilePr
       {previewUrl && (
         <div className="relative group">
           {isImage && (
-            <img
+            <img loading="lazy"
               src={previewUrl}
               alt="preview"
               className="w-full max-h-48 object-contain rounded border"
@@ -123,7 +123,7 @@ export function LabelInputFile({ id, label, accept, onChange }: LabelInputFilePr
                 minWidth={10}
                 minHeight={10}
               >
-                <img
+                <img loading="lazy"
                   src={previewUrl!}
                   onLoad={(e) => setImageRef(e.currentTarget)}
                   className="object-contain"

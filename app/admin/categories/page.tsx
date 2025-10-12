@@ -226,7 +226,7 @@ function SortableCard({
                         <div className="rounded-full w-4 h-4" style={{ backgroundColor: category?.color }}></div>
                     </div>
                     {category.iconUrl && (
-                        <img src={category.iconUrl} alt="ícone" className="w-20 h-20 object-contain" />
+                        <img loading="lazy" src={category.iconUrl} alt="ícone" className="w-20 h-20 object-contain" />
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-between bg-[rgba(245,245,245)] py-2">

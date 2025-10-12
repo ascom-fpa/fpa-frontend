@@ -53,7 +53,7 @@ export default function Page({ params }: PageProps) {
                                 (typeof currentPost?.postContent == "string" && !currentPost?.postContent?.includes('img') && currentPost?.thumbnailUrl) ||
                                 (typeof currentPost?.postContent == "object") && currentPost?.thumbnailUrl) &&
                                 (
-                                    <img
+                                    <img loading="lazy"
                                         src={currentPost.thumbnailUrl}
                                         alt={currentPost.postTitle}
                                         className="rounded-lg mb-6 w-full max-h-[400px] object-cover"

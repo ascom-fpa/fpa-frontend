@@ -238,7 +238,7 @@ function SortableCard({
                 >
                     <p className="font-semibold text-sm">{webstory.title}</p>
                     {webstory.slides?.[0]?.imageUrl && (
-                        <img
+                        <img loading="lazy"
                             className="object-contain max-h-64 rounded"
                             src={webstory.slides[0].imageUrl}
                             alt="webstory preview"
@@ -289,7 +289,7 @@ function SortableCard({
                                             />
 
                                             {slide.imageUrl && (
-                                                <img
+                                                <img loading="lazy"
                                                     src={slide.imageUrl}
                                                     alt="slide preview"
                                                     className="h-40 w-auto object-cover rounded"
@@ -326,7 +326,7 @@ function SortableCard({
                                                 </AlertDialogHeader>
                                                 <div className="mb-4 text-center">
                                                     {slide.imageUrl && (
-                                                        <img
+                                                        <img loading="lazy"
                                                             src={slide.imageUrl}
                                                             alt="preview"
                                                             className="mx-auto w-40 h-40 object-cover rounded"

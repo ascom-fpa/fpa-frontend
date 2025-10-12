@@ -107,7 +107,7 @@ function SortableCard({ tag, onDelete }: { tag: any, onDelete: () => void }) {
                     <p style={{color: tag.color}} className="font-semibold text-sm">{tag.slug}</p>
                     <p className="text-xs text-muted-foreground">{tag.description}</p>
                     {tag.iconUrl && (
-                        <img src={tag.iconUrl} alt="ícone" className="w-20 h-20 object-contain" />
+                        <img loading="lazy" src={tag.iconUrl} alt="ícone" className="w-20 h-20 object-contain" />
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-between bg-[rgba(245,245,245)] py-2">

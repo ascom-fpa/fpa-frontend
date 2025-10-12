@@ -53,7 +53,7 @@ export default function Page({ params }: PageProps) {
                                     <Link className="text-3xl font-semibold text-gray-900 mb-2 leading-tight " href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${newsNoFeatured[0].id}`}>
                                         <article className="relative flex items-end justify-center group overflow-hidden lg:rounded-2xl ">
                                             <div className="absolute top-0 left-0 w-full h-full bg-black rounded-2xl opacity-30 z-10"></div>
-                                            <img className="w-full lg:h-auto h-[400px] lg:object-contain object-cover lg:rounded-2xl lg:group-hover:scale-120 transition-all" src={newsNoFeatured[0].thumbnailUrl} />
+                                            <img loading="lazy" className="w-full lg:h-auto h-[400px] lg:object-contain object-cover lg:rounded-2xl lg:group-hover:scale-120 transition-all" src={newsNoFeatured[0].thumbnailUrl} />
                                             <h2 className="absolute m-10 text-white text-center font-semibold text-3xl z-20">{newsNoFeatured[0].postTitle}</h2>
                                         </article>
                                     </Link>
@@ -80,7 +80,7 @@ export default function Page({ params }: PageProps) {
                                                                 });
                                                         }}
                                                         className="h-4 w-4 hover:scale-110 transition-all text-gray-500 cursor-pointer" />
-                                                    <img
+                                                    <img loading="lazy"
                                                         width={16} height={16} src='/wpp.svg'
                                                         onClick={() => {
                                                             const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.slug}`)}`;
