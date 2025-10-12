@@ -36,15 +36,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR">
+    <html
+      lang="pt-BR"
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+    >
       <head>
-        <style>{`
-html {
-  font-family: ${GeistSans.style.fontFamily};
-  --font-sans: ${GeistSans.variable};
-  --font-mono: ${GeistMono.variable};
-}
-        `}</style>
         <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
       </head>
       <Script
@@ -60,7 +56,7 @@ html {
           gtag('config', 'G-K56PQX18ME');
         `}
       </Script>
-      <body>{children}</body>
+      <body cz-shortcut-listen="true">{children}</body>
     </html>
   )
 }

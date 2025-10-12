@@ -109,7 +109,7 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                             className="text-white hover:bg-[#154B2B] w-[30px] h-[30px] flex"
                             onClick={() => setIsSidebarOpen(true)}
                             id="menu-button"
-
+                            aria-label="Botão de menu"
                         >
                             <Menu width={30} height={30} className="w-[30px] h-[30px]" />
                             {/* {isMobile && <div className="-ms-1 me-1 border-1 border-white h-[20px] "></div>} */}

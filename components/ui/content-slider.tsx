@@ -55,12 +55,14 @@ export function ContentSlider({ children, perView = 3, youtube = false, arrowTop
       <button
         onClick={goPrev}
         className={`cursor-pointer transition-all hover:scale-110 absolute right-10 ${arrowTop} text-[#787878] z-10`}
+        aria-label='Seta esquerda'
       >
         <ArrowLeft className="h-8 w-8" />
       </button>
       <button
         onClick={goNext}
         className={`cursor-pointer transition-all hover:scale-110 absolute right-0 ${arrowTop} text-[#787878] z-10`}
+        aria-label='Seta direita'
       >
         <ArrowRight className="h-8 w-8" />
       </button>

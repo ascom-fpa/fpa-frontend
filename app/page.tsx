@@ -34,6 +34,7 @@ import TwitterInstagramSkeleton from '@/components/skeletons/twitter-instagram-s
 import WebstoriesCarouselSkeleton from '@/components/skeletons/webstory-skeleton'
 import Newsletter from '@/components/newsletter'
 import MinutoFPA from '@/components/minuto-fpa'
+import { LazyYouTube } from '@/components/lazy-youtube'
 
 export default function Home() {
   const ref = useRef<any>(null);
@@ -137,10 +138,15 @@ export default function Home() {
             key={banner.id}
             src={banner.imageUrl}
             alt={banner.text}
+            // ✅ Critical optimization for LCP
+            fetchPriority={index === 0 ? "high" : "auto"}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+
             className={`
-        absolute inset-0 w-full h-full object-cover transition-opacity duration-700
-        ${index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"}
-      `}
+              absolute inset-0 w-full h-full object-cover transition-opacity duration-700
+              ${index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"}
+            `}
           />
         ))}
 
@@ -159,12 +165,14 @@ export default function Home() {
           <button
             onClick={prevSlide}
             className="cursor-pointer hover:scale-105 absolute left-4 top-1/2 transform -translate-y-1/2 z-40 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all"
+            aria-label='Seta esquerda do banner'
           >
             <ChevronLeft className="h-6 w-6" />
           </button>
           <button
             onClick={nextSlide}
             className="cursor-pointer hover:scale-105 absolute right-4 top-1/2 transform -translate-y-1/2 z-40 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all"
+            aria-label='Seta direita do banner'
           >
             <ChevronRight className="h-6 w-6" />
           </button>
@@ -184,7 +192,7 @@ export default function Home() {
             <div className="max-w-[1300px] lg:mx-auto bg-white rounded-2xl shadow-md p-4 mx-4">
               <div className="grid md:grid-cols-3 gap-12">
 
-                {postsCategoryFeatured.categories.map(postCategory => <div className="space-y-6">
+                {postsCategoryFeatured.categories.map((postCategory, index) => <div key={postCategory.id + "-" + index} className="space-y-6">
                   <h2 style={{ color: postCategory?.color }} className={`text-2xl font-semibold mb-6 `}>{postCategory?.name}</h2>
 
                   {/* Featured Article */}
@@ -209,22 +217,23 @@ export default function Home() {
                   {/* Recent Articles */}
                   <div className="space-y-8">
                     {
-                      postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post => <>
-                        <hr className='mt-6' />
-                        <Link href={`/noticia/${post.id}`}>
-                          <article className={`flex gap-4 items-start cursor-pointer transition-all lg:hover:scale-105`}>
-                            <img
-                              src={post.thumbnailUrl}
-                              alt="Audiência pública"
-                              className="w-[180px] h-[120px] object-cover rounded-2xl flex-shrink-0 "
-                            />
-                            <div className="flex-1 max-w-[282px]">
-                              {/* <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p> */}
-                              <h4 className="text-sm  text-gray-900 leading-tight">{post.postTitle}</h4>
-                            </div>
-                          </article>
-                        </Link>
-                      </>
+                      postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post =>
+                        <div key={`postfeatured-${post.id}`}>
+                          <hr className='my-7' />
+                          <Link href={`/noticia/${post.id}`}>
+                            <article className={`flex gap-4 items-start cursor-pointer transition-all lg:hover:scale-105`}>
+                              <img
+                                src={post.thumbnailUrl}
+                                alt="Audiência pública"
+                                className="w-[180px] h-[120px] object-cover rounded-2xl flex-shrink-0 "
+                              />
+                              <div className="flex-1 max-w-[282px]">
+                                {/* <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p> */}
+                                <h4 className="text-sm  text-gray-900 leading-tight">{post.postTitle}</h4>
+                              </div>
+                            </article>
+                          </Link>
+                        </div>
                       )
                     }
                   </div>
@@ -262,9 +271,9 @@ export default function Home() {
                     </div>
                   </div>
                   <ContentSlider perView={1.4} youtube>
-                    {
-                      videos.map(video => <div className='rounded-2xl video-wrapper' dangerouslySetInnerHTML={{ __html: video.embed }}></div>)
-                    }
+                    {videos.map((video) => (
+                      <LazyYouTube key={video.id} embedHtml={video.embed} title={video.description} />
+                    ))}
                   </ContentSlider>
                 </div>
               </div>}

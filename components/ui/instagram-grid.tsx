@@ -16,8 +16,10 @@ export default function InstagramGrid({ posts }: any) {
                         href={post.permalink}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={`Veja a publicação do instagram ${post.caption}`}
                     >
                         <iframe
+                            title={post.caption}
                             src={post.permalink + "embed"}
                             className="w-full aspect-[9/17]  border-0 rounded-lg"
                             allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
