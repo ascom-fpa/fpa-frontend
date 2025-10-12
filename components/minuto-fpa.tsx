@@ -77,7 +77,8 @@ function VideoCard({
           poster={video?.coverImageUrl}
           id={`video-${video.id}`}
           className="w-full h-full object-cover"
-          src={video.videoUrl || ""}
+          // src={video.videoUrl || ""}
+          src={`/api/cache/video?url=${encodeURIComponent(video.videoUrl)}`}
           onEnded={() => {
             setIsPlaying(false)
             setActiveVideoId(null)

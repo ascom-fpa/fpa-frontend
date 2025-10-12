@@ -40,7 +40,8 @@ export default function PostsFeature({ postsFeature }: any) {
                         lg:hover:scale-105 lg:hover:pb-4 lg:hover:px-8 transition-all duration-300 ease-in-out items-end`}
                   >
                     <Image
-                      src={article.thumbnailUrl}
+                      // src={article.thumbnailUrl}
+                      src={`/api/cache/image?url=${encodeURIComponent(article.thumbnailUrl)}`}
                       alt={article.postTitle}
                       fill
                       className={`object-cover transition-opacity duration-500 z-0 ${isActive ? 'lg:opacity-100' : 'lg:opacity-0'}`}

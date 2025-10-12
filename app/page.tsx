@@ -139,7 +139,8 @@ export default function Home() {
             width={300}
             height={300}
             key={banner.id}
-            src={banner.imageUrl}
+            // src={banner.imageUrl}
+            src={`/api/cache/image?url=${encodeURIComponent(banner.imageUrl)}`}
             alt={banner.text}
             priority={index === 0}
             unoptimized
@@ -228,7 +229,7 @@ export default function Home() {
                           <Link href={`/noticia/${post.id}`}>
                             <article className={`flex gap-4 items-start cursor-pointer transition-all lg:hover:scale-105`}>
                               <img loading="lazy"
-                                src={post.thumbnailUrl}
+                                src={`/api/image?url=${encodeURIComponent(post.thumbnailUrl)}`}
                                 alt="Audiência pública"
                                 className="w-[180px] h-[120px] object-cover rounded-2xl flex-shrink-0 "
                               />
