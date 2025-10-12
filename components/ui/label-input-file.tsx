@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react"
-import { UploadCloud, X } from "lucide-react"
+"use client"
 
-interface LabelInputFileProps {
-  id: string
-  label: string
-  accept: string
-  onChange: (file: File | null) => void
-}
+import { useState, useEffect } from "react"
+import ReactCrop, { type Crop } from "react-image-crop"
+import "react-image-crop/dist/ReactCrop.css"
+import { UploadCloud, X } from "lucide-react"
 
 export function LabelInputFile({ id, label, accept, onChange }: LabelInputFileProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [cropModalOpen, setCropModalOpen] = useState(false)
+  const [crop, setCrop] = useState<Crop>()
+  const [completedCrop, setCompletedCrop] = useState<Crop>()
+  const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null)
 
   const isImage = accept.includes("image")
   const isVideo = accept.includes("video")
@@ -26,8 +27,43 @@ export function LabelInputFile({ id, label, accept, onChange }: LabelInputFilePr
   }, [selectedFile])
 
   const handleChange = (file: File | null) => {
-    setSelectedFile(file)
-    onChange(file)
+    if (file && file.type.startsWith("image/")) {
+      setSelectedFile(file)
+      setCropModalOpen(true)
+    } else {
+      setSelectedFile(file)
+      onChange(file)
+    }
+  }
+
+  const handleSaveCrop = async () => {
+    if (!imageRef || !completedCrop) return
+
+    const canvas = document.createElement("canvas")
+    const scaleX = imageRef.naturalWidth / imageRef.width
+    const scaleY = imageRef.naturalHeight / imageRef.height
+    canvas.width = completedCrop.width!
+    canvas.height = completedCrop.height!
+    const ctx = canvas.getContext("2d")!
+
+    ctx.drawImage(
+      imageRef,
+      completedCrop.x! * scaleX,
+      completedCrop.y! * scaleY,
+      completedCrop.width! * scaleX,
+      completedCrop.height! * scaleY,
+      0,
+      0,
+      completedCrop.width!,
+      completedCrop.height!
+    )
+
+    const blob: Blob = await new Promise((resolve) => canvas.toBlob((b) => resolve(b!), "image/jpeg"))
+    const croppedFile = new File([blob], selectedFile?.name || "cropped.jpg", { type: "image/jpeg" })
+
+    setCropModalOpen(false)
+    setSelectedFile(croppedFile)
+    onChange(croppedFile)
   }
 
   return (
@@ -72,6 +108,54 @@ export function LabelInputFile({ id, label, accept, onChange }: LabelInputFilePr
           </button>
         </div>
       )}
+
+      {cropModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-4 flex flex-col">
+            <div className="flex-1 flex items-center justify-center bg-gray-900 rounded relative ">
+              <ReactCrop
+                crop={crop}
+                onChange={(c) => setCrop(c)}
+                onComplete={(c) => setCompletedCrop(c)}
+                keepSelection
+                // 🟢 NO aspect ratio → freeform crop
+                ruleOfThirds={true}
+                minWidth={10}
+                minHeight={10}
+              >
+                <img
+                  src={previewUrl!}
+                  onLoad={(e) => setImageRef(e.currentTarget)}
+                  className="object-contain"
+                  style={{maxHeight: "70vh"}}
+                  alt="Crop selection"
+                />
+              </ReactCrop>
+            </div>
+
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                onClick={() => setCropModalOpen(false)}
+                className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSaveCrop}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
+}
+interface LabelInputFileProps {
+  id: string
+  label: string
+  accept: string
+  onChange: (file: File | null) => void
 }
