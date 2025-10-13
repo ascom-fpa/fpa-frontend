@@ -89,7 +89,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                                         <article className="flex lg:flex-row flex-col gap-8" key={post.id}>
                                             <img loading="lazy"
                                                 // src={post.thumbnailUrl || "/placeholder.svg"}
-                                                src={`/api/image?url=${encodeURIComponent(post.thumbnailUrl)}`}
+                                                src={`/api/cache/image?url=${encodeURIComponent(post.thumbnailUrl)}`}
                                                 alt={post.postTitle}
                                                 className="lg:min-w-[460px] rounded-lg object-cover h-[230px]"
                                             />

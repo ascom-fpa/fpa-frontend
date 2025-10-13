@@ -229,7 +229,7 @@ export default function Home() {
                           <Link href={`/noticia/${post.id}`}>
                             <article className={`flex gap-4 items-start cursor-pointer transition-all lg:hover:scale-105`}>
                               <img loading="lazy"
-                                src={`/api/image?url=${encodeURIComponent(post.thumbnailUrl)}`}
+                                src={`/api/cache/image?url=${encodeURIComponent(post.thumbnailUrl)}`}
                                 alt="Audiência pública"
                                 className="w-[180px] h-[120px] object-cover rounded-2xl flex-shrink-0 "
                               />
