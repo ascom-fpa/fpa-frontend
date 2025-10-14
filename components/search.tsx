@@ -70,7 +70,7 @@ export default function SearchToggle() {
                                 if (e.key === 'Escape') setOpen(false)
                             }}
                             placeholder="Pesquisar assuntos, notícias, vídeos…"
-                            className="w-full bg-transparent outline-none md :text-gray-900 md:placeholder:text-gray-500"
+                            className="w-full bg-transparent outline-none md:text-gray-900 md:placeholder:text-gray-500"
                         />
                         {q && (
                             <button

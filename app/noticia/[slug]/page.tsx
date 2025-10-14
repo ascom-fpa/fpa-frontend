@@ -50,16 +50,11 @@ export default function Page({ params }: PageProps) {
                                 Publicado em {new Date(currentPost?.createdAt || new Date()).toLocaleDateString('pt-BR')}
                             </div>
 
-                            {(
-                                (typeof currentPost?.postContent == "string" && !currentPost?.postContent?.includes('img') && currentPost?.thumbnailUrl) ||
-                                (typeof currentPost?.postContent == "object") && currentPost?.thumbnailUrl) &&
-                                (
-                                    <img loading="lazy"
-                                        src={currentPost.thumbnailUrl}
-                                        alt={currentPost.postTitle}
-                                        className="rounded-lg mb-6 w-full max-h-[400px] object-cover"
-                                    />
-                                )}
+                            <img loading="lazy"
+                                src={currentPost.thumbnailUrl}
+                                alt={currentPost.postTitle}
+                                className="rounded-lg mb-6 w-full max-h-[400px] object-cover"
+                            />
 
                             <article>
                                 {typeof currentPost?.postContent == 'object'

@@ -85,7 +85,7 @@ export default function Page({ searchParams }: { searchParams: { q: string } }) 
                             </div>
                     } */}
 
-                    <LastNews isHome={false} />
+                    <LastNews isHome />
                 </div>
 
             </div>

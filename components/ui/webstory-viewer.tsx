@@ -70,7 +70,7 @@ export default function WebstoryViewer({ open, onClose, webstory }: Props) {
           <Dialog.Panel className="relative">
             {/* Botão fechar */}
             <button
-              className="absolute top-4 right-4 z-20 text-white cursor-pointer"
+              className="absolute top-4 right-4 z-50 text-white cursor-pointer"
               onClick={onClose}
             >
               <X className="w-6 h-6" />
