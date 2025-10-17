@@ -38,6 +38,7 @@ export default function WebstoriesCarousel({ webstories }: IProps) {
                                     width={100}
                                     height={180}
                                     className="object-cover w-full h-full"
+                                    unoptimized
                                 />
                             </div>
                             {/* <p className="text-xs text-center mt-2 w-[100px] truncate">{story.title}</p> */}

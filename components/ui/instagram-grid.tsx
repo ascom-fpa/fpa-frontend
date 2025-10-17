@@ -4,7 +4,7 @@ import Link from "next/link";
 // /components/InstagramGrid.tsx
 export default function InstagramGrid({ posts }: any) {
     return (
-        <div className="flex flex-col gap-4 bg-white p-2 rounded-2xl shadow-md">
+        <div className="flex flex-col gap-4 bg-white p-2 rounded-2xl shadow-md lg:w-fit sm:w-[46%] w-full">
             <Link target="_blank" href="https://www.instagram.com/fpagro/" className="flex text-[#1C9658] gap-2 items-center justify-center">
                 <Instagram className="w-6 h-6" />
                 <h3 className=" text-xl text-center">Instagram FPA</h3>
@@ -21,8 +21,9 @@ export default function InstagramGrid({ posts }: any) {
                         <iframe
                             title={post.caption}
                             src={post.permalink + "embed"}
-                            className="w-full aspect-[9/17]  border-0 rounded-lg"
+                            className="w-full aspect-[9/18] border-0 rounded-lg"
                             allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                            scrolling="no"
                         ></iframe>
                         {/* <blockquote
                             className="instagram-media"

@@ -55,7 +55,7 @@ export default function Page({ params }: PageProps) {
                                     </Link>
                                 }
                             </div>
-                            <div className="w-full lg:w-4/12 flex flex-col gap-10 lg:mx-auto mx-4 justify-between">
+                            <div className="w-full lg:w-4/12 flex flex-col gap-4 lg:mx-auto mx-4 justify-between">
                                 {posts.slice(1, 4).map((post, index) => (
                                     <article key={post.id} className="flex items-start gap-4 flex-col">
                                         <div className="flex-1">
@@ -85,19 +85,21 @@ export default function Page({ params }: PageProps) {
                                                         className="h-4 w-4 hover:scale-110 transition-all text-green-600 cursor-pointer"
                                                     />
                                                 </div>
-
                                             </div>
-                                            <Link className="text-2xl font-medium text-gray-900 mb-2 leading-tight" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
-                                                <h3 >{post.postTitle}</h3>
-                                            </Link>
 
-                                            {post.summary && (
-                                                <p className="text-sm font-light text-gray-600 leading-relaxed">{post.summary}</p>
-                                            )}
+                                            <div className="flex gap-1 flex-col">
+                                                <Link className="text-xl font-medium text-gray-900 mb-2 leading-tight" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                                                    <h3 >{post.postTitle}</h3>
+                                                </Link>
+
+                                                {post.summary && (
+                                                    <p className="text-sm font-light text-gray-600 leading-relaxed">{post.summary}</p>
+                                                )}
+                                            </div>
                                         </div>
                                         {
                                             index < 2
-                                                ? <div className="h-2 w-full pb-10 border-b border-gray-200"></div>
+                                                ? <div className="h-2 w-full border-b border-gray-200"></div>
                                                 : <div></div>
                                         }
                                     </article>

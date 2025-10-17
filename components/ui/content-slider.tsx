@@ -20,10 +20,10 @@ export function ContentSlider({ children, perView = 3, youtube = false, arrowTop
       spacing: 16,
     },
     breakpoints: {
-      '(max-width: 1024px)': {
-        slides: { perView: 2, spacing: 12 },
+      '(max-width: 1216px)': {
+        slides: { perView: youtube ? 1.2 : 3, spacing: 12 },
       },
-      '(max-width: 640px)': {
+      '(max-width: 758px)': {
         slides: { perView: youtube ? 1 : 2, spacing: 8 },
       },
     },

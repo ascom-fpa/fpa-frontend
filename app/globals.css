@@ -457,7 +457,7 @@ html {
 }
 
 #facebook {
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 #menu-button svg {

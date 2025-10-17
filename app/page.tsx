@@ -148,7 +148,6 @@ export default function Home() {
             fetchPriority={index === 0 ? "high" : "auto"}
             loading={index === 0 ? "eager" : "lazy"}
             decoding="async"
-
             className={`
               absolute inset-0 w-full h-full object-cover transition-opacity duration-700
               ${index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"}
@@ -160,8 +159,8 @@ export default function Home() {
         <div className="absolute inset-0 bg-black opacity-50 z-20" />
 
         {/* Texto acima das imagens */}
-        <div className="relative z-30 flex items-end justify-center h-full text-white text-center lg:px-4 px-[60px]">
-          <h1 className="text-3xl md:text-6xl font-bold max-w-6xl leading-tight">
+        <div className="relative z-30 flex items-end justify-center h-full text-white text-center lg:px-4 px-[30px]">
+          <h1 className="text-2xl md:text-4xl font-bold max-w-6xl leading-tight">
             {banners[currentSlide]?.text}
           </h1>
         </div>
@@ -196,7 +195,7 @@ export default function Home() {
         postsCategoryFeatured?.categories?.length > 0
           ? <section className="my-12">
             <div className="max-w-[1300px] lg:mx-auto bg-white rounded-2xl shadow-md p-4 mx-4">
-              <div className="grid md:grid-cols-3 gap-12">
+              <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-12">
 
                 {postsCategoryFeatured.categories.map((postCategory, index) => <div key={postCategory.id + "-" + index} className="space-y-6">
                   <h2 style={{ color: postCategory?.color }} className={`text-2xl font-semibold mb-6 `}>{postCategory?.name}</h2>
@@ -205,11 +204,11 @@ export default function Home() {
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
                   <Link className='' href={`/noticia/${postsCategoryFeatured?.postsByCategory[postCategory?.id][0]?.id}`}>
                     <article className="bg-white rounded-2xl overflow-hidden shadow-md flex self-center cursor-pointer transition-all lg:hover:scale-105">
-                      <div className="relative lg:max-w-[460px] overflow-hidden">
+                      <div className="relative lg:max-w-[460px] overflow-hidden w-full ">
                         <img loading="lazy"
                           src={postsCategoryFeatured?.postsByCategory[postCategory.id][0]?.thumbnailUrl}
                           alt="Incentivo ao desenvolvimento e à produção de biocombustíveis"
-                          className="h-[320px] lg:max-w-[400px] object-cover"
+                          className="h-[320px] lg:max-w-[400px] w-full object-cover"
                         />
                         <div className="absolute inset-0 bg-black opacity-50 flex items-end">
                         </div>
@@ -227,11 +226,11 @@ export default function Home() {
                         <div key={`postfeatured-${post.id}`}>
                           <hr className='my-7' />
                           <Link href={`/noticia/${post.id}`}>
-                            <article className={`flex gap-4 items-start cursor-pointer transition-all lg:hover:scale-105`}>
+                            <article className={`flex gap-4 items-start cursor-pointer transition-all lg:hover:scale-105 sm:flex-row flex-col `}>
                               <img loading="lazy"
                                 src={`/api/cache/image?url=${encodeURIComponent(post.thumbnailUrl)}`}
                                 alt="Audiência pública"
-                                className="w-[180px] h-[120px] object-cover rounded-2xl flex-shrink-0 "
+                                className="sm:w-[180px] w-full h-[120px] object-cover rounded-2xl flex-shrink-0 "
                               />
                               <div className="flex-1 max-w-[282px]">
                                 {/* <p className="text-xs text-gray-500 mb-1">{new Date(post.createdAt).toLocaleDateString('pt-BR')}&nbsp;{new Date(post.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p> */}

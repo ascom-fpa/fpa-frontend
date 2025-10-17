@@ -28,40 +28,36 @@ export default function PostsFeature({ postsFeature }: any) {
                   className={`
                     flex-shrink-0 
                     transition-all duration-500 ease-in-out
-                    w-full overflow-hidden rounded-lg
-                    ${isActive ? 'flex-[2_1_0%] lg:max-w-[500px]' : 'flex-[1_1_0%] lg:max-w-[400px]'}
+                    lg:hover:scale-105
+                    lg:w-[32%] w-full overflow-hidden rounded-lg
                   `}
-                  onMouseEnter={() => {
-                    setActiveIndex(index)
-                  }}
                 >
                   <article
-                    className={`rounded-lg overflow-hidden relative lg:px-4 px-8 pb-2 h-[300px] cursor-pointer flex 
-                        lg:hover:scale-105 lg:hover:pb-4 lg:hover:px-8 transition-all duration-300 ease-in-out items-end`}
+                    className={`rounded-lg overflow-hidden relative lg:px-4 px-3 pb-2 h-[300px] cursor-pointer flex 
+                        transition-all duration-300 ease-in-out items-end`}
                   >
                     <Image
                       // src={article.thumbnailUrl}
                       src={`/api/cache/image?url=${encodeURIComponent(article.thumbnailUrl)}`}
                       alt={article.postTitle}
                       fill
-                      className={`object-cover transition-opacity duration-500 z-0 ${isActive ? 'lg:opacity-100' : 'lg:opacity-0'}`}
+                      className={`object-cover transition-opacity duration-500 z-0 lg:opacity-100`}
                       priority={index === 0}
                     />
 
                     <div
-                      className={`absolute w-full h-full top-0 left-0 bg-black ${isActive ? 'lg:opacity-50' : 'lg:opacity-0'
-                        } z-10 transition-opacity duration-500 opacity-50`}
+                      className={`absolute w-full h-full top-0 left-0 bg-black lg:opacity-50 z-10 transition-opacity duration-500 opacity-50`}
                     />
 
-                    <div className="relative z-20 flex flex-col gap-4">
+                    <div className="relative z-20 flex flex-col gap-2">
                       <span
-                        className={`text-sm font-light uppercase text-white ${isActive ? 'lg:text-white' : `lg:text-[${article.postCategory.color}]`}`}
+                        style={{ background: article.postCategory.color }}
+                        className={`text-sm font-light text-white p-1 w-[200px] rounded-md text-center uppercase`}
                       >
                         {article.postCategory.name}
                       </span>
                       <h3
-                        className={`lg:font-bold text-2xl ${isActive ? 'lg:text-white' : 'lg:text-[#3D3D3D]'
-                          } leading-tight font-medium  text-white`}
+                        className={`lg:h-[40px] text-sm leading-tight font-medium text-white`}
                       >
                         {article.postTitle}
                       </h3>
@@ -72,6 +68,6 @@ export default function PostsFeature({ postsFeature }: any) {
             })}
         </div>
       </div>
-    </section>
+    </section >
   )
 }

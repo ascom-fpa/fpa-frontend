@@ -50,7 +50,7 @@ export default function Page({ params }: PageProps) {
                         : <div className="flex gap-10 lg:flex-nowrap flex-wrap">
                             <div className="w-full lg:w-8/12">
                                 {newsNoFeatured[0] &&
-                                    <Link className="text-3xl font-semibold text-gray-900 mb-2 leading-tight " href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${newsNoFeatured[0].id}`}>
+                                    <Link className="text-3xl h-full font-semibold text-gray-900 mb-2 leading-tight " href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${newsNoFeatured[0].id}`}>
                                         <article className="relative flex items-end justify-center group overflow-hidden lg:rounded-2xl ">
                                             <div className="absolute top-0 left-0 w-full h-full bg-black rounded-2xl opacity-30 z-10"></div>
                                             <img loading="lazy" className="w-full lg:h-auto h-[400px] lg:object-contain object-cover lg:rounded-2xl lg:group-hover:scale-120 transition-all" src={newsNoFeatured[0].thumbnailUrl} />
@@ -59,12 +59,12 @@ export default function Page({ params }: PageProps) {
                                     </Link>
                                 }
                             </div>
-                            <div className="w-full lg:w-4/12 flex flex-col gap-10 lg:mx-auto  mx-4 justify-between">
+                            <div className="w-full lg:w-4/12 flex flex-col gap-4 lg:mx-auto mx-4 justify-between">
                                 {newsNoFeatured.slice(1, 4).map((post, index) => (
                                     <article key={post.id} className="flex items-start gap-4 flex-col">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-10 mb-2">
-                                                <span style={{ color: post.postCategory.color }} className={`text-xs font-medium uppercase tracking-wide`}>
+                                                <span style={{ background: post.postCategory.color }} className={`text-xs rounded-md p-1 text-white font-medium uppercase tracking-wide`}>
                                                     {post.postCategory.name}
                                                 </span>
                                                 <div className="flex gap-5">
@@ -91,17 +91,20 @@ export default function Page({ params }: PageProps) {
                                                 </div>
 
                                             </div>
-                                            <Link className="text-2xl font-medium text-gray-900 mb-2 leading-tight" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
-                                                <h3 >{post.postTitle}</h3>
-                                            </Link>
 
-                                            {post.summary && (
-                                                <p className="text-sm font-light text-gray-600 leading-relaxed">{post.summary}</p>
-                                            )}
+                                            <div className="flex gap-1 flex-col">
+                                                <Link className="text-xl font-medium text-gray-900 mb-2 leading-tight" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${post.id}`}>
+                                                    <h3 >{post.postTitle}</h3>
+                                                </Link>
+
+                                                {post.summary && (
+                                                    <p className="text-sm font-light text-gray-600 leading-relaxed">{post.summary}</p>
+                                                )}
+                                            </div>
                                         </div>
                                         {
                                             index < 2
-                                                ? <div className="h-2 w-full pb-10 border-b border-gray-200"></div>
+                                                ? <div className="h-2 w-full  border-b border-gray-200"></div>
                                                 : <div></div>
                                         }
                                     </article>

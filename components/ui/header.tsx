@@ -133,7 +133,7 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                             </Link>}
                         </div>
                         <div className="flex gap-6 justify-start md:w-[180px] ">
-                            <div className="md:block hidden">
+                            <div className="lg:block hidden">
                                 <SearchToggle />
                             </div>
                             {(live.isEnabled) ?
