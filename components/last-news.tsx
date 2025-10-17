@@ -90,7 +90,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                                                 // src={post.thumbnailUrl || "/placeholder.svg"}
                                                 src={`/api/cache/image?url=${encodeURIComponent(post.thumbnailUrl)}`}
                                                 alt={post.postTitle}
-                                                className="lg:w-[460px] lg:min-w-[460px] md:w-[400px] rounded-lg object-cover sm:h-[320px]"
+                                                className="lg:w-[460px] lg:min-w-[460px] md:w-[400px] h-[300px] rounded-lg object-cover sm:h-[320px]"
                                             />
                                             <div className="flex flex-col gap-2">
                                                 <span style={{ background: post.postCategory.color }} className='text-white p-1 rounded-md text-center w-fit md:px-3 px-2 uppercase md:text-sm text-[10px]'>{post.postCategory.name}</span>
@@ -123,7 +123,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                             ? <TwitterInstagramSkeleton />
                             : <div className="w-full flex flex-col gap-4 justify-center items-center">
                                 <InstagramGrid posts={instagramPosts.slice(0, 1)} />
-                                <div className="relative flex-col gap-4 flex lg:mt-4 lg:w-fit sm:w-1/2 justify-between">
+                                <div className="relative flex-col gap-4 flex lg:mt-4 lg:w-fit sm:w-1/2 justify-between md:px-0 px-2">
                                     {pautaImage ? <img loading="lazy" alt="pauta da semana" className='rounded-2xl lg:w-auto  w-full' src={pautaImage} /> : <div className="overflow-hidden rounded-2xl lg:w-auto md:w-1/2 w-full lg:h-[518px] bg-gray-200 animate-pulse" style={{ maxWidth: 435 }} />}
                                     <Link className="bg-primary text-white transition-all hover:scale-105 text-center text-xl p-2 rounded-xl" href="/credenciamento" target='_blank'>Clique aqui para se cadastrar</Link>
                                 </div>

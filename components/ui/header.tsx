@@ -102,11 +102,11 @@ export default function Header({ isArticle, category, categoryColor, categoryId 
 
                 {/* Main header */}
                 <div className="py-4 px-4">
-                    <div className="flex justify-between items-center max-w-[1300px] mx-auto">
+                    <div className="flex justify-between items-center max-w-[1300px] mx-auto relative">
                         <Button
                             variant="ghost"
                             size="sm"
-                            className={`text-white ${!categoryColor ? `hover:bg-[#154B2B]` : `hover:bg-[${categoryColor}]`} w-[30px] h-[30px] flex`}
+                            className={`fixed top-4 left-4 text-white ${!categoryColor ? `hover:bg-[#154B2B]` : `hover:bg-[${categoryColor}]`} w-[30px] h-[30px] flex`}
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                             id="menu-button"
                             aria-label="Botão de menu"
