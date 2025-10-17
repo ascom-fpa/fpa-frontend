@@ -1,5 +1,3 @@
-"use client"
-
 import { useRef, useState } from "react"
 import { Play, Pause } from "lucide-react"
 import { ContentSlider } from "./ui/content-slider"
@@ -46,7 +44,7 @@ function VideoCard({
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     const vid = videoRef.current
     if (!vid) return
 
@@ -55,14 +53,22 @@ function VideoCard({
       setIsPlaying(false)
       setActiveVideoId(null)
     } else {
-      // Pause all other videos first
+      // Pause other videos first
       setActiveVideoId(video.id)
-      vid.play()
-      setIsPlaying(true)
+
+      try {
+        await vid.play()
+        setIsPlaying(true)
+      } catch (err: any) {
+        // Ignore AbortError (happens if play is interrupted by pause)
+        if (err.name !== "AbortError") {
+          console.warn(`⚠️ Video play failed for ${video.id}:`, err.message)
+        }
+      }
     }
   }
 
-  // ⏸ Pause this video if another starts
+  // Pause this video if another starts
   if (activeVideoId !== video.id && isPlaying) {
     videoRef.current?.pause()
     setIsPlaying(false)
@@ -77,7 +83,6 @@ function VideoCard({
           poster={video?.coverImageUrl}
           id={`video-${video.id}`}
           className="w-full h-full object-cover"
-          // src={video.videoUrl || ""}
           src={`/api/cache/video?url=${encodeURIComponent(video.videoUrl)}`}
           onEnded={() => {
             setIsPlaying(false)

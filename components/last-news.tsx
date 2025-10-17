@@ -24,7 +24,6 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
 
     const newsNoFeatured = isHome ? posts.filter(post => !post.isFeatured) : posts
     const isMobile = useIsMobile()
-
     const containerRef = useRef<HTMLDivElement>(null)
     const [instagramPosts, setInstagramPosts] = useState([]);
     const [pautaImage, setPautaImage] = useState('');
@@ -71,7 +70,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
             <div className={`${internalPage ? `max-w-[1000px]` : `max-w-[1300px]`} mx-auto`}>
                 <div className="flex gap-8 flex-wrap">
                     {/* Recent News - 75% width */}
-                    <div className="flex-1 lg:w-3/4 w-full bg-white h-fit p-4 rounded-2xl shadow-md" ref={containerRef}>
+                    {newsNoFeatured.length > 4 && <div className="flex-1 lg:w-3/4 w-full bg-white h-fit p-4 rounded-2xl shadow-md" ref={containerRef}>
                         {
                             (postsLoading)
                                 ? <div className="animate-pulse bg-gray-200 h-8 w-[200px] mb-8"></div>
@@ -94,7 +93,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                                                 className="lg:w-[460px] lg:min-w-[460px] md:w-[400px] rounded-lg object-cover sm:h-[320px]"
                                             />
                                             <div className="flex flex-col gap-2">
-                                                <span style={{background: post.postCategory.color}} className='text-white p-1 rounded-md text-center w-fit md:px-3 px-2 uppercase md:text-sm text-[10px]'>{post.postCategory.name}</span>
+                                                <span style={{ background: post.postCategory.color }} className='text-white p-1 rounded-md text-center w-fit md:px-3 px-2 uppercase md:text-sm text-[10px]'>{post.postCategory.name}</span>
                                                 <h3 className="md:text-2xl font-semibold text-gray-900 mb-2">{post.postTitle}</h3>
                                             </div>
                                         </article>
@@ -117,7 +116,7 @@ export default function LastNews({ category, internalPage, isHome = true }: IPro
                             </button>
                         }
 
-                    </div>
+                    </div>}
                     {/* Sidebar - 25% width */}
                     {(!internalPage && isHome) && <aside className="lg:w-1/4 space-y-8">
                         {instagramPosts.length == 0
