@@ -106,7 +106,7 @@ export default function Header({ isArticle, category, categoryColor, categoryId 
                         <Button
                             variant="ghost"
                             size="sm"
-                            className={`fixed top-4 left-4 text-white ${!categoryColor ? `hover:bg-[#154B2B]` : `hover:bg-[${categoryColor}]`} w-[30px] h-[30px] flex`}
+                            className={`${!category ? 'fixed' : ''} top-4 left-4 text-white ${!categoryColor ? `hover:bg-[#154B2B]` : `hover:bg-[${categoryColor}]`} w-[30px] h-[30px] flex`}
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                             id="menu-button"
                             aria-label="Botão de menu"
@@ -128,7 +128,7 @@ export default function Header({ isArticle, category, categoryColor, categoryId 
                                 />
                                 <link rel="preload" as="image" href="/agfpa_branca.png" />
                             </Link>
-                            {(category && !isArticle) ? <Link className="w-full text-center lg:text-3xl  text-white" href={`/categoria/${categoryId}`}>
+                            {(category && !isArticle) ? <Link className={`w-full text-center ${category && '-ms-12'} lg:text-3xl text-white`} href={`/categoria/${categoryId}`}>
                                 {category}
                             </Link> :isArticle?
                                 <span className="w-full text-center lg:text-3xl  text-white" >
