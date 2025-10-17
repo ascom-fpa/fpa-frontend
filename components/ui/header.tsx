@@ -9,7 +9,7 @@ import { useContentStore } from "@/lib/content-store";
 import SearchToggle from "../search";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export default function Header({ category, categoryColor, categoryId }: { category?: string, categoryColor?: string, categoryId?: string }) {
+export default function Header({ isArticle, category, categoryColor, categoryId }: { isArticle?: boolean, category?: string, categoryColor?: string, categoryId?: string }) {
     const { categories, fetchCategories } = useContentStore()
 
     const [live, setLive] = useState<UpdateLiveData>({
@@ -128,9 +128,12 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                                 />
                                 <link rel="preload" as="image" href="/agfpa_branca.png" />
                             </Link>
-                            {category && <Link className="w-full text-center lg:text-3xl  text-white" href={`/categoria/${categoryId}`}>
+                            {(category && !isArticle) ? <Link className="w-full text-center lg:text-3xl  text-white" href={`/categoria/${categoryId}`}>
                                 {category}
-                            </Link>}
+                            </Link> :
+                                <span className="w-full text-center lg:text-3xl  text-white" >
+                                    {category}
+                                </span>}
                         </div>
                         <div className="flex gap-6 justify-start md:w-[180px] ">
                             <div className="lg:block hidden">

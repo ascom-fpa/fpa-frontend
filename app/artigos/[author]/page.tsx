@@ -37,7 +37,7 @@ export default function Page({ params }: PageProps) {
 
     return (
         <div className="min-h-screen bg-[#F9F9F9]" >
-            <Header category={`Artigos ${authors.find(el => el.id == currentAuthorId || "")?.name}`} categoryColor={currentCategory?.color || 'black'} categoryId={currentCategory?.id} />
+            <Header isArticle category={`Artigos ${authors.find(el => el.id == currentAuthorId || "")?.name}`} categoryColor={currentCategory?.color || 'black'} categoryId={currentCategory?.id} />
 
             <div className="max-w-[1300px] lg:mx-auto my-10">
                 {
