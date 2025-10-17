@@ -46,6 +46,8 @@ export function LabelInputFile({ id, label, accept, onChange }: LabelInputFilePr
     canvas.height = completedCrop.height!
     const ctx = canvas.getContext("2d")!
 
+    ctx.imageSmoothingQuality = "high";
+
     ctx.drawImage(
       imageRef,
       completedCrop.x! * scaleX,
@@ -58,8 +60,8 @@ export function LabelInputFile({ id, label, accept, onChange }: LabelInputFilePr
       completedCrop.height!
     )
 
-    const blob: Blob = await new Promise((resolve) => canvas.toBlob((b) => resolve(b!), "image/jpeg"))
-    const croppedFile = new File([blob], selectedFile?.name || "cropped.jpg", { type: "image/jpeg" })
+    const blob: Blob = await new Promise((resolve) => canvas.toBlob((b) => resolve(b!), "image/png", 1.0))
+    const croppedFile = new File([blob], selectedFile?.name || "cropped.png", { type: "image/png" })
 
     setCropModalOpen(false)
     setSelectedFile(croppedFile)
@@ -127,7 +129,7 @@ export function LabelInputFile({ id, label, accept, onChange }: LabelInputFilePr
                   src={previewUrl!}
                   onLoad={(e) => setImageRef(e.currentTarget)}
                   className="object-contain"
-                  style={{maxHeight: "70vh"}}
+                  style={{ maxHeight: "70vh" }}
                   alt="Crop selection"
                 />
               </ReactCrop>
