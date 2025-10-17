@@ -195,10 +195,10 @@ export default function Home() {
         postsCategoryFeatured?.categories?.length > 0
           ? <section className="my-12">
             <div className="max-w-[1300px] lg:mx-auto bg-white rounded-2xl shadow-md p-4 mx-4">
-              <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-12">
+              <div className="grid lg:grid-cols-3 md:grid-cols-1 gap-12">
 
-                {postsCategoryFeatured.categories.map((postCategory, index) => <div key={postCategory.id + "-" + index} className="space-y-6">
-                  <h2 style={{ color: postCategory?.color }} className={`text-2xl font-semibold mb-6 `}>{postCategory?.name}</h2>
+                {postsCategoryFeatured.categories.map((postCategory, index) => <div key={postCategory.id + "-" + index} className="space-y-6 flex flex-col md:items-start items-center justify-center">
+                  <h2 style={{ color: postCategory?.color }} className={`text-2xl font-semibold mb-6 md:text-start`}>{postCategory?.name}</h2>
 
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
@@ -261,7 +261,7 @@ export default function Home() {
           <FatoEmFocoSkeleton />
         ) : <MinutoFPA relevants={relevants} />
       }
-      <section id="artigos" className="px-4 bg-gray-50 max-w-[1300px] mx-auto ">
+      <section id="artigos" className="md:px-0 px-4 bg-gray-50 max-w-[1300px] mx-auto ">
         <div className="flex gap-10 lg:flex-nowrap flex-wrap lg:flex-row flex-col-reverse">
           <div className="w-full lg:w-9/12">
             <ColunistasSection />
@@ -307,11 +307,11 @@ export default function Home() {
 
 function MagazinePreview({ magazineUrl }: { magazineUrl: string }) {
   return (
-    <div className="relative group w-full max-w-3xl mx-auto">
+    <div className="group w-full max-w-3xl mx-auto flex justify-center">
       {/* Container com sombra e borda arredondada */}
-      <div className="relative overflow-hidden rounded-2xl shadow-lg border border-gray-200">
+      <div className="relative overflow-hidden rounded-2xl shadow-lg border border-gray-200 w-fit">
         {/* PDF preview */}
-        <img loading="lazy" src={magazineUrl} className='w-full' alt="" />
+        <img loading="lazy" src={magazineUrl} className='w-full lg:h-auto h-[480px] object-contain' alt="" />
 
         {/* Overlay ao hover */}
         <Link

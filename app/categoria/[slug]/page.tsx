@@ -50,11 +50,11 @@ export default function Page({ params }: PageProps) {
                         : <div className="flex gap-10 lg:flex-nowrap flex-wrap">
                             <div className="w-full lg:w-8/12">
                                 {newsNoFeatured[0] &&
-                                    <Link className="text-3xl h-full font-semibold text-gray-900 mb-2 leading-tight " href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${newsNoFeatured[0].id}`}>
-                                        <article className="relative flex items-end justify-center group overflow-hidden lg:rounded-2xl ">
+                                    <Link className="text-3xl h-full font-semibold text-gray-900 mb-2 leading-tight" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${newsNoFeatured[0].id}`}>
+                                        <article className="relative flex items-end justify-center group overflow-hidden h-full lg:rounded-2xl ">
                                             <div className="absolute top-0 left-0 w-full h-full bg-black rounded-2xl opacity-30 z-10"></div>
-                                            <img loading="lazy" className="w-full lg:h-auto h-[400px] lg:object-contain object-cover lg:rounded-2xl lg:group-hover:scale-120 transition-all" src={newsNoFeatured[0].thumbnailUrl} />
-                                            <h2 className="absolute m-10 text-white text-center font-semibold text-3xl z-20">{newsNoFeatured[0].postTitle}</h2>
+                                            <img loading="lazy" className="w-full lg:h-full h-[400px] object-cover lg:rounded-2xl lg:group-hover:scale-120 transition-all" src={newsNoFeatured[0].thumbnailUrl} />
+                                            <h2 className="absolute m-10 text-white text-center font-semibold md:text-3xl text-base z-20">{newsNoFeatured[0].postTitle}</h2>
                                         </article>
                                     </Link>
                                 }
@@ -63,8 +63,8 @@ export default function Page({ params }: PageProps) {
                                 {newsNoFeatured.slice(1, 4).map((post, index) => (
                                     <article key={post.id} className="flex items-start gap-4 flex-col">
                                         <div className="flex-1">
-                                            <div className="flex items-center gap-10 mb-2">
-                                                <span style={{ background: post.postCategory.color }} className={`text-xs rounded-md p-1 text-white font-medium uppercase tracking-wide`}>
+                                            <div className="flex items-center mb-2 md:gap-10 gap-2">
+                                                <span style={{ background: post.postCategory.color }} className={`md:text-xs text-[10px] rounded-md p-1 md:px-3 px-2 w-fit text-white font-medium uppercase tracking-wide`}>
                                                     {post.postCategory.name}
                                                 </span>
                                                 <div className="flex gap-5">

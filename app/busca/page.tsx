@@ -1,16 +1,13 @@
 "use client"
 import LastNews from "@/components/last-news";
-import FeaturedNewsSectionSkeleton from "@/components/skeletons/featured-news-skeleton";
 import Footer from "@/components/ui/footer";
 import Header from "@/components/ui/header";
 import { useContentStore } from "@/lib/content-store";
-import { showToast } from "@/utils/show-toast";
-import { Share2 } from "lucide-react";
-import Link from "next/link";
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 
-export default function Page({ searchParams }: { searchParams: { q: string } }) {
-    const query = searchParams?.q || ""
+export default function Page({ params }: { params: { q: string } }) {
+    const unwrappedParams = use(params as any);
+    const { q: query } = unwrappedParams as any;
 
     const { fetchPosts, posts, postsLoading } = useContentStore()
 

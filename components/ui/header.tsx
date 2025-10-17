@@ -57,7 +57,7 @@ export default function Header({ category, categoryColor, categoryId }: { catego
             ></div>
 
             {/* Sidebar */}
-            <aside className={`fixed top-0 left-0 h-full w-64 bg-[#1C9658] text-white z-50 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <aside style={{ background: categoryColor }} className={`fixed top-0 left-0 h-full w-64 bg-[#1C9658] text-white z-50 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className="p-4 flex justify-between items-center border-b border-gray-200">
                     <h2 className="text-lg font-bold">Menu</h2>
                     <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(false)}>
@@ -106,7 +106,7 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="text-white hover:bg-[#154B2B] w-[30px] h-[30px] flex"
+                            className={`text-white ${!categoryColor ? `hover:bg-[#154B2B]` : `hover:bg-[${categoryColor}]`} w-[30px] h-[30px] flex`}
                             onClick={() => setIsSidebarOpen(true)}
                             id="menu-button"
                             aria-label="Botão de menu"

@@ -52,7 +52,7 @@ export default function PostsFeature({ postsFeature }: any) {
                     <div className="relative z-20 flex flex-col gap-2">
                       <span
                         style={{ background: article.postCategory.color }}
-                        className={`text-sm font-light text-white p-1 w-[200px] rounded-md text-center uppercase`}
+                        className={`text-sm font-light text-white p-1 px-3 w-fit rounded-md text-center uppercase`}
                       >
                         {article.postCategory.name}
                       </span>

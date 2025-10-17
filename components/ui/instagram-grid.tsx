@@ -4,7 +4,7 @@ import Link from "next/link";
 // /components/InstagramGrid.tsx
 export default function InstagramGrid({ posts }: any) {
     return (
-        <div className="flex flex-col gap-4 bg-white p-2 rounded-2xl shadow-md lg:w-fit sm:w-[46%] w-full">
+        <div className="flex flex-col gap-4 bg-white p-2 rounded-2xl shadow-md lg:w-fit sm:w-1/2 w-full">
             <Link target="_blank" href="https://www.instagram.com/fpagro/" className="flex text-[#1C9658] gap-2 items-center justify-center">
                 <Instagram className="w-6 h-6" />
                 <h3 className=" text-xl text-center">Instagram FPA</h3>

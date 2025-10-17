@@ -43,14 +43,14 @@ export default function Page({ params }: PageProps) {
                 {
                     (!posts[0] || postsLoading || !(authors.some(el => el.id == currentAuthorId)))
                         ? <FeaturedNewsSectionSkeleton />
-                        : <div className="flex gap-10 lg:flex-nowrap flex-wrap px-5">
+                        : <div className="flex gap-10 lg:flex-nowrap flex-wrap">
                             <div className="w-full lg:w-8/12">
                                 {posts[0] &&
                                     <Link className="text-xl font-semibold text-gray-900 mb-2 leading-tight block h-full" href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${posts[0].id}`}>
                                         <article className="relative flex items-end justify-center group overflow-hidden lg:rounded-2xl h-full">
-                                            <div className="absolute top-0 left-0 w-full h-full bg-black rounded-2xl opacity-30 z-10"></div>
+                                            <div className="absolute top-0 left-0 w-full h-full rounded-2xl opacity-30 z-10"></div>
                                             <img loading="lazy" className="w-full lg:h-full h-[400px] object-cover lg:rounded-2xl lg:group-hover:scale-120 transition-all" src={posts[0].thumbnailUrl} />
-                                            <h2 className="absolute m-10 text-white text-center font-semibold text-3xl z-20">{posts[0].postTitle}</h2>
+                                            <h2 className="absolute m-10 text-white text-center font-semibold md:text-3xl text-base z-20">{posts[0].postTitle}</h2>
                                         </article>
                                     </Link>
                                 }
