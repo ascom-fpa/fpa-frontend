@@ -107,7 +107,7 @@ export default function Header({ category, categoryColor, categoryId }: { catego
                             variant="ghost"
                             size="sm"
                             className={`text-white ${!categoryColor ? `hover:bg-[#154B2B]` : `hover:bg-[${categoryColor}]`} w-[30px] h-[30px] flex`}
-                            onClick={() => setIsSidebarOpen(true)}
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                             id="menu-button"
                             aria-label="Botão de menu"
                         >
