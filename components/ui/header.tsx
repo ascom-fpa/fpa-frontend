@@ -123,7 +123,7 @@ export default function Header({ isArticle, category, categoryColor, categoryId 
                                         `
                                     ${'lg:max-w-[140px] lg:object-fill object-contain'}
                                     ${(isMobile && category) ? 'max-w-[40px]' : 'max-w-[100px]'}
-                                    `
+                                    relative z-40`
                                     }
                                 />
                                 <link rel="preload" as="image" href="/agfpa_branca.png" />
