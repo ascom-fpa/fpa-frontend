@@ -1,6 +1,7 @@
 'use client'
 
 import LastNews from "@/components/last-news";
+import LoadingPage from "@/components/loading";
 import FeaturedNewsSectionSkeleton from "@/components/skeletons/featured-news-skeleton";
 import Footer from "@/components/ui/footer";
 import Header from "@/components/ui/header";
@@ -18,24 +19,34 @@ interface PageProps {
 }
 
 export default function Page({ params }: PageProps) {
-    const pathname = usePathname()
-
+    const pathname = usePathname();
     const unwrappedParams = use(params as any);
     const { slug } = unwrappedParams as any;
-    const [currentCategoryId, setCurrentCategoryId] = useState(slug);
 
-    const { fetchPosts, posts, fetchCategory, currentCategory } = useContentStore()
-    const newsNoFeatured = posts.filter(post => !post.isFeatured)
+    const [currentCategoryId, setCurrentCategoryId] = useState(slug);
+    const [loading, setLoading] = useState(true); // ✅ loading state
+
+    const { fetchPosts, posts, fetchCategory, currentCategory } = useContentStore();
+    const newsNoFeatured = posts.filter((post) => !post.isFeatured);
 
     useEffect(() => {
-        getCategory()
+        getCategory();
     }, [pathname, params, slug]);
 
     async function getCategory() {
-        await fetchCategory(slug)
-        await fetchPosts({ categoryId: slug })
-        setCurrentCategoryId(slug)
+        setLoading(true);
+        try {
+            await fetchCategory(slug);
+            await fetchPosts({ categoryId: slug });
+            setCurrentCategoryId(slug);
+        } finally {
+            setLoading(false);
+        }
     }
+
+    if (loading) return <LoadingPage />;
+
+    console.log(currentCategory?.id != currentCategoryId)
 
     return (
         < div className="min-h-screen bg-[#F9F9F9]" >

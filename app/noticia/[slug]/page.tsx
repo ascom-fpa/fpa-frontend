@@ -1,6 +1,7 @@
 'use client'
 import ViewPost from '@/app/admin/posts/view-post';
 import LastNews from '@/components/last-news';
+import LoadingPage from '@/components/loading';
 import PostPageSkeleton from '@/components/skeletons/post-page-skeleton';
 import Footer from '@/components/ui/footer';
 import Header from '@/components/ui/header';
@@ -15,20 +16,37 @@ interface PageProps {
 }
 
 export default function Page({ params }: PageProps) {
-    const { currentPost, fetchPost, categories } = useContentStore()
+    const { currentPost, fetchPost, categories } = useContentStore();
     const unwrappedParams = use(params as any);
     const { slug } = unwrappedParams as any;
 
     const [currentPostId, setCurrentPostId] = useState(slug);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getPost()
+        getPost();
     }, [slug]);
 
     async function getPost() {
-        await fetchPost(slug)
-        setCurrentPostId(slug)
+        setLoading(true);
+        try {
+            await fetchPost(slug);
+            setCurrentPostId(slug);
+        } finally {
+            setLoading(false);
+        }
     }
+
+    if (loading) return <LoadingPage />;
+
+    // ✅ If no post found
+    if (!currentPost)
+        return (
+            <div className="min-h-screen flex items-center justify-center text-gray-500">
+                Post não encontrado.
+            </div>
+        );
+
 
     return (
         <main>

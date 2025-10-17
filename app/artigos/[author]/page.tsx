@@ -1,6 +1,7 @@
 'use client'
 
 import LastNews from "@/components/last-news";
+import LoadingPage from "@/components/loading";
 import FeaturedNewsSectionSkeleton from "@/components/skeletons/featured-news-skeleton";
 import Footer from "@/components/ui/footer";
 import Header from "@/components/ui/header";
@@ -18,22 +19,34 @@ interface PageProps {
 }
 
 export default function Page({ params }: PageProps) {
-    const pathname = usePathname()
-    const { fetchPosts, postsLoading, posts, currentCategory, authors, fetchAuthors } = useContentStore()
+    const pathname = usePathname();
+    const { fetchPosts, postsLoading, posts, currentCategory, authors, fetchAuthors } =
+        useContentStore();
 
     const unwrappedParams = use(params as any);
     const { author } = unwrappedParams as any;
     const [currentAuthorId, setCurrentAuthorId] = useState(author);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getPosts()
+        getPosts();
     }, [pathname, author]);
 
     async function getPosts() {
-        fetchPosts({ categoryId: "articles", authorId: author })
-        fetchAuthors()
-        setCurrentAuthorId(author)
+        setLoading(true);
+        try {
+            await Promise.all([
+                fetchPosts({ categoryId: "articles", authorId: author }),
+                fetchAuthors(),
+            ]);
+            setCurrentAuthorId(author);
+        } finally {
+            setLoading(false);
+        }
     }
+
+    // ✅ Show loading screen while data is being fetched
+    if (loading || postsLoading) return <LoadingPage />;
 
     return (
         <div className="min-h-screen bg-[#F9F9F9]" >
