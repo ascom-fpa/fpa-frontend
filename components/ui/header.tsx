@@ -130,10 +130,10 @@ export default function Header({ isArticle, category, categoryColor, categoryId 
                             </Link>
                             {(category && !isArticle) ? <Link className="w-full text-center lg:text-3xl  text-white" href={`/categoria/${categoryId}`}>
                                 {category}
-                            </Link> :
+                            </Link> :isArticle?
                                 <span className="w-full text-center lg:text-3xl  text-white" >
                                     {category}
-                                </span>}
+                                </span> : null}
                         </div>
                         <div className="flex gap-6 justify-start md:w-[180px] ">
                             <div className="lg:block hidden">
