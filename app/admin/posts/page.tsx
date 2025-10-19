@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { UploadCloud, Trash2, Edit3 } from "lucide-react"
+import { UploadCloud, Trash2, Edit3, Search } from "lucide-react"
 import { useContentStore } from "@/lib/content-store"
 import {
   AlertDialog,
@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { LabelInputFile } from "@/components/ui/label-input-file"
 import { PostStatusEnum } from "@/enums/post"
-import { CreatePostData } from "@/services/posts"
+import { CreatePostData, getPosts } from "@/services/posts"
 import { MultiSelect } from "@/components/ui/multi-select"
 import { TipTapEditor } from "./tiptap-editor"
 import { useEditor } from "@tiptap/react"
@@ -70,6 +70,31 @@ export default function PostsAdminPage() {
   } = useContentStore()
 
   const [orderedPosts, setOrderedPosts] = useState<any[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [loadingSearch, setLoadingSearch] = useState(false)
+
+  async function fetchSearchResults() {
+    if (!searchQuery.trim()) {
+      setSearchResults([])
+      return
+    }
+
+    try {
+      setLoadingSearch(true)
+      const result = await getPosts({ search: searchQuery })
+      console.log(result)
+
+      setSearchResults(result || [])
+    } catch (err) {
+      console.error(err)
+      setSearchResults([])
+    } finally {
+      setLoadingSearch(false)
+    }
+  }
+
+  const displayedPosts = searchQuery.trim() ? searchResults : orderedPosts
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -256,16 +281,42 @@ export default function PostsAdminPage() {
         </CardFooter>
       </Card>
 
-      {/* Listagem */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {orderedPosts?.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            onDelete={() => deletePost(post.id)}
-            onEdit={() => handleEdit(post)}
+      {/* 🔍 Search bar with button */}
+      <div className="flex items-center gap-2 mb-6 bg-white p-4 shadow-md rounded-lg w-full">
+        <div className="relative flex-grow">
+          <Search className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
+          <Input
+            type="text"
+            placeholder="Buscar matéria por título..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && fetchSearchResults()}
+            className="pl-9"
           />
-        ))}
+        </div>
+        <Button onClick={fetchSearchResults} disabled={loadingSearch}>
+          {loadingSearch ? "Buscando..." : "Buscar"}
+        </Button>
+      </div>
+
+      {/* 📰 Listagem */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {loadingSearch ? (
+          <p className="text-gray-500 col-span-full text-center py-10">Carregando...</p>
+        ) : displayedPosts?.length > 0 ? (
+          displayedPosts.map((post: any) => (
+            <PostCard
+              key={post.id}
+              post={post}
+              onDelete={() => deletePost(post.id)}
+              onEdit={() => handleEdit(post)}
+            />
+          ))
+        ) : (
+          <p className="text-gray-500 col-span-full text-center py-10">
+            Nenhuma matéria encontrada.
+          </p>
+        )}
       </div>
     </div>
   )
