@@ -193,8 +193,8 @@ export default function Home() {
       {/* Highlighted Categories Section */}
       {
         postsCategoryFeatured?.categories?.length > 0
-          ? <section className="my-12">
-            <div className="max-w-[1300px] lg:mx-auto bg-white rounded-2xl shadow-md p-4 mx-4">
+          ? <section className="my-12 flex justify-center">
+            <div className="lg:max-w-[1300px] md:max-w-2/3 lg:mx-auto bg-white rounded-2xl shadow-md p-4 mx-4">
               <div className="grid lg:grid-cols-3 md:grid-cols-1 gap-12">
 
                 {postsCategoryFeatured.categories.map((postCategory, index) => <div key={postCategory.id + "-" + index} className="space-y-6 flex flex-col md:items-start items-center justify-center">
@@ -202,7 +202,7 @@ export default function Home() {
 
                   {/* Featured Article */}
                   {/* <Link href={`${process.env.NEXT_PUBLIC_FRONT_URL}/noticia/${postCategory.slug}`}> */}
-                  <Link className='' href={`/noticia/${postsCategoryFeatured?.postsByCategory[postCategory?.id][0]?.id}`}>
+                  <Link className='lg:w-auto w-full' href={`/noticia/${postsCategoryFeatured?.postsByCategory[postCategory?.id][0]?.id}`}>
                     <article className="bg-white rounded-2xl overflow-hidden shadow-md flex self-center cursor-pointer transition-all lg:hover:scale-105">
                       <div className="relative lg:max-w-[460px] overflow-hidden w-full ">
                         <img loading="lazy"
@@ -220,7 +220,7 @@ export default function Home() {
                   </Link>
 
                   {/* Recent Articles */}
-                  <div className="space-y-8">
+                  <div className="space-y-8 w-full">
                     {
                       postsCategoryFeatured?.postsByCategory && postsCategoryFeatured?.postsByCategory[postCategory.id].slice(1).map(post =>
                         <div key={`postfeatured-${post.id}`}>
