@@ -57,7 +57,7 @@ export default function PostsFeature({ postsFeature }: any) {
                         {article.postCategory.name}
                       </span>
                       <h3
-                        className={` leading-tight font-medium text-white`}
+                        className={`lg:h-[50px] text-sm leading-tight font-medium text-white`}
                       >
                         {article.postTitle}
                       </h3>
