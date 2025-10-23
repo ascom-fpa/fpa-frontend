@@ -87,7 +87,7 @@ export default function Header({ isArticle, category, categoryColor, categoryId 
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#fato-em-foco" className="block hover:scale-105 transition">Minuto FPA</Link>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#videos" className="block hover:scale-105 transition">Vídeos</Link>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#webstories" className="block hover:scale-105 transition">Webstories</Link>
-                    <Link onClick={() => setIsSidebarOpen(false)} href="https://www.flickr.com/photos/130908833@N08/albums/" target="_blank" className="block hover:scale-105 transition">Foto</Link>
+                    <Link onClick={() => setIsSidebarOpen(false)} href="https://www.flickr.com/photos/130908833@N08/albums/" target="_blank" className="block hover:scale-105 transition">Fotos</Link>
                     <Link href="/sobre" className="block hover:scale-105 transition">Sobre</Link>
                     <Link href="/contato" className="block hover:scale-105 transition">Contato</Link>
                     <div className="md:hidden block">
