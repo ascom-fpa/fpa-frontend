@@ -12,7 +12,7 @@ export default function FatoEmFoco({ relevants }: { relevants: any[] }) {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-3xl font-bold text-[#1C9658]">Minuto FPA</h2>
-              <p className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
+              <p id="artigos" className="text-gray-600">Acompanhe nossas notícias em 1 minuto</p>
             </div>
           </div>
 

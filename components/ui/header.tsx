@@ -83,7 +83,7 @@ export default function Header({ isArticle, category, categoryColor, categoryId 
                         </div>
                     </div>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#artigos" className="block hover:scale-105 transition">Artigos</Link>
-                    <Link onClick={() => setIsSidebarOpen(false)} href="/#mais-lidas" className="block hover:scale-105 transition">Mais lidas</Link>
+                    <Link onClick={() => setIsSidebarOpen(false)} href="/#mais-lidas" className="block hover:scale-105 transition">Mais Recentes</Link>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#fato-em-foco" className="block hover:scale-105 transition">Minuto FPA</Link>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#videos" className="block hover:scale-105 transition">Vídeos</Link>
                     <Link onClick={() => setIsSidebarOpen(false)} href="/#webstories" className="block hover:scale-105 transition">Webstories</Link>
