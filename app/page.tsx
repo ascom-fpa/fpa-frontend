@@ -261,13 +261,13 @@ export default function Home() {
           <FatoEmFocoSkeleton />
         ) : <MinutoFPA relevants={relevants} />
       }
-      <section id="artigos" className="md:px-0 px-4 bg-gray-50 max-w-[1300px] mx-auto ">
+      <section className="md:px-0 px-4 bg-gray-50 max-w-[1300px] mx-auto ">
         <div className="flex gap-10 lg:flex-nowrap flex-wrap lg:flex-row flex-col-reverse">
           <div className="w-full lg:w-9/12">
             <ColunistasSection />
             {videos.length === 0
               ? <VideosSkeleton />
-              : <div className="my-12 bg-white rounded-2xl shadow-md p-4" id='videos'>
+              : <div className="my-12 bg-white rounded-2xl shadow-md p-4" >
                 {/* Videos */}
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
