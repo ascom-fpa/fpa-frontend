@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { UploadCloud, Trash2, Edit3, Search } from "lucide-react"
+import { UploadCloud, Trash2, Edit3, Search, ChevronUp, ChevronDown, RotateCcw } from "lucide-react"
 import { useContentStore } from "@/lib/content-store"
 import {
   AlertDialog,
@@ -37,6 +37,7 @@ import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/ho
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 import { showToast } from "@/utils/show-toast"
 import ViewPost from "./view-post"
+import api from "@/services/axios"
 
 const formInitialState: CreatePostData = {
   postTitle: "",
@@ -73,6 +74,25 @@ export default function PostsAdminPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState<any[]>([])
   const [loadingSearch, setLoadingSearch] = useState(false)
+  const [removedPosts, setRemovedPosts] = useState<any[]>([])
+  const [showRemoved, setShowRemoved] = useState(false)
+  const [showPostEditor, setShowPostEditor] = useState(false);
+
+  const fetchRemovedPosts = async () => {
+    const { data } = await api.get("/posts/removed")
+    setRemovedPosts(data.data)
+  }
+
+  useEffect(() => {
+    if (showRemoved) fetchRemovedPosts()
+  }, [showRemoved]);
+
+  const restorePost = async (id: string) => {
+    await api.post(`/posts/${id}/restore`)
+    showToast({ children: "Matéria restaurada com sucesso!" })
+    fetchSearchResults()
+    fetchRemovedPosts()
+  }
 
   async function fetchSearchResults() {
     if (!searchQuery.trim()) {
@@ -189,7 +209,7 @@ export default function PostsAdminPage() {
         {editingPost ? "Editar Matéria" : "Gerenciamento de Matérias"}
       </h1>
 
-      <Card>
+      {showPostEditor && <Card>
         <CardContent className="p-4 flex flex-col gap-4">
           <Input
             placeholder="Título"
@@ -279,10 +299,24 @@ export default function PostsAdminPage() {
             {editingPost ? "Salvar Alterações" : "Enviar Matéria"}
           </Button>
         </CardFooter>
-      </Card>
+      </Card>}
+
+      <div className="flex gap-4">
+        <Button onClick={() => setShowPostEditor(true)}>Adicionar matéria</Button>
+        <Button
+          className="flex items-center justify-between bg-red-400 text-white hover:bg-red-500"
+          onClick={() => setShowRemoved(!showRemoved)}
+        >
+          <span>
+            {showRemoved ? "Ocultar matérias removidas" : "Ver matérias removidas"}
+            <Trash2 width={16} className="inline-block ml-2 " />
+          </span>
+        </Button>
+      </div>
+      <RemovedPostsSection removedPosts={removedPosts} onRestore={restorePost} showRemoved={showRemoved} />
 
       {/* 🔍 Search bar with button */}
-      <div className="flex items-center gap-2 mb-6 bg-white p-4 shadow-md rounded-lg w-full">
+      {!showRemoved && <div className="flex items-center gap-2 mb-6 bg-white p-4 shadow-md rounded-lg w-full">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
           <Input
@@ -297,10 +331,10 @@ export default function PostsAdminPage() {
         <Button onClick={fetchSearchResults} disabled={loadingSearch}>
           {loadingSearch ? "Buscando..." : "Buscar"}
         </Button>
-      </div>
+      </div>}
 
       {/* 📰 Listagem */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {!showRemoved && <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {loadingSearch ? (
           <p className="text-gray-500 col-span-full text-center py-10">Carregando...</p>
         ) : displayedPosts?.length > 0 ? (
@@ -317,7 +351,7 @@ export default function PostsAdminPage() {
             Nenhuma matéria encontrada.
           </p>
         )}
-      </div>
+      </div>}
     </div>
   )
 }
@@ -343,5 +377,43 @@ function PostCard({ post, onDelete, onEdit }: { post: any; onDelete: () => void;
         </Button>
       </CardFooter>
     </Card>
+  )
+}
+
+function RemovedPostsSection({
+  removedPosts,
+  onRestore,
+  showRemoved,
+}: {
+  removedPosts: any[],
+  onRestore: (id: string) => void,
+  showRemoved: boolean,
+}) {
+  return (
+    <div >
+      {showRemoved && (
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {removedPosts.map((post: any) => (
+            <Card key={post.id} className="border border-red-300">
+              <CardContent className="p-4">
+                <p className="font-semibold text-sm">{post.postTitle}</p>
+                <p className="font-medium text-xs">{post.summary}</p>
+                <p className="text-xs text-gray-500 mt-1">Removido em {new Date(post.updatedAt).toLocaleDateString()}</p>
+              </CardContent>
+              <CardFooter className="flex justify-end">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => onRestore(post.id)}
+                  className="text-green-600 border-green-500 hover:bg-green-50"
+                >
+                  <RotateCcw className="w-4 h-4 mr-1" /> Restaurar
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
